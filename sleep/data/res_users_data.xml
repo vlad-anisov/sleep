@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="sleepy" model="res.users">
+            <field name="name">Sleepy</field>
+            <field name="login">sleepy</field>
+            <field name="password">sleepy</field>
+        </record>
+
+    </data>
+</odoo>

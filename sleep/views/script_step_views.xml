@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="script_form" model="ir.ui.view">
+        <field name="name">script.form</field>
+        <field name="model">script</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="run" type="object" string="Run"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="step_ids">
+                            <tree default_order="sequence, id">
+                                <field name="sequence" widget="handle" nolabel="1"/>
+                                <field name="name"/>
+                                <field name="type"/>
+                                <field name="message"/>
+                            </tree>
+                            <form>
+                                <group>
+                                    <field name="sequence"/>
+                                    <field name="name"/>
+                                    <field name="type"/>
+                                    <field name="message"/>
+                                    <field name="answer_ids"/>
+                                </group>
+                            </form>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="script_action" model="ir.actions.act_window">
+        <field name="res_model">script</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="script_root_menu" name="Scripts" action="script_action" sequence="1"/>
+
+</odoo>
