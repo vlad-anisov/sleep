@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, _
 
 STEP_TYPES = [
     ("send_message", "Send message"),
@@ -15,6 +15,13 @@ class ScriptStep(models.Model):
     type = fields.Selection(STEP_TYPES, string="Type", required=True)
     message = fields.Html(string="Message")
     answer_ids = fields.One2many("script.step.answer", "step_id", string="Answers")
+    is_running = fields.Boolean(string="Running")
+    next_step_id = fields.Many2one("script.step", string="Next step", compute="_compute_next_step")
+
+    def _compute_next_step(self):
+        for record in self:
+            step_ids = record.script_id.step_ids.sorted(key=lambda s: (s.sequence, s.id))
+            record.next_step_id = step_ids.filtered(lambda s: (s.sequence, s.id) > (record.sequence, record.id))[:1]
 
     def get_channel(self):
         sleepy_id = self.env.ref("sleep.sleepy")
@@ -24,14 +31,27 @@ class ScriptStep(models.Model):
         channel_id = channel_id.browse(3).with_user(sleepy_id)
         return channel_id
 
-    def send_message(self):
+    def send_message(self, message):
         channel_id = self.get_channel()
         channel_id.message_post(
-            body=self.message, message_type="comment", subtype_xmlid="mail.mt_comment", body_is_html=True
+            body=message, message_type="comment", subtype_xmlid="mail.mt_comment", body_is_html=True
         )
 
-    def run(self):
+    def run(self, **kwargs):
+        if not self:
+            return
+        self.ensure_one()
+        self.is_running = True
         if self.type == "send_message":
-            self.send_message()
+            self.send_message(self.message)
         elif self.type == "wait_answer":
-            pass
+            answer = kwargs.get("answer")
+            if answer and answer in self.answer_ids.mapped("name"):
+                pass
+            elif answer and answer not in self.answer_ids.mapped("name"):
+                self.send_message(_("Unknown answer"))
+                return
+            elif not answer:
+                return
+        self.is_running = False
+        self.next_step_id.run()

@@ -13,19 +13,21 @@
                     <group>
                         <field name="name"/>
                         <field name="step_ids">
-                            <tree default_order="sequence, id">
+                            <tree default_order="sequence, id" decoration-success="is_running == True" decoration-muted="is_running == False">
                                 <field name="sequence" widget="handle" nolabel="1"/>
+                                <field name="is_running"/>
                                 <field name="name"/>
                                 <field name="type"/>
                                 <field name="message"/>
                             </tree>
                             <form>
                                 <group>
-                                    <field name="sequence"/>
                                     <field name="name"/>
                                     <field name="type"/>
                                     <field name="message"/>
                                     <field name="answer_ids"/>
+                                    <field name="is_running"/>
+                                    <field name="next_step_id"/>
                                 </group>
                             </form>
                         </field>
