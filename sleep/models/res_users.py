@@ -1,9 +1,11 @@
-from odoo import models
+from odoo import models, fields
 import time
 
 
 class ResUsers(models.Model):
     _inherit = "res.users"
+
+    script_id = fields.Many2one("script", string="Script")
 
     def start_first_communication(self):
         sleepy_id = self.env.ref("sleep.sleepy")

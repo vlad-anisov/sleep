@@ -13,21 +13,20 @@
                     <group>
                         <field name="name"/>
                         <field name="step_ids">
-                            <tree default_order="sequence, id" decoration-success="is_running == True" decoration-muted="is_running == False">
+                            <tree default_order="sequence, id" decoration-success="is_running == True" decoration-muted="is_running == False" editable="bottom">
                                 <field name="sequence" widget="handle" nolabel="1"/>
-                                <field name="is_running"/>
-                                <field name="name"/>
                                 <field name="type"/>
+                                <field name="name"/>
                                 <field name="message"/>
+                                <field name="next_step_ids" widget="many2many_tags"/>
                             </tree>
                             <form>
                                 <group>
-                                    <field name="name"/>
+                                    <field name="is_running" invisible="1"/>
                                     <field name="type"/>
+                                    <field name="name"/>
                                     <field name="message"/>
-                                    <field name="answer_ids"/>
-                                    <field name="is_running"/>
-                                    <field name="next_step_id"/>
+                                    <field name="next_step_ids"/>
                                 </group>
                             </form>
                         </field>
