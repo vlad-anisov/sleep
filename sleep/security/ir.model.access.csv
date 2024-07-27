@@ -1,4 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_script,access_script,model_script,base.group_system,1,1,1,1
 access_script_step,access_script_step,model_script_step,base.group_system,1,1,1,1
-access_script_step_answer,access_script_step_answer,model_script_step_answer,base.group_system,1,1,1,1

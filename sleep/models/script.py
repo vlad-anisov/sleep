@@ -1,9 +1,8 @@
-from odoo import models, fields, api
+from odoo import models, fields
 
 STATE_TYPES = [
-    ("pending", "Pending"),
-    ("started", "Started"),
-    ("wait_dependencies", "Wait Dependencies"),
+    ("not_running", "Not running"),
+    ("running", "Running"),
     ("done", "Done"),
     ("failed", "Failed"),
 ]
@@ -14,15 +13,21 @@ class Script(models.Model):
 
     name = fields.Char(string="Name")
     step_ids = fields.One2many("script.step", "script_id", string="Steps")
-    state = fields.Selection(STATE_TYPES, string="State", required=True, default="pending")
+    state = fields.Selection(STATE_TYPES, string="State", compute="_compute_state")
     data = fields.Json(string="Data")
+    user_id = fields.Many2one("res.users", string="User")
 
     def run(self):
-        self.env.user.script_id = self
-        self.step_ids.is_running = False
+        self.step_ids.state = "not_running"
         self.step_ids.sorted(key=lambda s: (s.sequence, s.id))[:1].run()
 
-    @api.depends()
     def _compute_state(self):
         for record in self:
-            fi
+            if record.step_ids.filtered(lambda s: s.state == "failed"):
+                record.state = "failed"
+            elif record.step_ids.filtered(lambda s: s.state in ("running", "waiting")):
+                record.state = "running"
+            elif record.step_ids.filtered(lambda s: s.state == "done"):
+                record.state = "done"
+            else:
+                record.state = "not_running"

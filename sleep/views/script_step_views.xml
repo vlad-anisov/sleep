@@ -7,23 +7,27 @@
         <field name="arch" type="xml">
             <form>
                 <header>
+                    <field name="state" widget="statusbar"/>
                     <button name="run" type="object" string="Run"/>
                 </header>
                 <sheet>
                     <group>
                         <field name="name"/>
+                        <field name="user_id"/>
                         <field name="step_ids">
-                            <tree default_order="sequence, id" decoration-success="is_running == True" decoration-muted="is_running == False" editable="bottom">
+                            <tree default_order="sequence, id" decoration-success="state in ('running', 'waiting')" decoration-muted="state == 'not_running'" editable="bottom">
                                 <field name="sequence" widget="handle" nolabel="1"/>
-                                <field name="type"/>
+                                <field name="state"/>
                                 <field name="name"/>
                                 <field name="message"/>
+                                <field name="user_answer_type"/>
                                 <field name="next_step_ids" widget="many2many_tags"/>
                             </tree>
                             <form>
+                                <header>
+                                    <field name="state" widget="statusbar"/>
+                                </header>
                                 <group>
-                                    <field name="is_running" invisible="1"/>
-                                    <field name="type"/>
                                     <field name="name"/>
                                     <field name="message"/>
                                     <field name="next_step_ids"/>

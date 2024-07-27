@@ -1,17 +1,20 @@
 from odoo import models, fields, _
-
-STEP_TYPES = [
-    ("send_message", "Send message"),
-    ("process_answer", "Process answer"),
-    ("run_code", "Run code"),
-]
+from odoo.tools import html2plaintext, email_normalize
+from email_validator import validate_email, EmailNotValidError
 
 STATE_TYPES = [
-    ("pending", "Pending"),
-    ("started", "Started"),
-    ("wait_dependencies", "Wait Dependencies"),
+    ("not_running", "Not running"),
+    ("running", "Running"),
+    ("waiting", "Waiting"),
     ("done", "Done"),
     ("failed", "Failed"),
+]
+
+USER_ANSWER_TYPES = [
+    ("nothing", "Nothing"),
+    ("next_step_name", "Next step name"),
+    ("email", "Email"),
+    ("time", "Time"),
 ]
 
 
@@ -21,9 +24,7 @@ class ScriptStep(models.Model):
     name = fields.Char(string="Name")
     script_id = fields.Many2one("script", string="Script")
     sequence = fields.Integer(string="Sequence")
-    type = fields.Selection(STEP_TYPES, string="Type", required=True)
-    state = fields.Selection(STATE_TYPES, string="State", required=True, default="pending")
-    is_running = fields.Boolean(string="Running")
+    state = fields.Selection(STATE_TYPES, string="State", required=True, default="not_running")
     next_step_ids = fields.Many2many(
         "script.step",
         "previous_step_next_step_rel",
@@ -32,7 +33,10 @@ class ScriptStep(models.Model):
         string="Next steps"
     )
     message = fields.Html(string="Message")
+    message_id = fields.Many2one("mail.message", string="Message")
     code = fields.Char(string="Code")
+    user_answer = fields.Char(string="User answer")
+    user_answer_type = fields.Selection(USER_ANSWER_TYPES, string="User answer type", required=True, default="next_step_name")
 
     def get_channel(self):
         sleepy_id = self.env.ref("sleep.sleepy")
@@ -44,64 +48,111 @@ class ScriptStep(models.Model):
 
     def send_message(self, message):
         channel_id = self.get_channel()
-        channel_id.message_post(
+        self.message_id = channel_id.message_post(
             body=message, message_type="comment", subtype_xmlid="mail.mt_comment", body_is_html=True
         )
 
-    def run(self, **kwargs):
+    def run(self):
         self.ensure_one()
-        self.is_running = True
-        next_step_id = self.env["script.step"]
 
-        if self.name:
+        if self.state in ("not_running", "done", "failed"):
+            self.state = "running"
 
-
-        if self.type == "send_message":
-            next_step_id = self.next_step_ids[:1]
-            if next_step_id.type == "send_message":
-                message = self.message
-            else:
+        if self.state == "running":
+            if self.user_answer_type == "next_step_name":
                 buttons = ""
-                for step_id in next_step_id.next_step_ids:
+                for step_id in self.next_step_ids:
                     buttons += f"""
-                        <button class="btn btn-primary" 
-                        onclick="
-                            let el = [...document.getElementsByTagName('textarea')].filter((el) => {{return el.className.indexOf('o-mail-Composer-input')}})[0];
-                            el.focus();
-                            el.value = '';
-                            el.dispatchEvent(new window.KeyboardEvent('keydown', {{ key: 'Backspace' }}));
-                            el.dispatchEvent(new window.KeyboardEvent('keyup', {{ key: 'Backspace' }}));
-                            el.dispatchEvent(new window.InputEvent('input'));
-                            el.dispatchEvent(new window.InputEvent('change'));
-                            for (const char of '{step_id.name}') {{
-                                el.value += char;
-                                el.dispatchEvent(new window.KeyboardEvent('keydown', {{key: char}}));
-                                el.dispatchEvent(new window.KeyboardEvent('keyup', {{key: char}}));
+                        <div class="row px-3">
+                            <button class="btn btn-primary" 
+                            onclick="
+                                let el = [...document.getElementsByTagName('textarea')].filter((el) => {{return el.className.indexOf('o-mail-Composer-input')}})[0];
+                                el.focus();
+                                el.value = '';
+                                el.dispatchEvent(new window.KeyboardEvent('keydown', {{ key: 'Backspace' }}));
+                                el.dispatchEvent(new window.KeyboardEvent('keyup', {{ key: 'Backspace' }}));
                                 el.dispatchEvent(new window.InputEvent('input'));
                                 el.dispatchEvent(new window.InputEvent('change'));
-                            }};
-                            setTimeout(function() {{
-                                document.getElementsByClassName('o-mail-Composer-send')[0].click();
-                            }}, 0);">
-                            {step_id.name}
-                        </button>
+                                for (const char of '{step_id.name}') {{
+                                    el.value += char;
+                                    el.dispatchEvent(new window.KeyboardEvent('keydown', {{key: char}}));
+                                    el.dispatchEvent(new window.KeyboardEvent('keyup', {{key: char}}));
+                                    el.dispatchEvent(new window.InputEvent('input'));
+                                    el.dispatchEvent(new window.InputEvent('change'));
+                                }};
+                                setTimeout(function() {{
+                                    document.getElementsByClassName('o-mail-Composer-send')[0].click();
+                                }}, 0);">
+                                {step_id.name}
+                            </button>
+                        </div>
                     """
                 message = f"{self.message}<br/>{buttons}"
+            elif self.user_answer_type == "email":
+                message = self.message
+            elif self.user_answer_type == "time":
+                buttons = ""
+                for step_id in self.next_step_ids:
+                    buttons += f"""
+                        <div class="row px-3">
+                            <button class="btn btn-primary" 
+                            onclick="
+                                let el = [...document.getElementsByTagName('textarea')].filter((el) => {{return el.className.indexOf('o-mail-Composer-input')}})[0];
+                                el.focus();
+                                el.value = '';
+                                el.dispatchEvent(new window.KeyboardEvent('keydown', {{ key: 'Backspace' }}));
+                                el.dispatchEvent(new window.KeyboardEvent('keyup', {{ key: 'Backspace' }}));
+                                el.dispatchEvent(new window.InputEvent('input'));
+                                el.dispatchEvent(new window.InputEvent('change'));
+                                for (const char of '{step_id.name}') {{
+                                    el.value += char;
+                                    el.dispatchEvent(new window.KeyboardEvent('keydown', {{key: char}}));
+                                    el.dispatchEvent(new window.KeyboardEvent('keyup', {{key: char}}));
+                                    el.dispatchEvent(new window.InputEvent('input'));
+                                    el.dispatchEvent(new window.InputEvent('change'));
+                                }};
+                                setTimeout(function() {{
+                                    document.getElementsByClassName('o-mail-Composer-send')[0].click();
+                                }}, 0);">
+                                {step_id.name}
+                            </button>
+                        </div>
+                    """
+                message = f"{self.message}<br/>{buttons}"
+            elif self.user_answer_type == "nothing":
+                message = self.message
+            else:
+                message = self.message
             self.send_message(message)
-        elif self.type == "process_answer":
-            user_answer = kwargs.get("user_answer")
-            if not user_answer:
+            self.state = "waiting"
+            if self.user_answer_type != "nothing":
                 return
-            next_step_id = self.next_step_ids.filtered(lambda s: s.name == user_answer)[:1]
-            if user_answer and not next_step_id:
-                self.send_message(_("Unknown answer"))
-                return
-        elif self.type == "run_code":
-            pass
 
-        self.is_running = False
-        if next_step_id:
-            next_step_id.run()
-        else:
-            self.env.user.script_id = False
-
+        if self.state == "waiting":
+            if self.user_answer_type == "nothing":
+                self.state = "done"
+                self.next_step_ids[:1].run()
+            elif self.user_answer:
+                if self.user_answer_type == "next_step_name":
+                    if not self.next_step_ids:
+                        self.state = "done"
+                    next_step_id = self.next_step_ids.filtered(lambda s: s.name == self.user_answer)[:1]
+                    if next_step_id:
+                        self.state = "done"
+                        self.message_id.body = self.message
+                        next_step_id.run()
+                    else:
+                        self.send_message(_("Unknown answer"))
+                elif self.user_answer_type == "email":
+                    try:
+                        emailinfo = validate_email(self.user_answer, check_deliverability=False)
+                        email = emailinfo.normalized
+                        self.env.user.email = email
+                        self.state = "done"
+                        self.next_step_ids[:1].run()
+                    except EmailNotValidError as e:
+                        self.send_message(_("Invalid email"))
+                elif self.user_answer_type == "time":
+                    pass
+            else:
+                self.send_message(_("Please provide an answer"))
