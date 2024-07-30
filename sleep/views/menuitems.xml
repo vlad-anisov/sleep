@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <menuitem id="sleep_root_menu" name="Sleep" sequence="0"/>
+
+</odoo>

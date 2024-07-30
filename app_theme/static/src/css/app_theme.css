@@ -1,0 +1,91 @@
+/* Disable pager */
+.o_cp_pager {
+  display:none !important;
+}
+
+
+/* Disable main button */
+.o_menu_toggle {
+    display: none !important;
+}
+/* Added left padding for menu where main button is disabled */
+.o_menu_sections {
+    padding-left: 8px !important;
+}
+
+
+/* Added red color for heart icon */
+.fa-heart{
+    color: red;
+}
+.fa-heart-o{
+    color: red;
+}
+
+/* Disable mobile menu header (avatar, user menu and close button) */
+.o_burger_menu_topbar {
+    display: none !important;
+}
+/* Disable avatar and user menu */
+.o_user_menu {
+    display: none !important;
+}
+
+/* Disable search button for mobile */
+.o_control_panel_navigation > .btn {
+    display: none !important;
+}
+
+/* Disable right button in search panel (filters, groups) */
+.o_cp_searchview > .dropdown {
+    display: none !important;
+}
+
+
+/* Navbar */
+.o_main_navbar {
+    background-color: transparent;
+    position: fixed;
+    right: 0;
+    z-index: 100;
+}
+/* Styles for control panel  */
+.o_control_panel {
+    background-color: transparent;
+    backdrop-filter: blur(30px);
+    box-shadow: 0 5px 10px 3px rgba(0, 0, 0, .05);
+    z-index: 90;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0 !important;
+}
+
+/* Disable border where click on kanban record */
+.o_kanban_renderer .oe_kanban_card:focus-visible.oe_kanban_global_click, .o_kanban_renderer .oe_kanban_card:focus-visible.oe_kanban_global_click_edit, .o_kanban_renderer .oe_kanban_card:focus-visible .oe_kanban_global_click, .o_kanban_renderer .oe_kanban_card:focus-visible .oe_kanban_global_click_edit, .o_kanban_renderer .oe_kanban_card:focus-within.oe_kanban_global_click, .o_kanban_renderer .oe_kanban_card:focus-within.oe_kanban_global_click_edit, .o_kanban_renderer .oe_kanban_card:focus-within .oe_kanban_global_click, .o_kanban_renderer .oe_kanban_card:focus-within .oe_kanban_global_click_edit, .o_kanban_renderer .o_kanban_record:focus-visible.oe_kanban_global_click, .o_kanban_renderer .o_kanban_record:focus-visible.oe_kanban_global_click_edit, .o_kanban_renderer .o_kanban_record:focus-visible .oe_kanban_global_click, .o_kanban_renderer .o_kanban_record:focus-visible .oe_kanban_global_click_edit, .o_kanban_renderer .o_kanban_record:focus-within.oe_kanban_global_click, .o_kanban_renderer .o_kanban_record:focus-within.oe_kanban_global_click_edit, .o_kanban_renderer .o_kanban_record:focus-within .oe_kanban_global_click, .o_kanban_renderer .o_kanban_record:focus-within .oe_kanban_global_click_edit {
+     outline: thin solid rgba(255, 0, 0, 0) !important;
+}
+
+/* Transparent background for images*/
+.o_field_image {
+    background-color: transparent;
+}
+
+/* Disable save/rollback buttons */
+.o_form_status_indicator {
+    display: none !important;
+}
+
+/* Styles menu items */
+.o_nav_entry {
+    background-color: transparent !important;
+}
+
+/* Styles for breadcrumb */
+.breadcrumb {
+    background-color: transparent !important;
+}
+
+.o_list_renderer {
+    padding-top: 65px;
+}

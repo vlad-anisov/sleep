@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="article_form" model="ir.ui.view">
+        <field name="name">article.form</field>
+        <field name="model">article</field>
+        <field name="arch" type="xml">
+            <form create="0" delete="0">
+                <field name="name" invisible="1"/>
+                <field name="text" readonly="1"/>
+            </form>
+        </field>
+    </record>
+
+    <record id="article_tree" model="ir.ui.view">
+        <field name="name">article.tree</field>
+        <field name="model">article</field>
+        <field name="arch" type="xml">
+            <tree create="1" decoration-muted="state == 'not_running'">
+                <field name="user_ids"/>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="article_action" model="ir.actions.act_window">
+        <field name="name">Articles</field>
+        <field name="res_model">article</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="article_menu" name="Articles" parent="sleep_root_menu" sequence="2" action="article_action"/>
+
+</odoo>

@@ -1,3 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_script,access_script,model_script,base.group_system,1,1,1,1
 access_script_step,access_script_step,model_script_step,base.group_system,1,1,1,1
+access_page_sleepy_chat,access_page_sleepy_chat,model_page_sleepy_chat,base.group_user,1,0,0,0
+access_page_about,access_page_about,model_page_about,base.group_user,1,0,0,0
+access_article,access_article,model_article,base.group_user,1,1,1,1

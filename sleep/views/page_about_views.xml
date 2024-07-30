@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="page_about_form" model="ir.ui.view">
+        <field name="name">page.about.form</field>
+        <field name="model">page.about</field>
+        <field name="arch" type="xml">
+            <form>
+                <div class="row">
+                    <div class="col">
+                        <h1>Sleep app</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <h2>Version: 0.1.0</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-auto pe-0">
+                        <h3>Author: Vlad Anisov</h3>
+                    </div>
+                    <div class="col ps-2">
+                        <a href="https://www.instagram.com/anisov_vlad">
+                           <span class="fa fa-lg fa-instagram"></span>
+                         </a>
+                    </div>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="page_about_action" model="ir.actions.act_window">
+        <field name="name">About app</field>
+        <field name="res_model">page.about</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">form</field>
+        <field name="res_id">1</field>
+    </record>
+
+    <menuitem id="page_about_menu" name="About app" action="page_about_action" sequence="100"
+              parent="sleep_root_menu"/>
+
+</odoo>
