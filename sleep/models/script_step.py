@@ -55,8 +55,6 @@ class ScriptStep(models.Model):
         )
 
     def run(self):
-        self.ensure_one()
-
         if self.state in ("not_running", "done", "failed"):
             self.state = "pre_processing"
 
@@ -79,7 +77,7 @@ class ScriptStep(models.Model):
                     <div class="row px-3">
                         <button class="btn btn-primary" 
                         onclick="
-                            let el = [...document.getElementsByTagName('textarea')].filter((el) => {{return el.className.indexOf('o-mail-Composer-input')}})[0];
+                            let el = document.getElementsByClassName('o-mail-Composer-input')[0];
                             el.focus();
                             el.value = '';
                             el.dispatchEvent(new window.KeyboardEvent('keydown', {{ key: 'Backspace' }}));
@@ -93,9 +91,8 @@ class ScriptStep(models.Model):
                                 el.dispatchEvent(new window.InputEvent('input'));
                                 el.dispatchEvent(new window.InputEvent('change'));
                             }};
-                            setTimeout(function() {{
-                                document.getElementsByClassName('o-mail-Composer-send')[0].click();
-                            }}, 0);">
+                            el.dispatchEvent(new window.KeyboardEvent('keydown', {{ key: 'Enter' }}));
+                            ">
                             {step_id.name}
                         </button>
                     </div>
@@ -127,7 +124,7 @@ class ScriptStep(models.Model):
                             el.dispatchEvent(new window.InputEvent('change'));
                         }};
                         setTimeout(function() {{
-                            document.getElementsByClassName('o-mail-Composer-send')[0].click();
+                            el.dispatchEvent(new window.KeyboardEvent('keydown', {{key: 'Enter', which: 13, bubbles: true}}));
                         }}, 0);">
                         Set
                     </button>
@@ -155,6 +152,7 @@ class ScriptStep(models.Model):
         elif self.user_answer_type != "nothing":
             self.send_message(_("Please provide an answer"))
         self.state = "post_processing"
+        self.message_id.body = self.message
 
     def post_processing(self):
         next_step_id = self.next_step_ids[:1]

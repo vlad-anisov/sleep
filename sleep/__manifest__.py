@@ -8,7 +8,6 @@
         "base",
         "muk_web_enterprise_theme",
         "queue_job",
-        "knowledge",
         "mail",
     ],
     "data": [

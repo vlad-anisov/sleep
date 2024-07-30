@@ -7,3 +7,4 @@ from . import discuss_channel
 from . import page_sleepy_chat
 from . import page_about
 from . import article
+from . import base

@@ -1,6 +1,14 @@
 .o-mail-ChatWindow {
-    height: 80% !important;
+    height: 95% !important;
     width: 100% !important;
     right: 0px !important;
     z-index: 89 !important;
+}
+
+.o-mail-Message-sidebar {
+    display: none !important;
+}
+
+.o-mail-Composer-actions {
+    display: none !important;
 }

@@ -14,6 +14,21 @@ threadActionsRegistry.addEventListener("UPDATE", ({ detail: { operation, key } }
 });
 
 
+import { messageActionsRegistry } from "@mail/core/common/message_actions";
+
+const allowedMessageActions = new Set([]);
+for (const [actionName] of messageActionsRegistry.getEntries()) {
+    if (!allowedMessageActions.has(actionName)) {
+        messageActionsRegistry.remove(actionName);
+    }
+}
+messageActionsRegistry.addEventListener("UPDATE", ({ detail: { operation, key } }) => {
+    if (operation === "add" && !allowedMessageActions.has(key)) {
+        messageActionsRegistry.remove(key);
+    }
+});
+
+
 
 import { ChatWindowService } from "@mail/core/common/chat_window_service";
 
@@ -32,4 +47,21 @@ patch(ChatWindowService.prototype, {
         }
         await super._onClose(chatWindow, options);
     },
+});
+
+
+import { DiscussCoreWeb } from "@mail/discuss/core/web/discuss_core_web_service";
+
+patch(DiscussCoreWeb.prototype, {
+    setup() {
+        super.setup();
+        this.busService.subscribe("discuss.Thread/open", (data) => {
+            const thread = this.store.Thread.get(data);
+            this.threadService.open(thread);
+        });
+        this.busService.subscribe("discuss.Thread/closed", (data) => {
+            const thread = this.store.Thread.get(data);
+            this.threadService.closeChatWindow(thread);
+        });
+    }
 });
