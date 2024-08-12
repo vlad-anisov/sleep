@@ -23,7 +23,7 @@
     "assets": {
         "web.assets_backend": [
             "sleep/static/src/js/sleep.js",
-            # "sleep/static/src/xml/sleep.xml",
+            "sleep/static/src/xml/sleep.xml",
             "sleep/static/src/css/sleep.scss",
             "sleep/static/src/css/sleep.css",
         ],

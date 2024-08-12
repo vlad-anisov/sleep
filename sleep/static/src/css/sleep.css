@@ -1,8 +1,9 @@
 .o-mail-ChatWindow {
-    height: 95% !important;
+    height: 100% !important;
     width: 100% !important;
     right: 0px !important;
-    z-index: 89 !important;
+    z-index: 91 !important;
+    border: 0px !important;
 }
 
 .o-mail-Message-sidebar {
@@ -11,4 +12,39 @@
 
 .o-mail-Composer-actions {
     display: none !important;
+}
+
+.o-mail-DiscussSystray-class {
+    display: none !important;
+}
+
+.o-mail-ChatWindow-threadAvatar {
+    padding-left: 35% !important;
+    /*padding-right: 20px !important;*/
+}
+
+.o-mail-ThreadIcon {
+    display: none !important;
+}
+
+/*.o-mail-ChatWindow-command {*/
+/*    display: none !important;*/
+/*}*/
+
+.o-mail-ChatWindow-threadAvatar > img {
+    border-radius: 50% !important;
+    height: 40px !important;
+    width: 40px !important;
+}
+
+.o-mail-ChatWindow-header {
+    background-color: transparent !important;
+    backdrop-filter: blur(30px) !important;
+    box-shadow: 0 5px 10px 3px rgba(0, 0, 0, .05) !important;
+    position: fixed !important;
+    z-index: 92 !important;
+    left: 0 !important;
+    right: 0 !important;
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
 }
