@@ -18,7 +18,7 @@
         <field name="res_id">1</field>
     </record>
 
-    <menuitem id="page_sleepy_chat_menu" name="Sleepy chat" action="page_sleepy_chat_action" sequence="1"
+    <menuitem web_icon="fa-regular fa-comment" id="page_sleepy_chat_menu" name="Sleepy" action="page_sleepy_chat_action" sequence="1"
               parent="sleep_root_menu"/>
 
 </odoo>

@@ -54,7 +54,7 @@ export function useSearchBarToggler() {
 patch(KanbanController.prototype, {
     setup(attributes) {
         super.setup(...arguments);
-        this.searchBarToggler = useSearchBarToggler();
+        // this.searchBarToggler = useSearchBarToggler();
     }
 })
 
@@ -72,6 +72,42 @@ userMenuRegistry.remove("color_scheme.switch");
 userMenuRegistry.remove("web.user_menu");
 userMenuRegistry.remove("web_mobile.switch");
 
+
+//
+const systrayRegistry = registry.category("systray")
+systrayRegistry.remove("burger_menu")
+systrayRegistry.remove("mail.activity_menu")
+systrayRegistry.remove("mail.messaging_menu")
+
+
+//
+import { NavBar } from '@web/webclient/navbar/navbar';
+
+// patch(Navbar.prototype, {
+//     get showCashMoveButton() {
+//         const { cashier } = this.pos;
+//         return super.showCashMoveButton && (!cashier || cashier.role == "manager");
+//     },
+//     get showCloseSessionButton() {
+//         return (
+//             !this.pos.config.module_pos_hr ||
+//             (this.pos.get_cashier().role === "manager" && this.pos.get_cashier().user_id) ||
+//             this.pos.get_cashier_user_id() === this.pos.user.id
+//         );
+//     },
+//     get showBackendButton() {
+//         return (
+//             !this.pos.config.module_pos_hr ||
+//             (this.pos.get_cashier().role === "manager" && this.pos.get_cashier().user_id) ||
+//             this.pos.get_cashier_user_id() === this.pos.user.id
+//         );
+//     },
+//     async showLoginScreen() {
+//         this.pos.reset_cashier();
+//         await this.pos.showTempScreen("LoginScreen");
+//     },
+// });
+
 // Auto dark/light theme
 if (window.matchMedia) {
     var match = window.matchMedia('(prefers-color-scheme: dark)')
@@ -84,3 +120,10 @@ if (window.matchMedia) {
         window.location.reload();
     })
 }
+
+import { ControlPanel } from "@web/search/control_panel/control_panel";
+patch(ControlPanel.prototype, {
+    onScrollThrottled(){
+        return
+    }
+})

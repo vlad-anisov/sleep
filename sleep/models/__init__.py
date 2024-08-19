@@ -8,3 +8,6 @@ from . import page_sleepy_chat
 from . import page_about
 from . import article
 from . import base
+from . import ritual
+from . import ritual_line
+from . import ir_http

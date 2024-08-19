@@ -40,17 +40,19 @@ class ScriptStep(models.Model):
     user_answer = fields.Char(string="User answer")
     user_answer_type = fields.Selection(USER_ANSWER_TYPES, string="User answer type", required=True, default="next_step_name")
 
-    def get_channel(self):
-        sleepy_id = self.env.ref("sleep.sleepy")
-        partner_ids = self.env.user.partner_id + sleepy_id.partner_id
-        channel_id = self.env["discuss.channel"].search(
-            [("channel_partner_ids", "=", partner_ids.ids)], order="id desc", limit=1)
-        channel_id = channel_id.browse(3).with_user(sleepy_id)
-        return channel_id
+    # def get_channel(self):
+    #     sleepy_id = self.env.ref("sleep.sleepy")
+        # channel_ids = self.env["discuss.channel"].search(
+        #     [("channel_partner_ids", "=", [self.env.user.partner_id.id])]
+        # )
+        # channel_id = self.env["discuss.channel"].search(
+        #     [("id", "in", channel_ids.ids), ("channel_partner_ids", "=", [sleepy_id.partner_id.id])]
+        # ).filtered(lambda c: len(c.channel_partner_ids) == 2)[:1]
+        # return self.env.user.sleepy_chat_id.with_user(sleepy_id)
 
     def send_message(self, message):
-        channel_id = self.get_channel()
-        self.message_id = channel_id.message_post(
+        chat_id = self.env.user.sleepy_chat_id.with_user(self.env.ref("sleep.sleepy"))
+        self.message_id = chat_id.with_context(skip_notify_thread_by_web_push=True).message_post(
             body=message, message_type="comment", subtype_xmlid="mail.mt_comment", body_is_html=True
         )
 

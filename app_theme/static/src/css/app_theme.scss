@@ -1,7 +1,43 @@
 /* Styles for control panel  */
 .o_control_panel {
+  background-color: transparent;
+  backdrop-filter: blur(30px);
+  box-shadow: 0 5px 10px 3px rgba(0, 0, 0, .05);
+  z-index: 90;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0 !important;
+  border: 0 !important;
+
   @include media-breakpoint-up(md) {
-    padding-top: 55px !important;
+    padding-top: 60px !important;
+  }
+
+  @include media-breakpoint-down(md) {
+    padding-top: 11px !important;
+    padding-bottom: 11px !important;
+  }
+}
+
+/* Navbar (menu items) */
+.o_main_navbar {
+  background-color: transparent;
+  backdrop-filter: blur(30px);
+  position: fixed;
+  right: 0;
+  left: 0;
+  z-index: 100;
+  height: 60px !important;
+
+  @include media-breakpoint-down(md) {
+    bottom: 0;
+  }
+}
+
+.o_control_panel_main {
+  @include media-breakpoint-down(md) {
+    height: 38px !important;
   }
 }
 
@@ -13,25 +49,41 @@
   }
 }
 
-/*!* For menu items in desctop *!*/
-.o_main_navbar {
-  @include media-breakpoint-up(md) {
-    left: 0 !important;
-  }
-}
 
 /* Added padding-top for navbar in form and kanban*/
-.o_kanban_renderer {
-  padding-top: 97px !important;
-
-  @include media-breakpoint-up(md) {
-    padding-top: 113px !important;
-  }
-}
 .o_form_renderer {
   padding-top: 80px !important;
 
   @include media-breakpoint-up(md) {
     padding-top: 130px !important;
+  }
+}
+
+/* Added padding-top for player in form and kanban*/
+.o_list_renderer {
+  padding-bottom: 60px !important;
+
+  @include media-breakpoint-up(md) {
+    padding-bottom: 60px !important;
+  }
+}
+.o_form_renderer {
+  padding-bottom: 60px !important;
+
+  @include media-breakpoint-up(md) {
+    padding-bottom: 60px !important;
+  }
+}
+
+
+
+.o_kanban_renderer {
+  padding-top: 60px !important;
+  padding-bottom: 61px !important; //FIXME
+  border: 0px !important;
+
+  @include media-breakpoint-up(md) {
+    padding-bottom: 60px !important;
+    padding-top: 113px !important;
   }
 }

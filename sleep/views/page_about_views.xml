@@ -38,7 +38,7 @@
         <field name="res_id">1</field>
     </record>
 
-    <menuitem id="page_about_menu" name="About app" action="page_about_action" sequence="100"
-              parent="sleep_root_menu"/>
+    <menuitem id="page_about_menu" name="About" action="page_about_action" sequence="100"
+              parent="sleep_root_menu" web_icon="fa-gear"/>
 
 </odoo>

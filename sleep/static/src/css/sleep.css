@@ -1,22 +1,24 @@
-.o-mail-ChatWindow {
-    height: 100% !important;
-    width: 100% !important;
-    right: 0px !important;
-    z-index: 91 !important;
-    border: 0px !important;
-}
+/*.o-mail-ChatWindow {*/
+/*    !*top: 0 !important;*!*/
+/*    height: 93% !important;*/
+/*    width: 100% !important;*/
+/*    right: 0px !important;*/
+/*    z-index: 91 !important;*/
+/*    border: 0px !important;*/
+/*}*/
 
 .o-mail-Message-sidebar {
     display: none !important;
 }
 
+/* Disable emoji, attachments and voice message */
 .o-mail-Composer-actions {
     display: none !important;
 }
 
-.o-mail-DiscussSystray-class {
-    display: none !important;
-}
+/*.o-mail-DiscussSystray-class {*/
+/*    display: none !important;*/
+/*}*/
 
 .o-mail-ChatWindow-threadAvatar {
     padding-left: 35% !important;
@@ -47,4 +49,5 @@
     right: 0 !important;
     padding-top: 40px !important;
     padding-bottom: 40px !important;
+    border: 0 !important;
 }

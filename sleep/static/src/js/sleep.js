@@ -49,8 +49,9 @@ patch(ChatWindowService.prototype, {
 });
 
 import { FormRenderer } from "@web/views/form/form_renderer";
-import { onWillRender, onWillDestroy, onMounted } from "@odoo/owl";
+import {onWillRender, onWillDestroy, onMounted, useState, useEffect} from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
+import { session } from '@web/session';
 
 patch(FormRenderer.prototype, {
     setup() {
@@ -58,13 +59,14 @@ patch(FormRenderer.prototype, {
         this.threadService = useService("mail.thread");
    		onWillRender(() => {
             if (this.props.record.model.config.resModel == "page.sleepy.chat"){
-                const thread = this.mailStore.Thread.get({ model: "discuss.channel", id: 3 });
-                if (thread)
-                    this.threadService.open(thread)
+                let thread = this.mailStore.Thread.get({ model: "discuss.channel", id: session.sleepy_chat_id });
+                if (!thread)
+                    thread = this.mailStore.Thread.insert({ model: "discuss.channel", id: session.sleepy_chat_id });
+                this.threadService.open(thread)
             }
         });
         onWillDestroy(() => {
-            const thread = this.mailStore.Thread.get({ model: "discuss.channel", id: 3 });
+            const thread = this.mailStore.Thread.get({ model: "discuss.channel", id: session.sleepy_chat_id });
             const chatWindow = this.threadService.store.discuss.chatWindows.find((c) => c.thread?.eq(thread));
             if (chatWindow) {
                 this.threadService.chatWindowService.close(chatWindow);
@@ -85,6 +87,7 @@ patch(Composer.prototype, {
 
 
 import {ThreadService} from "@mail/core/common/thread_service";
+import {useSearchBarToggler} from "../../../../app_theme/static/src/js/app_theme";
 
 patch(ThreadService.prototype, {
     async loadAround2(thread) {
@@ -97,3 +100,58 @@ patch(ThreadService.prototype, {
         this._enrichMessagesWithTransient(thread);
     }
 });
+
+
+
+// import {KanbanController} from "@web/views/kanban/kanban_controller";
+// import {browser} from "@web/core/browser/browser";
+// import {useDebounced} from "@web/core/utils/timing";
+// import {SearchBarToggler} from "@web/search/search_bar/search_bar_toggler";
+//
+// export function useSearchBarToggler2() {
+//     const ui = useService("ui");
+//
+//     let isToggled = false;
+//     const state = useState({
+//         isSmall: ui.isSmall,
+//         showSearchBar: true,
+//     });
+//     const updateState = () => {
+//         state.isSmall = ui.isSmall;
+//         state.showSearchBar = true;
+//     };
+//     updateState();
+//
+//     function toggleSearchBar() {
+//         isToggled = !isToggled;
+//         updateState();
+//     }
+//
+//     const onResize = useDebounced(updateState, 200);
+//     useEffect(
+//         () => {
+//             browser.addEventListener("resize", onResize);
+//             return () => browser.removeEventListener("resize", onResize);
+//         },
+//         () => []
+//     );
+//
+//     return {
+//         state,
+//         component: SearchBarToggler,
+//         get props() {
+//             return {
+//                 isSmall: state.isSmall,
+//                 showSearchBar: state.showSearchBar,
+//                 toggleSearchBar,
+//             };
+//         },
+//     };
+// }
+//
+// patch(KanbanController.prototype, {
+//     setup(attributes) {
+//         super.setup(...arguments);
+//         this.searchBarToggler = useSearchBarToggler2();
+//     }
+// })
