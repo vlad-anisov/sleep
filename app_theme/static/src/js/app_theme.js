@@ -127,3 +127,31 @@ patch(ControlPanel.prototype, {
         return
     }
 })
+
+
+
+
+import { ListRenderer } from "@web/views/list/list_renderer";
+
+patch(ListRenderer.prototype, {
+    get displayRowCreates() {
+        return this.canCreate;
+    }
+})
+
+
+
+
+//
+// import { getActiveActions, archParseBoolean } from "@web/views/utils";
+// patch(getActiveActions.prototype, function (rootNode) {
+//     return {
+//         type: "view",
+//         edit: archParseBoolean(rootNode.getAttribute("edit"), true),
+//         create: archParseBoolean(rootNode.getAttribute("create"), true),
+//         delete: archParseBoolean(rootNode.getAttribute("delete"), true),
+//         duplicate: archParseBoolean(rootNode.getAttribute("duplicate"), true),
+//         link: archParseBoolean(rootNode.getAttribute("link"), true),
+//         unlink: archParseBoolean(rootNode.getAttribute("unlink"), true),
+//     };
+// })

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="article_rule" model="ir.rule">
+            <field name="name">Article rule</field>
+            <field name="model_id" ref="sleep.model_article"/>
+            <field name="domain_force">[('user_ids', 'in', user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="ritual_line_rule" model="ir.rule">
+            <field name="name">Ritual line rule</field>
+            <field name="model_id" ref="sleep.model_ritual_line"/>
+            <field name="domain_force">[('create_uid', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+    </data>
+</odoo>

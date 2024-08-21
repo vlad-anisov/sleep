@@ -14,12 +14,14 @@
         "security/ir.model.access.csv",
         "data/res_users_data.xml",
         "data/ir_actions_server_data.xml",
+        "data/ir_rule_data.xml",
         "views/script_views.xml",
         "views/menuitems.xml",
         "views/page_sleepy_chat_views.xml",
         "views/page_about_views.xml",
         "views/article_views.xml",
         "views/ritual_views.xml",
+        "views/ritual_line_views.xml",
     ],
     "assets": {
         "web.assets_backend": [

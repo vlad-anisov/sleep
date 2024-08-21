@@ -21,6 +21,9 @@ class Script(models.Model):
     is_main = fields.Boolean(string="Is main")
     main_script_id = fields.Many2one("script", string="Main script")
 
+    ritual_line_id = fields.Many2one("ritual.line", string="Ritual line", domain=[("is_base", "=", True)])
+    article_id = fields.Many2one("article", string="Article")
+
     @api.constrains("is_main", "main_script_id", "user_id", "next_script_id")
     def _check_script(self):
         for record in self:

@@ -1,7 +1,8 @@
 /* Styles for control panel  */
-.o_control_panel {
+.o_action_manager > .o_kanban_view > .o_control_panel {
   background-color: transparent;
-  backdrop-filter: blur(30px);
+  backdrop-filter: blur(30px) !important;
+  -webkit-backdrop-filter: blur(30px) !important;
   box-shadow: 0 5px 10px 3px rgba(0, 0, 0, .05);
   z-index: 90;
   position: fixed;
@@ -23,7 +24,8 @@
 /* Navbar (menu items) */
 .o_main_navbar {
   background-color: transparent;
-  backdrop-filter: blur(30px);
+  backdrop-filter: blur(30px) !important;
+  -webkit-backdrop-filter: blur(30px) !important;
   position: fixed;
   right: 0;
   left: 0;
@@ -51,28 +53,20 @@
 
 
 /* Added padding-top for navbar in form and kanban*/
-.o_form_renderer {
+.o_action_manager > .o_list_view > .o_content > .o_form_renderer {
   padding-top: 80px !important;
+  padding-bottom: 60px !important;
 
   @include media-breakpoint-up(md) {
-    padding-top: 130px !important;
+     padding-top: 130px !important;
+    padding-bottom: 60px !important;
   }
 }
 
 /* Added padding-top for player in form and kanban*/
-.o_list_renderer {
+.o_action_manager > .o_list_view > .o_content > .o_list_renderer  {
   padding-bottom: 60px !important;
-
-  @include media-breakpoint-up(md) {
-    padding-bottom: 60px !important;
-  }
-}
-.o_form_renderer {
-  padding-bottom: 60px !important;
-
-  @include media-breakpoint-up(md) {
-    padding-bottom: 60px !important;
-  }
+  padding-top: 60px;
 }
 
 
@@ -86,4 +80,15 @@
     padding-bottom: 60px !important;
     padding-top: 113px !important;
   }
+}
+
+
+
+.modal-body > .o_list_view > .o_control_panel {
+  display: none !important;
+}
+
+
+.o_list_record_selector {
+    display: none;
 }

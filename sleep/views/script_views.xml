@@ -13,6 +13,8 @@
                 <sheet>
                     <group>
                         <field name="name"/>
+                        <field name="article_id"/>
+                        <field name="ritual_line_id"/>
                         <field name="user_id"/>
                         <field name="is_main"/>
                         <field name="main_script_id" invisible="is_main == True"/>
@@ -35,7 +37,7 @@
                                     <field name="name"/>
                                     <field name="message" widget="html" options="{'codeview': true}"/>
                                     <field name="user_answer_type"/>
-<!--                                    <field name="code" widget="code" options="{'mode': 'python'}"/>-->
+                                    <field name="code" widget="code" options="{'mode': 'python'}"/>
                                     <field name="script_id" invisible="1"/>
                                     <field name="next_step_ids" widget="many2many_tags" domain="[('script_id', '=', script_id)]"/>
                                 </group>

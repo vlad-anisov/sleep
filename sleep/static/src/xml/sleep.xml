@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
 
+<t t-name="sleep.SelectCreateDialog" t-inherit="web.SelectCreateDialog" t-inherit-mode="extension">
+    <xpath expr="//button[hasclass('o_form_button_cancel')]" position="replace">
+    </xpath>
+</t>
+
+<!--<t t-name="sleep.Dialog" t-inherit="web.Dialog" t-inherit-mode="extension">-->
+<!--    <xpath expr="//footer[hasclass('modal-footer')]" position="replace">-->
+<!--        <footer t-if="props.footer" class="modal-footer" style="display: none">-->
+<!--            <t t-slot="footer" close="() => this.data.close()">-->
+<!--                <button class="btn btn-primary o-default-button" t-on-click="() => this.data.close()">-->
+<!--                    <t>Ok</t>-->
+<!--                </button>-->
+<!--            </t>-->
+<!--        </footer>-->
+<!--    </xpath>-->
+<!--</t>-->
+
+
+<t t-name="sleep.ListRenderer.Rows" t-inherit="web.ListRenderer.Rows" t-inherit-mode="extension">
+    <xpath expr="//t[@t-if='!props.list.isGrouped']" position="replace">
+    </xpath>
+</t>
 
 </templates>

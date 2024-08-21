@@ -42,6 +42,7 @@
 .o-mail-ChatWindow-header {
     background-color: transparent !important;
     backdrop-filter: blur(30px) !important;
+    -webkit-backdrop-filter: blur(30px) !important;
     box-shadow: 0 5px 10px 3px rgba(0, 0, 0, .05) !important;
     position: fixed !important;
     z-index: 92 !important;

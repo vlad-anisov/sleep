@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="ritual_line_form" model="ir.ui.view">
+        <field name="name">ritual.line.form</field>
+        <field name="model">ritual.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="ritual_line_tree" model="ir.ui.view">
+        <field name="name">ritual.line.tree</field>
+        <field name="model">ritual.line</field>
+        <field name="arch" type="xml">
+            <tree action="add_to_ritual" type="object" multi_edit="false">
+                <control>
+                    <button name="create_custom_line" class="btn-link" type="object" string="Create custom line"/>
+                </control>
+                <field name="name" nolabel="1"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>

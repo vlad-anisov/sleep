@@ -17,6 +17,7 @@ USER_ANSWER_TYPES = [
     ("next_step_name", "Next step name"),
     ("email", "Email"),
     ("time", "Time"),
+    ("article", "Article"),
 ]
 
 
@@ -40,18 +41,20 @@ class ScriptStep(models.Model):
     user_answer = fields.Char(string="User answer")
     user_answer_type = fields.Selection(USER_ANSWER_TYPES, string="User answer type", required=True, default="next_step_name")
 
-    # def get_channel(self):
-    #     sleepy_id = self.env.ref("sleep.sleepy")
-        # channel_ids = self.env["discuss.channel"].search(
-        #     [("channel_partner_ids", "=", [self.env.user.partner_id.id])]
-        # )
-        # channel_id = self.env["discuss.channel"].search(
-        #     [("id", "in", channel_ids.ids), ("channel_partner_ids", "=", [sleepy_id.partner_id.id])]
-        # ).filtered(lambda c: len(c.channel_partner_ids) == 2)[:1]
-        # return self.env.user.sleepy_chat_id.with_user(sleepy_id)
-
     def send_message(self, message):
-        chat_id = self.env.user.sleepy_chat_id.with_user(self.env.ref("sleep.sleepy"))
+        if not self.env.context.get("skip_first_delay"):
+            self.with_context(skip_first_delay=True).with_delay(eta=1).send_message(message)
+            return
+        sleepy_id = self.env.ref("sleep.sleepy")
+        chat_id = self.env.user.sleepy_chat_id.with_user(sleepy_id)
+        member_id = self.env["discuss.channel.member"].search(
+            [("channel_id", "=", chat_id.id), ("partner_id", "=", sleepy_id.partner_id.id)]
+        ).with_user(sleepy_id)
+        if not self.env.context.get("skip_second_delay"):
+            member_id._notify_typing(True)
+            self.with_context(skip_second_delay=True).with_delay(eta=2).send_message(message)
+            return
+        member_id._notify_typing(False)
         self.message_id = chat_id.with_context(skip_notify_thread_by_web_push=True).message_post(
             body=message, message_type="comment", subtype_xmlid="mail.mt_comment", body_is_html=True
         )
@@ -133,6 +136,16 @@ class ScriptStep(models.Model):
                 </div>
             """
             message = f"{self.message}<br/>{timepicker}<br/>{button}"
+        elif self.user_answer_type == "article":
+            self.script_id.sudo().article_id.user_ids += self.env.user
+            next_script_id = self.script_id.next_script_id.create_script(self.env.user)
+            self.env.user.script_id = next_script_id
+            button = f"""
+                <div class="row px-3">
+                    <a class="btn btn-primary href="/web#id={self.script_id.article_id.id}&model=article&view_type=form"">Read</a>
+                </div>
+            """
+            message = f"{self.message}<br/>{button}"
         elif self.user_answer_type in ("email", "nothing"):
             message = self.message
         self.send_message(message)
@@ -150,7 +163,11 @@ class ScriptStep(models.Model):
                 except EmailNotValidError as e:
                     self.send_message(_("Invalid email"))
             elif self.user_answer_type == "time":
-                pass
+                vals = self.user_answer.split(':')
+                t, hours = divmod(float(vals[0]), 24)
+                t, minutes = divmod(float(vals[1]), 60)
+                minutes = minutes / 60.0
+                self.user_answer = str(hours + minutes)
         elif self.user_answer_type != "nothing":
             self.send_message(_("Please provide an answer"))
         self.state = "post_processing"
@@ -163,4 +180,7 @@ class ScriptStep(models.Model):
         if self.user_answer_type == "next_step_name":
             next_step_id = self.next_step_ids.filtered(lambda s: s.name == self.user_answer)[:1]
         self.state = "done"
-        next_step_id.run()
+        if next_step_id:
+            next_step_id.run()
+        else:
+            self.unlink()

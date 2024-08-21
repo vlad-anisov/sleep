@@ -18,12 +18,16 @@
 }
 
 .o-mail-Thread {
+    //@include media-breakpoint-down(md) {
+    //    padding-bottom: 126px !important;
+    //}
     @include media-breakpoint-down(md) {
-        padding-bottom: 126px !important;
+        padding-bottom: 84px !important;
     }
 }
 
 .o-mail-Composer {
+    display: none !important;
     @include media-breakpoint-down(md) {
         //background-color: transparent !important;
         //backdrop-filter: blur(30px) !important;

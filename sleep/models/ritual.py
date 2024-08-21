@@ -5,8 +5,7 @@ class Ritual(models.Model):
     _name = "ritual"
 
     name = fields.Char(string="Name", default="Ritual")
-    line_ids = fields.One2many("ritual.line", "ritual_id", string="Lines")
-    line_name = fields.Char(string="Line name")
+    line_ids = fields.Many2many("ritual.line", string="Lines")
     user_id = fields.Many2one("res.users", string="User", required=True)
     is_edit = fields.Boolean(string="Is edit")
 
@@ -20,11 +19,6 @@ class Ritual(models.Model):
             "res_id": self.env.user.ritual_id.id,
         }
 
-    def add_line(self):
-        self.ensure_one()
-        if self.line_name:
-            self.env["ritual.line"].create({
-                "ritual_id": self.id,
-                "name": self.line_name,
-            })
-            self.line_name = ""
+    @api.onchange("line_ids")
+    def _onchange_line_ids(self):
+        self.env["ritual.line"].browse(list(set(self._origin.line_ids.ids) - set(self.line_ids.ids))).unlink()

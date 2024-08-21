@@ -49,7 +49,7 @@ patch(ChatWindowService.prototype, {
 });
 
 import { FormRenderer } from "@web/views/form/form_renderer";
-import {onWillRender, onWillDestroy, onMounted, useState, useEffect} from "@odoo/owl";
+import {onWillRender, onWillDestroy, onMounted, useState, useEffect, markup} from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 import { session } from '@web/session';
 
@@ -101,57 +101,35 @@ patch(ThreadService.prototype, {
     }
 });
 
+import { SelectCreateDialog } from "@web/views/view_dialogs/select_create_dialog";
+patch(SelectCreateDialog.prototype, {
+    setup() {
+        super.setup();
+        this.props.multiSelect = false;
+        this.props.noCreate = true;
+        this.props.editable = "bottom";
+    },
+    get viewProps() {
+        const type = "list";
+        const props = {
+            loadIrFilters: true,
+            ...this.baseViewProps,
+            context: this.props.context,
+            domain: this.props.domain,
+            dynamicFilters: this.props.dynamicFilters,
+            resModel: this.props.resModel,
+            searchViewId: this.props.searchViewId,
+            type,
+        };
+        props.allowSelectors = this.props.multiSelect;
+        return props;
+    }
+});
 
+import { Dialog } from '@web/core/dialog/dialog';
 
-// import {KanbanController} from "@web/views/kanban/kanban_controller";
-// import {browser} from "@web/core/browser/browser";
-// import {useDebounced} from "@web/core/utils/timing";
-// import {SearchBarToggler} from "@web/search/search_bar/search_bar_toggler";
-//
-// export function useSearchBarToggler2() {
-//     const ui = useService("ui");
-//
-//     let isToggled = false;
-//     const state = useState({
-//         isSmall: ui.isSmall,
-//         showSearchBar: true,
-//     });
-//     const updateState = () => {
-//         state.isSmall = ui.isSmall;
-//         state.showSearchBar = true;
-//     };
-//     updateState();
-//
-//     function toggleSearchBar() {
-//         isToggled = !isToggled;
-//         updateState();
-//     }
-//
-//     const onResize = useDebounced(updateState, 200);
-//     useEffect(
-//         () => {
-//             browser.addEventListener("resize", onResize);
-//             return () => browser.removeEventListener("resize", onResize);
-//         },
-//         () => []
-//     );
-//
-//     return {
-//         state,
-//         component: SearchBarToggler,
-//         get props() {
-//             return {
-//                 isSmall: state.isSmall,
-//                 showSearchBar: state.showSearchBar,
-//                 toggleSearchBar,
-//             };
-//         },
-//     };
-// }
-//
-// patch(KanbanController.prototype, {
-//     setup(attributes) {
-//         super.setup(...arguments);
-//         this.searchBarToggler = useSearchBarToggler2();
-//     }
-// })
+patch(Dialog.prototype, {
+	get isFullscreen() {
+        return this.props.fullscreen;
+    }
+});
