@@ -87,14 +87,27 @@ patch(Composer.prototype, {
 
 
 import {ThreadService} from "@mail/core/common/thread_service";
-import {useSearchBarToggler} from "../../../../app_theme/static/src/js/app_theme";
 
 patch(ThreadService.prototype, {
     async loadAround2(thread) {
-        const {messages} = await this.rpc(this.getFetchRoute(thread), {
+        let {messages} = await this.rpc(this.getFetchRoute(thread), {
             ...this.getFetchParams(thread)
         });
-        thread.messages = this.store.Message.insert(messages.reverse(), {html: true});
+        let originalMessages = JSON.parse(JSON.stringify(messages));
+        for (const message of messages) {
+          if (this.user.userId === message.author.user.id) {
+            break;
+          }
+          else {
+              const index = originalMessages.findIndex(function(el){
+                  return el.id === message.id;
+                });
+              if (index !== -1) {
+                originalMessages.splice(index, 1);
+              }
+          }
+        }
+        thread.messages = this.store.Message.insert(originalMessages.reverse(), {html: true});
         thread.loadNewer = false;
         thread.loadOlder = true;
         this._enrichMessagesWithTransient(thread);
@@ -133,3 +146,84 @@ patch(Dialog.prototype, {
         return this.props.fullscreen;
     }
 });
+
+
+
+
+// // задержка перед тем как показать сообщение
+import { DiscussCoreCommon } from "@mail/discuss/core/common/discuss_core_common_service"
+import { delay } from "@web/core/utils/concurrency";
+
+patch(DiscussCoreCommon.prototype, {
+    async _handleNotificationNewMessage(notif) {
+        let self = this;
+        if (notif.payload.message.author.name === "Sleepy"){
+            const { id } = notif.payload;
+            await self.rpc(
+                "/discuss/channel/notify_typing",
+                {
+                    channel_id: id,
+                    is_typing: true,
+                    is_sleepy: true,
+                },
+                { silent: true }
+            ).then(async () => {
+                console.log("1111")
+                await delay(2000).then(async () => {
+                    await self.rpc(
+                    "/discuss/channel/notify_typing",
+                    {
+                        channel_id: id,
+                        is_typing: false,
+                        is_sleepy: true,
+                    },
+                    { silent: true}
+                ).then(async () => {
+                     await super._handleNotificationNewMessage(notif);
+                    })
+                })
+            })
+        } else {
+            await super._handleNotificationNewMessage(notif);
+        }
+    }
+})
+
+
+
+// Edit button for ritual
+import { FormController } from "@web/views/form/form_controller";
+import { formView } from '@web/views/form/form_view';
+import { registry } from '@web/core/registry';
+export class RitualFormController extends FormController {
+    setup() {
+        this.props.preventEdit = true;
+        super.setup();
+    }
+
+    async edit(){
+        await this.model.load();
+        this.model.root.switchMode("edit")
+    }
+
+    async saveButtonClicked(params = {}){
+        let saved = await super.saveButtonClicked();
+        if (saved) {
+        if (!this.env.inDialog) {
+            await this.model.root.switchMode("readonly");
+        } else {
+            await this.model.actionService.doAction({ type: 'ir.actions.act_window_close' });
+        }
+    }
+        return saved;
+    }
+
+}
+RitualFormController.template = 'sleep.RitualFormView';
+export const ritualFormViewe = {
+    ...formView,
+    Controller: RitualFormController
+};
+registry.category("views").add("ritual_form", ritualFormViewe);
+
+

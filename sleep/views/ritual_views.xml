@@ -5,32 +5,28 @@
         <field name="name">ritual.form</field>
         <field name="model">ritual</field>
         <field name="arch" type="xml">
-            <form>
-                <group>
-                    <label for="is_edit" string=" "/>
-                    <div class="o_row">
-                        <span style="width: 35px !important;">Edit</span>
-                        <field name="is_edit" string="Edit lines" widget="boolean_toggle"/>
-                    </div>
-                    <field name="line_ids" string=" " readonly="1" invisible="is_edit == True">
-                        <tree default_order="sequence desc, id desc"
+            <form js_class="ritual_form">
+                <div class="oe_read_only">
+                    <field name="line_ids" nolabel="1" readonly="1">
+                        <tree no_open="1" default_order="sequence desc, id desc"
                               decoration-muted="is_check == False" decoration-primary="is_check == True">
                             <field name="is_check" nolabel="1" widget="boolean_sleep_icon"
                                    options="{'icon': 'fa-check rounded-circle', 'no_active_icon': 'rounded-circle'}"/>
-                            <field name="name" readonly="1" class="text-left" nolabel="1"/>
+                            <field name="name" readonly="1" nolabel="1"/>
                         </tree>
                     </field>
-                    <label for="line_ids" string=" "/>
-                    <field name="line_ids" string="Line" nolabel="1" invisible="is_edit == False">
-                        <tree default_order="sequence desc, id desc">
+                </div>
+                <div class="oe_edit_only">
+                    <field name="line_ids" nolabel="1" readonly="0">
+                        <tree no_open="1" default_order="sequence desc, id desc">
                             <control>
                                 <button name="add_line" string="Add line" class="btn-link" type="object"/>
                             </control>
                             <field name="sequence" widget="handle" nolabel="1"/>
-                            <field name="name" readonly="0" class="text-left" nolabel="1"/>
+                            <field name="name" nolabel="1"/>
                         </tree>
                     </field>
-                </group>
+                </div>
             </form>
         </field>
     </record>
@@ -44,6 +40,7 @@
         </field>
     </record>
 
-    <menuitem id="ritual_menu" name="Ritual" parent="sleep_root_menu" sequence="3" action="ritual_action" web_icon="fa-regular fa-star"/>
+    <menuitem id="ritual_menu" name="Ritual" parent="sleep_root_menu" sequence="3" action="ritual_action"
+              web_icon="fa-regular fa-star"/>
 
 </odoo>

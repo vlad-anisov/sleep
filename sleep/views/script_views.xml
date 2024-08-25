@@ -25,7 +25,7 @@
                                 <field name="state" invisible="1"/>
                                 <field name="name"/>
                                 <field name="message"/>
-                                <field name="user_answer_type"/>
+                                <field name="type"/>
                                 <field name="next_step_ids" widget="many2many_tags"/>
                             </tree>
                             <form>
@@ -36,7 +36,7 @@
                                 <group>
                                     <field name="name"/>
                                     <field name="message" widget="html" options="{'codeview': true}"/>
-                                    <field name="user_answer_type"/>
+                                    <field name="type"/>
                                     <field name="code" widget="code" options="{'mode': 'python'}"/>
                                     <field name="script_id" invisible="1"/>
                                     <field name="next_step_ids" widget="many2many_tags" domain="[('script_id', '=', script_id)]"/>

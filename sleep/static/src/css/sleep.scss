@@ -22,8 +22,12 @@
     //    padding-bottom: 126px !important;
     //}
     @include media-breakpoint-down(md) {
-        padding-bottom: 84px !important;
+        padding-bottom: 71px !important;
     }
+}
+.o-mail-ChatWindow-typing{
+    padding-bottom: 60px !important;
+    background-color: transparent !important;
 }
 
 .o-mail-Composer {
@@ -45,3 +49,21 @@
 //        backdrop-filter: blur(30px) !important;
 //    }
 //}
+
+
+.o_last_breadcrumb_item {
+    display: none !important;
+}
+
+.o-mail-Thread-newMessage {
+    display: none !important;
+}
+.o-mail-DateSection {
+    display: none !important;
+}
+.o-mail-Message-header {
+    display: none !important;
+}
+.o-mail-ChatWindow-counter {
+    display: none !important;
+}

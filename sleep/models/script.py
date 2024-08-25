@@ -42,12 +42,13 @@ class Script(models.Model):
             main_script_id = self
             self.user_id = False
         else:
-            main_script_id = self.sudo().main_script_id
+            main_script_id = self.next_script_id or self.main_script_id
             self.unlink()
 
         if user_id:
             script_id = main_script_id.create_script(user_id)
-            user_id.script_id.unlink()
+            if user_id.script_id:
+                user_id.script_id.unlink()
             user_id.script_id = script_id
             script_id.with_user(user_id).step_ids.sorted(key=lambda s: (s.sequence, s.id))[:1].run()
 
@@ -74,6 +75,7 @@ class Script(models.Model):
             "is_main": False,
             "user_id": user_id.id,
             "main_script_id": self.id,
+            "next_script_id": False,
         })
 
         previous_step_id = False

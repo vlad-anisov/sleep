@@ -1,13 +1,12 @@
 {
     "name": "Sleep",
-    "version": "17.0",
+    "version": "17.1",
     "category": "",
     "summary": "Summary",
     "description": """ Description """,
     "depends": [
         "base",
         "muk_web_enterprise_theme",
-        "queue_job",
         "mail",
     ],
     "data": [
@@ -22,6 +21,7 @@
         "views/article_views.xml",
         "views/ritual_views.xml",
         "views/ritual_line_views.xml",
+        "views/settings_views.xml",
     ],
     "assets": {
         "web.assets_backend": [

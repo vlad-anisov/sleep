@@ -19,6 +19,9 @@
             "app_theme/static/src/css/app_theme.scss",
             "app_theme/static/src/css/app_theme.css",
         ],
+        'web._assets_primary_variables': [
+            ('after', 'web_enterprise/static/src/scss/primary_variables.scss', "app_theme/static/src/css/primary_variables.scss"),
+        ],
     },
     "application": True,
 }

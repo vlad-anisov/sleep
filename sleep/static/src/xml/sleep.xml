@@ -24,4 +24,47 @@
     </xpath>
 </t>
 
+<!-- For edit button in ritual -->
+
+<t t-name="sleep.ControlPanel" t-inherit="web.ControlPanel" t-inherit-mode="extension">
+    <xpath expr="//div[hasclass('o_control_panel_actions')]" position="attributes">
+        <attribute name="class" add="order-3" remove="order-2" separator=" "/>
+    </xpath>
+    <xpath expr="//div[hasclass('o_control_panel_navigation')]" position="attributes">
+        <attribute name="class" add="order-2 order-lg-3" remove="order-1 order-lg-2" separator=" "/>
+    </xpath>
+    <xpath expr="//div[hasclass('o_control_panel_breadcrumbs')]" position="after">
+        <div class="o_control_panel_navigation d-flex align-items-center justify-content-center order-1">
+            <t t-if="!env.config.noBreadcrumbs">
+                <t t-set="currentBreadcrumbs" t-value="breadcrumbs.slice(-1)"/>
+                <t t-set="breadcrumb" t-value="currentBreadcrumbs[0] || {}"/>
+                <t t-slot="control-panel-breadcrumb">
+                    <div class="o_breadcrumb d-flex gap-1 text-truncate">
+                        <div class="active d-flex fs-4 min-w-0 align-items-center">
+                            <span class="min-w-0 text-truncate" t-call="web.Breadcrumb.Name"/>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </div>
+    </xpath>
+    <xpath expr="//div[hasclass('o_control_panel_collapsed_create')]" position="attributes">
+        <attribute name="class" add="d-none" remove="d-xl-none" separator=" "/>
+    </xpath>
+    <xpath expr="//div[hasclass('d-xl-inline-flex')]" position="attributes">
+        <attribute name="class" add="d-inline-flex" remove="d-none d-xl-inline-flex" separator=" "/>
+    </xpath>
+</t>
+
+<t t-name="sleep.RitualFormView" t-inherit="web.FormView">
+    <xpath expr="//t[@t-set-slot='layout-buttons']" position="inside">
+            <t t-if="!model.root.isInEdition">
+                <button type="button" class="btn btn-link" t-on-click="edit">Edit</button>
+            </t>
+            <t t-else="">
+                <button type="button" class="btn btn-link" t-on-click="saveButtonClicked">Done</button>
+            </t>
+        </xpath>
+</t>
+
 </templates>

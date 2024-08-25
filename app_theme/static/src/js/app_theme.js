@@ -82,31 +82,13 @@ systrayRegistry.remove("mail.messaging_menu")
 
 //
 import { NavBar } from '@web/webclient/navbar/navbar';
+let { DropdownItem } = NavBar.components;
 
-// patch(Navbar.prototype, {
-//     get showCashMoveButton() {
-//         const { cashier } = this.pos;
-//         return super.showCashMoveButton && (!cashier || cashier.role == "manager");
-//     },
-//     get showCloseSessionButton() {
-//         return (
-//             !this.pos.config.module_pos_hr ||
-//             (this.pos.get_cashier().role === "manager" && this.pos.get_cashier().user_id) ||
-//             this.pos.get_cashier_user_id() === this.pos.user.id
-//         );
-//     },
-//     get showBackendButton() {
-//         return (
-//             !this.pos.config.module_pos_hr ||
-//             (this.pos.get_cashier().role === "manager" && this.pos.get_cashier().user_id) ||
-//             this.pos.get_cashier_user_id() === this.pos.user.id
-//         );
-//     },
-//     async showLoginScreen() {
-//         this.pos.reset_cashier();
-//         await this.pos.showTempScreen("LoginScreen");
-//     },
-// });
+DropdownItem.props = {
+    ...DropdownItem.props,
+    web_icon: { type: String, optional: true },
+};
+
 
 // Auto dark/light theme
 if (window.matchMedia) {

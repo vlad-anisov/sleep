@@ -8,6 +8,9 @@ class Ritual(models.Model):
     line_ids = fields.Many2many("ritual.line", string="Lines")
     user_id = fields.Many2one("res.users", string="User", required=True)
     is_edit = fields.Boolean(string="Is edit")
+    
+    def write(self, vals):
+        return super().write(vals)
 
     @api.model
     def open(self):

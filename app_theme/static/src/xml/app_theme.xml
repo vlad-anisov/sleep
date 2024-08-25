@@ -7,7 +7,7 @@
     </xpath>
 </t>
 
-<t t-name="sleep.NavBar" t-inherit="web_enterprise.EnterpriseNavBar" t-inherit-mode="extension">
+    <t t-name="sleep.NavBar" t-inherit="web_enterprise.EnterpriseNavBar" t-inherit-mode="extension">
 <!--    <xpath expr="//div[hasclass('o_menu_systray')]" position="replace"/>-->
         <!--     <xpath expr="//t[@t-call='web.NavBar.SectionsMenu']" position="before">-->
         <!--        &lt;!&ndash; Systray &ndash;&gt;-->
@@ -23,7 +23,7 @@
         <!--    </xpath>-->
 </t>
 
-<t t-name="sleep.NavBar.SectionsMenu" t-inherit="web.NavBar.SectionsMenu" t-inherit-mode="extension">
+    <t t-name="sleep.NavBar.SectionsMenu" t-inherit="web.NavBar.SectionsMenu" t-inherit-mode="extension">
     <xpath expr="//div[hasclass('o_menu_sections')]" position="attributes">
         <attribute name="class" add="d-flex" remove="d-none d-md-flex flex-grow-1 flex-shrink-1 w-0" separator=" "/>
     </xpath>
@@ -32,14 +32,13 @@
     </xpath>
 </t>
 
-<t t-name="sleep.NavBar.DropdownItem" t-inherit="web.NavBar.DropdownItem" t-inherit-mode="extension">
+    <t t-name="sleep.NavBar.DropdownItem" t-inherit="web.NavBar.DropdownItem" t-inherit-mode="extension">
     <xpath expr="//t[hasclass('dropdown-item')]" position="replace">
         <div class="d-flex align-items-center flex-column">
-            <t t-tag="'i'" class="fa fa-lg" t-att-class="props.web_icon"/>
             <t
                 t-tag="props.href ? 'a' : 'span'"
                 t-att-href="props.href"
-                class="dropdown-item"
+                class="dropdown-item d-flex align-items-center flex-column"
                 t-att-class="props.class"
                 role="menuitem"
                 t-on-click.stop="onClick"
@@ -49,7 +48,20 @@
                 tabindex="0"
                 t-att-style="props.style"
             >
-                <t t-slot="default"/>
+                <div class="d-flex align-items-center flex-column">
+                    <div class="row">
+                    <div class="col d-flex justify-content-center">
+                         <t t-tag="'i'" class="fa fa-lg" t-att-class="props.web_icon"/>
+                    </div>
+                </div>
+                    <div class="row">
+                    <div class="col">
+                        <t t-slot="default"/>
+                    </div>
+                </div>
+                </div>
+
+
             </t>
     </div>
 </xpath>

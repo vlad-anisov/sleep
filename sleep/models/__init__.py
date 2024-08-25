@@ -11,3 +11,4 @@ from . import base
 from . import ritual
 from . import ritual_line
 from . import ir_http
+from . import settings

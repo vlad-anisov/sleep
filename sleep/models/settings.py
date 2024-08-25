@@ -1,0 +1,38 @@
+from odoo import models, fields, api, _
+from odoo.http import request
+from odoo.addons.base.models.res_partner import _lang_get
+
+COLOR_SCHEME_TYPES = [
+    ("light", _("Light")),
+    ("dark", _("Dark")),
+]
+
+
+class Settings(models.Model):
+    _name = "settings"
+
+    name = fields.Char(default="Settings")
+    lang = fields.Selection(_lang_get, string="Language", compute="_compute_lang", readonly=False, required=True)
+    color_scheme = fields.Selection(COLOR_SCHEME_TYPES, string="Theme", compute="_compute_color_scheme", readonly=False, required=True)
+
+    @api.onchange("color_scheme", "lang")
+    def _onchange_settings(self):
+        if self.lang:
+            self.env.user.lang = self.lang
+        # request.future_response.set_cookie("color_scheme", "dark")
+        request.future_response.set_cookie("color_scheme", self.color_scheme)
+        return {
+            "action": {
+                "type": "ir.actions.client",
+                "tag": "reload"
+            }
+        }
+
+    def _compute_lang(self):
+        for record in self:
+            record.lang = self.env.user.lang
+
+    def _compute_color_scheme(self):
+        for record in self:
+            # record.color_scheme = "dark"
+            record.color_scheme = request.httprequest.cookies.get("color_scheme", "light")

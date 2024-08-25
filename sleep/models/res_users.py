@@ -10,6 +10,7 @@ class ResUsers(models.Model):
     sleepy_chat_id = fields.Many2one("discuss.channel", string="Sleepy Chat", required=True)
     ritual_id = fields.Many2one("ritual", string="Ritual", required=True)
     time = fields.Float(string="Time")
+    action_id = fields.Many2one(default=lambda self: self.env.ref("sleep.page_sleepy_chat_action"))
 
     @api.constrains("time")
     def _constrains_time(self):
