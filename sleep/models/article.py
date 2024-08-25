@@ -12,3 +12,7 @@ class Article(models.Model):
     def _compute_is_available(self):
         for record in self:
             record.is_available = self.env.user in record.user_ids
+
+    def read(self, fields=None, load='_classic_read'):
+        self.env.user.script_id.step_ids.filtered(lambda s: s.type == "article" and s.state == "waiting")[:1].run()
+        return super().read(fields=fields, load=load)

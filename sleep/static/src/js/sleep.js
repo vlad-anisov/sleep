@@ -227,3 +227,12 @@ export const ritualFormViewe = {
 registry.category("views").add("ritual_form", ritualFormViewe);
 
 
+import { Thread } from "@mail/core/common/thread";
+
+patch(Thread.prototype, {
+    isSquashed(msg, prevMsg) {
+        return false;
+    },
+});
+
+

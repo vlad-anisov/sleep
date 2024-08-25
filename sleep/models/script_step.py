@@ -42,6 +42,8 @@ class ScriptStep(models.Model):
     type = fields.Selection(TYPES, string="Type", required=True, default="next_step_name")
 
     def send_message(self, message):
+        if not message and self.type == "nothing":
+            return
         chat_id = self.env.user.sleepy_chat_id.with_user(self.env.ref("sleep.sleepy"))
         message_id = chat_id.with_context(skip_notify_thread_by_web_push=True).message_post(
             body=message, message_type="comment", subtype_xmlid="mail.mt_comment", body_is_html=True
@@ -50,7 +52,6 @@ class ScriptStep(models.Model):
         self.message_id = message_id
 
     def run(self):
-        # self.state = "pre_processing"
         if self.state in ("not_running", "done", "failed"):
             self.state = "pre_processing"
 
@@ -61,8 +62,6 @@ class ScriptStep(models.Model):
 
         if self.state == "waiting":
             self.waiting()
-            if self.type == "article":
-                return
 
         if self.state == "post_processing":
             self.post_processing()
@@ -167,7 +166,7 @@ class ScriptStep(models.Model):
             # Adds link to read the article
             button = f"""
                 <div class="row px-3">
-                    <a class="btn btn-primary href="/web#id={self.script_id.article_id.id}&model=article&view_type=form"">Read</a>
+                    <a class="btn btn-primary" href="/web#id={self.script_id.article_id.id}&model=article&view_type=form">Read</a>
                 </div>
             """
             message = f"{self.message}<br/>{button}"
@@ -186,14 +185,14 @@ class ScriptStep(models.Model):
                     emailinfo = validate_email(self.user_answer, check_deliverability=False)
                     self.user_answer = emailinfo.normalized
                 except EmailNotValidError as e:
-                    self.send_message(_("Invalid email"))
+                    self.send_message("Invalid email")
             elif self.type == "time":
                 vals = self.user_answer.split(':')
                 t, hours = divmod(float(vals[0]), 24)
                 t, minutes = divmod(float(vals[1]), 60)
                 minutes = minutes / 60.0
                 self.user_answer = str(hours + minutes)
-        elif self.type != "nothing":
+        elif self.type not in ("nothing", "article"):
             self.send_message("Please provide an answer")
         self.state = "post_processing"
         if self.type != "article":

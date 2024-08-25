@@ -29,7 +29,7 @@ class Script(models.Model):
         for record in self:
             if record.is_main and not record.main_script_id:
                 continue
-            elif not record.is_main and record.main_script_id and record.user_id and record.next_script_id.is_main:
+            elif not record.is_main and record.main_script_id and record.user_id:
                 continue
             else:
                 raise UserError("Invalid script")
