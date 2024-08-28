@@ -14,5 +14,7 @@ class Article(models.Model):
             record.is_available = self.env.user in record.user_ids
 
     def read(self, fields=None, load='_classic_read'):
-        self.env.user.script_id.step_ids.filtered(lambda s: s.type == "article" and s.state == "waiting")[:1].run()
+        step_id = self.env.user.script_id.step_ids.filtered(lambda s: s.type == "article" and s.state == "waiting")[:1]
+        step_id.type = "nothing"
+        step_id.run()
         return super().read(fields=fields, load=load)

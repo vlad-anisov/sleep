@@ -18,6 +18,8 @@ TYPES = [
     ("time", "Time"),
     ("article", "Article"),
     ("mood", "Mood"),
+    ("ritual_line", "Ritual line"),
+    ("ritual", "Ritual"),
 ]
 
 
@@ -92,9 +94,8 @@ class ScriptStep(models.Model):
                             ">
                             {step_id.name}
                         </button>
-                    </div>
-                """
-            message = f"{self.message}<br/>{buttons}"
+                    </div><br/>"""
+            message = f"{self.message}<br/>{buttons}"[:-5]
         elif self.type == "mood":
             buttons = ""
             for mood in ("👍", "👌", "👎"):
@@ -120,9 +121,8 @@ class ScriptStep(models.Model):
                             ">
                             {mood}
                         </button>
-                    </div><br/>
-                """
-            message = f"{self.message}<br/>{buttons}"
+                    </div><br/>"""
+            message = f"{self.message}<br/>{buttons}"[:-5]
         elif self.type == "time":
             timepicker = f"""
                 <div class="row px-3">
@@ -160,9 +160,6 @@ class ScriptStep(models.Model):
             self.script_id.sudo().article_id.user_ids += self.env.user
             # Adds next script to current script
             self.script_id.next_script_id = self.script_id.main_script_id.next_script_id
-            # Adds ritual line for user
-            if self.script_id.ritual_line_id:
-                self.env.user.ritual_id.line_ids += self.script_id.ritual_line_id.copy()
             # Adds link to read the article
             button = f"""
                 <div class="row px-3">
@@ -170,7 +167,25 @@ class ScriptStep(models.Model):
                 </div>
             """
             message = f"{self.message}<br/>{button}"
-        elif self.type in ("email", "nothing"):
+        elif self.type == "ritual":
+            button = f"""
+                <div class="row px-3">
+                    <a class="btn btn-primary" href="/web#id={self.env.user.ritual_id.id}&model=ritual&view_type=form">Go</a>
+                </div>
+            """
+            message = f"{self.message}<br/>{button}"
+        elif self.type == "ritual_line":
+            new_ritual_line_id = self.script_id.sudo().ritual_line_id
+            ritual_line_id = self.env["ritual.line"].search(
+                [("name", "=", new_ritual_line_id.name), ("is_base", "=", True), ("create_uid", "=", self.env.user.id)]
+            )
+            if not ritual_line_id:
+                ritual_line_id = new_ritual_line_id.copy()
+            if self.name == "Давай 👌":
+                self.env.user.ritual_id.line_ids += ritual_line_id
+            self.type = "nothing"
+            message = self.message
+        else:
             message = self.message
         self.send_message(message)
         self.state = "waiting"
@@ -192,10 +207,10 @@ class ScriptStep(models.Model):
                 t, minutes = divmod(float(vals[1]), 60)
                 minutes = minutes / 60.0
                 self.user_answer = str(hours + minutes)
-        elif self.type not in ("nothing", "article"):
+        elif self.type != "nothing":
             self.send_message("Please provide an answer")
         self.state = "post_processing"
-        if self.type != "article":
+        if self.type not in ("article", "ritual"):
             self.message_id.body = self.message
 
     def post_processing(self):

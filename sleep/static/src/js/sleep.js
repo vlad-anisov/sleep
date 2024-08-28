@@ -48,31 +48,31 @@ patch(ChatWindowService.prototype, {
     },
 });
 
-import { FormRenderer } from "@web/views/form/form_renderer";
+import {FormRenderer} from "@web/views/form/form_renderer";
 import {onWillRender, onWillDestroy, onMounted, useState, useEffect, markup} from "@odoo/owl";
-import { useService } from "@web/core/utils/hooks";
-import { session } from '@web/session';
+import {useService} from "@web/core/utils/hooks";
+import {session} from '@web/session';
 
 patch(FormRenderer.prototype, {
     setup() {
         super.setup();
         this.threadService = useService("mail.thread");
-   		onWillRender(() => {
-            if (this.props.record.model.config.resModel == "page.sleepy.chat"){
-                let thread = this.mailStore.Thread.get({ model: "discuss.channel", id: session.sleepy_chat_id });
+        onWillRender(() => {
+            if (this.props.record.model.config.resModel == "page.sleepy.chat") {
+                let thread = this.mailStore.Thread.get({model: "discuss.channel", id: session.sleepy_chat_id});
                 if (!thread)
-                    thread = this.mailStore.Thread.insert({ model: "discuss.channel", id: session.sleepy_chat_id });
+                    thread = this.mailStore.Thread.insert({model: "discuss.channel", id: session.sleepy_chat_id});
                 this.threadService.open(thread)
             }
         });
         onWillDestroy(() => {
-            const thread = this.mailStore.Thread.get({ model: "discuss.channel", id: session.sleepy_chat_id });
+            const thread = this.mailStore.Thread.get({model: "discuss.channel", id: session.sleepy_chat_id});
             const chatWindow = this.threadService.store.discuss.chatWindows.find((c) => c.thread?.eq(thread));
             if (chatWindow) {
                 this.threadService.chatWindowService.close(chatWindow);
             }
         });
- 	 }
+    }
 });
 
 
@@ -95,26 +95,35 @@ patch(ThreadService.prototype, {
         });
         let originalMessages = JSON.parse(JSON.stringify(messages));
         for (const message of messages) {
-          if (this.user.userId === message.author.user.id) {
-            break;
-          }
-          else {
-              const index = originalMessages.findIndex(function(el){
-                  return el.id === message.id;
+            if (this.user.userId === message.author.user.id) {
+                break;
+            } else {
+                const index = originalMessages.findIndex(function (el) {
+                    return el.id === message.id;
                 });
-              if (index !== -1) {
-                originalMessages.splice(index, 1);
-              }
-          }
+                if (index !== -1) {
+                    originalMessages.splice(index, 1);
+                }
+            }
         }
         thread.messages = this.store.Message.insert(originalMessages.reverse(), {html: true});
+        thread.loadNewer = false;
+        thread.loadOlder = true;
+        this._enrichMessagesWithTransient(thread);
+    },
+    async loadAround3(thread) {
+        let {messages} = await this.rpc(this.getFetchRoute(thread), {
+            ...this.getFetchParams(thread)
+        });
+        thread.messages = this.store.Message.insert(messages.reverse(), {html: true});
         thread.loadNewer = false;
         thread.loadOlder = true;
         this._enrichMessagesWithTransient(thread);
     }
 });
 
-import { SelectCreateDialog } from "@web/views/view_dialogs/select_create_dialog";
+import {SelectCreateDialog} from "@web/views/view_dialogs/select_create_dialog";
+
 patch(SelectCreateDialog.prototype, {
     setup() {
         super.setup();
@@ -139,49 +148,55 @@ patch(SelectCreateDialog.prototype, {
     }
 });
 
-import { Dialog } from '@web/core/dialog/dialog';
+import {Dialog} from '@web/core/dialog/dialog';
 
 patch(Dialog.prototype, {
-	get isFullscreen() {
+    get isFullscreen() {
         return this.props.fullscreen;
     }
 });
 
 
-
-
 // // задержка перед тем как показать сообщение
-import { DiscussCoreCommon } from "@mail/discuss/core/common/discuss_core_common_service"
-import { delay } from "@web/core/utils/concurrency";
+import {DiscussCoreCommon} from "@mail/discuss/core/common/discuss_core_common_service"
+import {delay} from "@web/core/utils/concurrency";
 
 patch(DiscussCoreCommon.prototype, {
     async _handleNotificationNewMessage(notif) {
         let self = this;
-        if (notif.payload.message.author.name === "Sleepy"){
-            const { id } = notif.payload;
-            await self.rpc(
+        if (notif.payload.message.author.name === "Sleepy") {
+            const {id} = notif.payload;
+            self.rpc(
                 "/discuss/channel/notify_typing",
                 {
                     channel_id: id,
                     is_typing: true,
                     is_sleepy: true,
                 },
-                { silent: true }
-            ).then(async () => {
-                console.log("1111")
-                await delay(2000).then(async () => {
-                    await self.rpc(
-                    "/discuss/channel/notify_typing",
-                    {
-                        channel_id: id,
-                        is_typing: false,
-                        is_sleepy: true,
-                    },
-                    { silent: true}
-                ).then(async () => {
-                     await super._handleNotificationNewMessage(notif);
+                {silent: true}
+            ).then(() => {
+                setTimeout(() => {
+                    self.rpc(
+                        "/discuss/channel/notify_typing",
+                        {
+                            channel_id: id,
+                            is_typing: false,
+                            is_sleepy: true,
+                        },
+                        {silent: true}
+                    ).then(() => {
+                        super._handleNotificationNewMessage(notif);
+                        const { id, message: messageData } = notif.payload;
+                        let thread = self.store.Thread.get({ model: "discuss.channel", id });
+                        if (!thread || !thread.type) {
+                            thread = self.threadService.fetchChannel(id);
+                            if (!thread) {
+                                return;
+                            }
+                        }
+                        self.threadService.loadAround3(thread);
                     })
-                })
+                }, 2000);
             })
         } else {
             await super._handleNotificationNewMessage(notif);
@@ -190,35 +205,36 @@ patch(DiscussCoreCommon.prototype, {
 })
 
 
-
 // Edit button for ritual
-import { FormController } from "@web/views/form/form_controller";
-import { formView } from '@web/views/form/form_view';
-import { registry } from '@web/core/registry';
+import {FormController} from "@web/views/form/form_controller";
+import {formView} from '@web/views/form/form_view';
+import {registry} from '@web/core/registry';
+
 export class RitualFormController extends FormController {
     setup() {
         this.props.preventEdit = true;
         super.setup();
     }
 
-    async edit(){
+    async edit() {
         await this.model.load();
         this.model.root.switchMode("edit")
     }
 
-    async saveButtonClicked(params = {}){
+    async saveButtonClicked(params = {}) {
         let saved = await super.saveButtonClicked();
         if (saved) {
-        if (!this.env.inDialog) {
-            await this.model.root.switchMode("readonly");
-        } else {
-            await this.model.actionService.doAction({ type: 'ir.actions.act_window_close' });
+            if (!this.env.inDialog) {
+                await this.model.root.switchMode("readonly");
+            } else {
+                await this.model.actionService.doAction({type: 'ir.actions.act_window_close'});
+            }
         }
-    }
         return saved;
     }
 
 }
+
 RitualFormController.template = 'sleep.RitualFormView';
 export const ritualFormViewe = {
     ...formView,
@@ -227,7 +243,7 @@ export const ritualFormViewe = {
 registry.category("views").add("ritual_form", ritualFormViewe);
 
 
-import { Thread } from "@mail/core/common/thread";
+import {Thread} from "@mail/core/common/thread";
 
 patch(Thread.prototype, {
     isSquashed(msg, prevMsg) {

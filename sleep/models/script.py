@@ -50,6 +50,7 @@ class Script(models.Model):
             if user_id.script_id:
                 user_id.script_id.unlink()
             user_id.script_id = script_id
+            user_id.with_user(user_id).sudo().ritual_id.line_ids.is_check = False
             script_id.with_user(user_id).step_ids.sorted(key=lambda s: (s.sequence, s.id))[:1].run()
 
     def _compute_state(self):
@@ -77,14 +78,20 @@ class Script(models.Model):
             "main_script_id": self.id,
             "next_script_id": False,
         })
-
-        previous_step_id = False
-        for step_id in self.step_ids.sorted(key=lambda s: (s.sequence, s.id)):
-            new_step_id = step_id.copy({
-                "script_id": script_id.id,
-                "next_step_ids": False,
-            })
-            if previous_step_id:
-                previous_step_id.next_step_ids = [(4, new_step_id.id)]
-            previous_step_id = new_step_id
         return script_id
+
+    def copy(self, default=None):
+        record_id = super().copy(default)
+
+        def create_next_step_ids(step_id, script_id):
+            next_step_ids = self.env["script.step"]
+            for next_step_id in step_id.next_step_ids:
+                next_step_ids += create_next_step_ids(next_step_id, script_id)
+            return step_id.copy({
+                "script_id": script_id.id,
+                "next_step_ids": next_step_ids.ids,
+            })
+
+        create_next_step_ids(self.step_ids.sorted(key=lambda s: (s.sequence, s.id))[:1], record_id)
+
+        return record_id

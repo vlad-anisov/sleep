@@ -1,6 +1,6 @@
 from odoo import models, fields, api, _
 from odoo.http import request
-from odoo.addons.base.models.res_partner import _lang_get
+from odoo.addons.base.models.res_partner import _lang_get, _tz_get
 
 COLOR_SCHEME_TYPES = [
     ("light", _("Light")),
@@ -14,11 +14,14 @@ class Settings(models.Model):
     name = fields.Char(default="Settings")
     lang = fields.Selection(_lang_get, string="Language", compute="_compute_lang", readonly=False, required=True)
     color_scheme = fields.Selection(COLOR_SCHEME_TYPES, string="Theme", compute="_compute_color_scheme", readonly=False, required=True)
+    tz = fields.Selection(_tz_get, string="Timezone", compute="_compute_tz", readonly=False, required=True)
 
-    @api.onchange("color_scheme", "lang")
+    @api.onchange("color_scheme", "lang", "tz")
     def _onchange_settings(self):
         if self.lang:
             self.env.user.lang = self.lang
+        if self.tz:
+            self.env.user.tz = self.tz
         # request.future_response.set_cookie("color_scheme", "dark")
         request.future_response.set_cookie("color_scheme", self.color_scheme)
         return {
@@ -36,3 +39,7 @@ class Settings(models.Model):
         for record in self:
             # record.color_scheme = "dark"
             record.color_scheme = request.httprequest.cookies.get("color_scheme", "light")
+
+    def _compute_tz(self):
+        for record in self:
+            record.tz = self.env.user.tz

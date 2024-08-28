@@ -8,6 +8,7 @@
             <form>
                 <group>
                     <field name="lang"/>
+                    <field name="tz"/>
                     <field name="color_scheme" widget="radio"/>
                     <a class="btn btn-link" href="/web/session/logout?redirect=/web">Logout</a>
                 </group>
