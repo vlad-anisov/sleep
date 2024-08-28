@@ -36,7 +36,7 @@ class Script(models.Model):
 
     def run(self):
         self.ensure_one()
-        user_id = self.user_id
+        user_id = self.user_id or self.env.user
 
         if self.is_main:
             main_script_id = self
@@ -45,13 +45,12 @@ class Script(models.Model):
             main_script_id = self.next_script_id or self.main_script_id
             self.unlink()
 
-        if user_id:
-            script_id = main_script_id.create_script(user_id)
-            if user_id.script_id:
-                user_id.script_id.unlink()
-            user_id.script_id = script_id
-            user_id.with_user(user_id).sudo().ritual_id.line_ids.is_check = False
-            script_id.with_user(user_id).step_ids.sorted(key=lambda s: (s.sequence, s.id))[:1].run()
+        script_id = main_script_id.create_script(user_id)
+        if user_id.script_id:
+            user_id.script_id.unlink()
+        user_id.script_id = script_id
+        user_id.with_user(user_id).sudo().ritual_id.line_ids.is_check = False
+        script_id.with_user(user_id).with_context(skip_notify_thread_by_web_push=False).step_ids.sorted(key=lambda s: (s.sequence, s.id))[:1].run()
 
     def _compute_state(self):
         for record in self:
@@ -84,6 +83,12 @@ class Script(models.Model):
         record_id = super().copy(default)
 
         def create_next_step_ids(step_id, script_id):
+            existing_step_id = self.env["script.step"].search([
+                ("script_id", "=", script_id.id), ("name", "=", step_id.name), ("message", "=", step_id.message)
+            ], limit=1)
+            if existing_step_id:
+                return existing_step_id
+
             next_step_ids = self.env["script.step"]
             for next_step_id in step_id.next_step_ids:
                 next_step_ids += create_next_step_ids(next_step_id, script_id)

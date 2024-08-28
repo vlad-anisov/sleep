@@ -47,7 +47,8 @@ class ScriptStep(models.Model):
         if not message and self.type == "nothing":
             return
         chat_id = self.env.user.sleepy_chat_id.with_user(self.env.ref("sleep.sleepy"))
-        message_id = chat_id.with_context(skip_notify_thread_by_web_push=True).message_post(
+        skip_notify_thread_by_web_push = self.env.context.get("skip_notify_thread_by_web_push", True)
+        message_id = chat_id.with_context(skip_notify_thread_by_web_push=skip_notify_thread_by_web_push).message_post(
             body=message, message_type="comment", subtype_xmlid="mail.mt_comment", body_is_html=True
         )
         # message_id.set_message_done()
@@ -222,3 +223,8 @@ class ScriptStep(models.Model):
         self.state = "done"
         if next_step_id:
             next_step_id.run()
+        elif self.env.user.test_script_count < 1 and self.script_id.next_script_id:
+            self.env.user.test_script_count += 1
+            self.script_id.next_script_id.run()
+        else:
+            self.env.user.test_script_count = 0

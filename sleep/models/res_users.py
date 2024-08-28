@@ -11,6 +11,7 @@ class ResUsers(models.Model):
     ritual_id = fields.Many2one("ritual", string="Ritual", required=True)
     time = fields.Float(string="Time")
     action_id = fields.Many2one(default=lambda self: self.env.ref("sleep.page_sleepy_chat_action"))
+    test_script_count = fields.Integer(string="Test Script Count", default=0)
 
     @api.constrains("time")
     def _constrains_time(self):

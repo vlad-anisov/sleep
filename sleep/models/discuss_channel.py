@@ -4,9 +4,9 @@ from odoo import models, api
 class DiscussChannel(models.Model):
     _inherit = "discuss.channel"
 
-    # def _notify_thread_by_web_push(self, message, recipients_data, msg_vals=False, **kwargs):
-    #     if not self.env.context.get("skip_notify_thread_by_web_push"):
-    #         return super()._notify_thread_by_web_push(message, recipients_data, msg_vals=msg_vals, **kwargs)
+    def _notify_thread_by_web_push(self, message, recipients_data, msg_vals=False, **kwargs):
+        if not self.env.context.get("skip_notify_thread_by_web_push"):
+            return super()._notify_thread_by_web_push(message, recipients_data, msg_vals=msg_vals, **kwargs)
 
     def message_post(self, **kwargs):
         result = super().message_post(**kwargs)
