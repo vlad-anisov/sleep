@@ -1,138 +1,138 @@
-///* Styles for control panel  */
-//.o_action_manager > .o_kanban_view > .o_control_panel {
-//  background-color: transparent;
-//  backdrop-filter: blur(30px) !important;
-//  -webkit-backdrop-filter: blur(30px) !important;
-//  //box-shadow: 0 5px 10px 3px rgba(0, 0, 0, .05);
-//  z-index: 90;
-//  position: fixed;
-//  left: 0;
-//  right: 0;
-//  top: 0 !important;
-//  border: 0 !important;
-//
-//  @include media-breakpoint-up(md) {
-//    padding-top: 60px !important;
-//  }
-//
-//  @include media-breakpoint-down(md) {
-//    padding-top: 11px !important;
-//    padding-bottom: 11px !important;
-//  }
-//}
-//.o_action_manager > .o_form_view > .o_form_view_container > .o_control_panel {
-//  background-color: transparent;
-//  backdrop-filter: blur(30px) !important;
-//  -webkit-backdrop-filter: blur(30px) !important;
-//  //box-shadow: 0 5px 10px 3px rgba(0, 0, 0, .05);
-//  z-index: 90;
-//  position: fixed;
-//  left: 0;
-//  right: 0;
-//  top: 0 !important;
-//  border: 0 !important;
-//
-//  @include media-breakpoint-up(md) {
-//    padding-top: 60px !important;
-//  }
-//
-//  @include media-breakpoint-down(md) {
-//    padding-top: 11px !important;
-//    padding-bottom: 11px !important;
-//  }
-//}
-//
-///* Navbar (menu items) */
-//.o_main_navbar {
-//  background-color: transparent;
-//  backdrop-filter: blur(30px) !important;
-//  -webkit-backdrop-filter: blur(30px) !important;
-//  position: fixed;
-//  right: 0;
-//  left: 0;
-//  z-index: 100;
-//  height: 60px !important;
-//
-//  @include media-breakpoint-down(md) {
-//    bottom: 0;
-//  }
-//}
-//
-//.o_control_panel_main {
-//  @include media-breakpoint-down(md) {
-//    height: 38px !important;
-//  }
-//}
-//
-///*!* Disable border around kanban record *!*/
-//.oe_kanban_global_click {
-//  @include media-breakpoint-down(md) {
-//    border-left: 0 !important;
-//    border-right: 0 !important;
-//  }
-//}
-//
-//
-///* Added padding-top for navbar in form and kanban*/
-//.o_action_manager > .o_form_view > .o_form_view_container > .o_content > .o_form_renderer {
-//  padding-top: 80px !important;
-//  padding-bottom: 60px !important;
-//
-//  @include media-breakpoint-up(md) {
-//     padding-top: 130px !important;
-//    padding-bottom: 60px !important;
-//  }
-//}
-//
-///* Added padding-top for player in form and kanban*/
-//.o_action_manager > .o_list_view > .o_content > .o_list_renderer  {
-//  padding-bottom: 60px !important;
-//  padding-top: 60px;
-//}
-//
-//
-//
-//.o_kanban_renderer {
-//  padding-top: 60px !important;
-//  padding-bottom: 61px !important; //FIXME
-//  border: 0px !important;
-//
-//  @include media-breakpoint-up(md) {
-//    padding-bottom: 60px !important;
-//    padding-top: 113px !important;
-//  }
-//}
-//
-//
-//
-//.modal-body > .o_list_view > .o_control_panel {
-//  display: none !important;
-//}
-//
-//
-//.o_list_record_selector {
-//    display: none;
-//}
-//
-//.o_control_panel_breadcrumbs, .o_control_panel_navigation {
-//    flex: 1
-//}
-//
-//.o_control_panel_actions {
-//    min-width: MIN(500px, 33%);
-//}
-//
-//.o_control_panel_breadcrumbs {
-//  min-width: 0px !important;
-//
-//}
-//
-//.o_back_button {
-//  padding-left: 0 !important;
-//  border-left: 0 !important;
-//}
-//
-//.o_control_panel {
-//  padding-left: 11px !important;
-//  padding-right: 11px !important;
-//}
+/* Styles for control panel  */
+.o_action_manager > .o_kanban_view > .o_control_panel {
+  background-color: transparent;
+  backdrop-filter: blur(30px) !important;
+  -webkit-backdrop-filter: blur(30px) !important;
+  //box-shadow: 0 5px 10px 3px rgba(0, 0, 0, .05);
+  z-index: 90;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0 !important;
+  border: 0 !important;
+
+  @include media-breakpoint-up(md) {
+    padding-top: 60px !important;
+  }
+
+  @include media-breakpoint-down(md) {
+    padding-top: 11px !important;
+    padding-bottom: 11px !important;
+  }
+}
+.o_action_manager > .o_form_view > .o_form_view_container > .o_control_panel {
+  background-color: transparent;
+  backdrop-filter: blur(30px) !important;
+  -webkit-backdrop-filter: blur(30px) !important;
+  //box-shadow: 0 5px 10px 3px rgba(0, 0, 0, .05);
+  z-index: 90;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0 !important;
+  border: 0 !important;
+
+  @include media-breakpoint-up(md) {
+    padding-top: 60px !important;
+  }
+
+  @include media-breakpoint-down(md) {
+    padding-top: 11px !important;
+    padding-bottom: 11px !important;
+  }
+}
+
+/* Navbar (menu items) */
+.o_main_navbar {
+  background-color: transparent;
+  backdrop-filter: blur(30px) !important;
+  -webkit-backdrop-filter: blur(30px) !important;
+  position: fixed;
+  right: 0;
+  left: 0;
+  z-index: 100;
+  height: 60px !important;
+
+  @include media-breakpoint-down(md) {
+    bottom: 0;
+  }
+}
+
+.o_control_panel_main {
+  @include media-breakpoint-down(md) {
+    height: 38px !important;
+  }
+}
+
+/*!* Disable border around kanban record *!*/
+.oe_kanban_global_click {
+  @include media-breakpoint-down(md) {
+    border-left: 0 !important;
+    border-right: 0 !important;
+  }
+}
+
+
+/* Added padding-top for navbar in form and kanban*/
+.o_action_manager > .o_form_view > .o_form_view_container > .o_content > .o_form_renderer {
+  padding-top: 80px !important;
+  padding-bottom: 60px !important;
+
+  @include media-breakpoint-up(md) {
+     padding-top: 130px !important;
+    padding-bottom: 60px !important;
+  }
+}
+
+/* Added padding-top for player in form and kanban*/
+.o_action_manager > .o_list_view > .o_content > .o_list_renderer  {
+  padding-bottom: 60px !important;
+  padding-top: 60px;
+}
+
+
+
+.o_kanban_renderer {
+  padding-top: 60px !important;
+  padding-bottom: 61px !important; //FIXME
+  border: 0px !important;
+
+  @include media-breakpoint-up(md) {
+    padding-bottom: 60px !important;
+    padding-top: 113px !important;
+  }
+}
+
+
+
+.modal-body > .o_list_view > .o_control_panel {
+  display: none !important;
+}
+
+
+.o_list_record_selector {
+    display: none;
+}
+
+.o_control_panel_breadcrumbs, .o_control_panel_navigation {
+    flex: 1
+}
+
+.o_control_panel_actions {
+    min-width: MIN(500px, 33%);
+}
+
+.o_control_panel_breadcrumbs {
+  min-width: 0px !important;
+
+}
+
+.o_back_button {
+  padding-left: 0 !important;
+  border-left: 0 !important;
+}
+
+.o_control_panel {
+  padding-left: 11px !important;
+  padding-right: 11px !important;
+}
