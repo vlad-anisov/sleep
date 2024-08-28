@@ -22,6 +22,7 @@
         "views/ritual_views.xml",
         "views/ritual_line_views.xml",
         "views/settings_views.xml",
+        "views/web.xml",
     ],
     "assets": {
         "web.assets_backend": [

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <odoo>
+        <template id="webclient_bootstrap" inherit_id="web.webclient_bootstrap">
+            <xpath expr="//link[@rel='apple-touch-icon']" position="replace">
+                <link rel="apple-touch-icon" href="/sleep/static/img/odoo-icon-512x512.png"/>
+            </xpath>
+        </template>
+    </odoo>
+</odoo>
