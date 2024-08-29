@@ -1,77 +1,77 @@
-/* Disable pager */
-.o_cp_pager {
-  display:none !important;
-}
+/*!* Disable pager *!*/
+/*.o_cp_pager {*/
+/*  display:none !important;*/
+/*}*/
 
-/* Disable main button */
-.o_menu_toggle {
-    display: none !important;
-}
-/* Added left padding for menu where main button is disabled */
-.o_menu_sections {
-    /*padding-left: 8px !important;*/
-    width: 100% !important;
-    justify-content: space-around !important;
-}
+/*!* Disable main button *!*/
+/*.o_menu_toggle {*/
+/*    display: none !important;*/
+/*}*/
+/*!* Added left padding for menu where main button is disabled *!*/
+/*.o_menu_sections {*/
+/*    !*padding-left: 8px !important;*!*/
+/*    width: 100% !important;*/
+/*    justify-content: space-around !important;*/
+/*}*/
 
-/* Added red color for heart icon */
-.fa-heart{
-    color: red;
-}
-.fa-heart-o{
-    color: red;
-}
+/*!* Added red color for heart icon *!*/
+/*.fa-heart{*/
+/*    color: red;*/
+/*}*/
+/*.fa-heart-o{*/
+/*    color: red;*/
+/*}*/
 
-/* Disable mobile menu header (avatar, user menu and close button) */
-.o_burger_menu_topbar {
-    display: none !important;
-}
-/* Disable avatar and user menu */
-.o_user_menu {
-    display: none !important;
-}
+/*!* Disable mobile menu header (avatar, user menu and close button) *!*/
+/*.o_burger_menu_topbar {*/
+/*    display: none !important;*/
+/*}*/
+/*!* Disable avatar and user menu *!*/
+/*.o_user_menu {*/
+/*    display: none !important;*/
+/*}*/
 
-/* Disable search button for mobile */
-.o_control_panel_navigation > .btn {
-    display: none !important;
-}
+/*!* Disable search button for mobile *!*/
+/*.o_control_panel_navigation > .btn {*/
+/*    display: none !important;*/
+/*}*/
 
-/* Disable right button in search panel (filters, groups) */
-.o_cp_searchview > .dropdown {
-    display: none !important;
-}
+/*!* Disable right button in search panel (filters, groups) *!*/
+/*.o_cp_searchview > .dropdown {*/
+/*    display: none !important;*/
+/*}*/
 
-/* Disable border where click on kanban record */
-.o_kanban_renderer .oe_kanban_card:focus-visible.oe_kanban_global_click, .o_kanban_renderer .oe_kanban_card:focus-visible.oe_kanban_global_click_edit, .o_kanban_renderer .oe_kanban_card:focus-visible .oe_kanban_global_click, .o_kanban_renderer .oe_kanban_card:focus-visible .oe_kanban_global_click_edit, .o_kanban_renderer .oe_kanban_card:focus-within.oe_kanban_global_click, .o_kanban_renderer .oe_kanban_card:focus-within.oe_kanban_global_click_edit, .o_kanban_renderer .oe_kanban_card:focus-within .oe_kanban_global_click, .o_kanban_renderer .oe_kanban_card:focus-within .oe_kanban_global_click_edit, .o_kanban_renderer .o_kanban_record:focus-visible.oe_kanban_global_click, .o_kanban_renderer .o_kanban_record:focus-visible.oe_kanban_global_click_edit, .o_kanban_renderer .o_kanban_record:focus-visible .oe_kanban_global_click, .o_kanban_renderer .o_kanban_record:focus-visible .oe_kanban_global_click_edit, .o_kanban_renderer .o_kanban_record:focus-within.oe_kanban_global_click, .o_kanban_renderer .o_kanban_record:focus-within.oe_kanban_global_click_edit, .o_kanban_renderer .o_kanban_record:focus-within .oe_kanban_global_click, .o_kanban_renderer .o_kanban_record:focus-within .oe_kanban_global_click_edit {
-     outline: thin solid rgba(255, 0, 0, 0) !important;
-}
+/*!* Disable border where click on kanban record *!*/
+/*.o_kanban_renderer .oe_kanban_card:focus-visible.oe_kanban_global_click, .o_kanban_renderer .oe_kanban_card:focus-visible.oe_kanban_global_click_edit, .o_kanban_renderer .oe_kanban_card:focus-visible .oe_kanban_global_click, .o_kanban_renderer .oe_kanban_card:focus-visible .oe_kanban_global_click_edit, .o_kanban_renderer .oe_kanban_card:focus-within.oe_kanban_global_click, .o_kanban_renderer .oe_kanban_card:focus-within.oe_kanban_global_click_edit, .o_kanban_renderer .oe_kanban_card:focus-within .oe_kanban_global_click, .o_kanban_renderer .oe_kanban_card:focus-within .oe_kanban_global_click_edit, .o_kanban_renderer .o_kanban_record:focus-visible.oe_kanban_global_click, .o_kanban_renderer .o_kanban_record:focus-visible.oe_kanban_global_click_edit, .o_kanban_renderer .o_kanban_record:focus-visible .oe_kanban_global_click, .o_kanban_renderer .o_kanban_record:focus-visible .oe_kanban_global_click_edit, .o_kanban_renderer .o_kanban_record:focus-within.oe_kanban_global_click, .o_kanban_renderer .o_kanban_record:focus-within.oe_kanban_global_click_edit, .o_kanban_renderer .o_kanban_record:focus-within .oe_kanban_global_click, .o_kanban_renderer .o_kanban_record:focus-within .oe_kanban_global_click_edit {*/
+/*     outline: thin solid rgba(255, 0, 0, 0) !important;*/
+/*}*/
 
-/* Transparent background for images*/
-.o_field_image {
-    background-color: transparent;
-}
+/*!* Transparent background for images*!*/
+/*.o_field_image {*/
+/*    background-color: transparent;*/
+/*}*/
 
-/* Disable save/rollback buttons */
-.o_form_status_indicator {
-    display: none !important;
-}
+/*!* Disable save/rollback buttons *!*/
+/*.o_form_status_indicator {*/
+/*    display: none !important;*/
+/*}*/
 
-/* Styles menu items */
-.o_nav_entry {
-    background-color: transparent !important;
-}
+/*!* Styles menu items *!*/
+/*.o_nav_entry {*/
+/*    background-color: transparent !important;*/
+/*}*/
 
-/* Styles for breadcrumb */
-.breadcrumb {
-    background-color: transparent !important;
-}
+/*!* Styles for breadcrumb *!*/
+/*.breadcrumb {*/
+/*    background-color: transparent !important;*/
+/*}*/
 
-.o_list_renderer .o_list_table > thead > tr > :first-child, .o_list_renderer .o_list_table > tbody > tr > :first-child, .o_list_renderer .o_list_table > tfoot > tr > :first-child {
-    padding-left: 0.3rem;
-}
+/*.o_list_renderer .o_list_table > thead > tr > :first-child, .o_list_renderer .o_list_table > tbody > tr > :first-child, .o_list_renderer .o_list_table > tfoot > tr > :first-child {*/
+/*    padding-left: 0.3rem;*/
+/*}*/
 
-.o_form_view.o_xxs_form_view .o_inner_group .o_wrap_field .o_cell .o_field_widget {
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
+/*.o_form_view.o_xxs_form_view .o_inner_group .o_wrap_field .o_cell .o_field_widget {*/
+/*    margin-top: 5px;*/
+/*    margin-bottom: 5px;*/
+/*}*/
 
