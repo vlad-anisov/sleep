@@ -9,8 +9,8 @@ class RitualLine(models.Model):
     is_check = fields.Boolean(string="Check")
     is_base = fields.Boolean(string="Base")
 
-    # def unlink(self):
-    #     return super(RitualLine, self.filtered(lambda line: not line.is_base)).unlink()
+    def unlink(self):
+        return super(RitualLine, self.filtered(lambda line: not line.is_base)).unlink()
 
     @api.model_create_multi
     def create(self, vals_list):
