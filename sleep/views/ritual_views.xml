@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <form js_class="ritual_form">
                 <field name="is_check" invisible="1"/>
-                <div class="oe_read_only" invisible="is_check == False">
+                <div class="oe_read_only text-center pt-5" invisible="is_check == False" style="font-size: 20px">
                     ✨ Ritual is done ✨
                 </div>
                 <div class="oe_read_only" invisible="is_check == True">

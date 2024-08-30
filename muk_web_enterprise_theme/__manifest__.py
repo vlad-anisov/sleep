@@ -17,8 +17,8 @@
     'depends': [
         'web_enterprise',
         'muk_web_chatter',
-        'muk_web_dialog',
-        'muk_web_appsbar',
+        # 'muk_web_dialog',
+        # 'muk_web_appsbar',
         'muk_web_colors',
     ],
     'data': [

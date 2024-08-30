@@ -24,6 +24,7 @@ class WebManifest(MainWebManifest):
             'src': '/sleep/static/img/odoo-icon-%s.png' % size,
             'sizes': size,
             'type': 'image/png',
+            "purpose": "maskable",
         } for size in icon_sizes]
         manifest['shortcuts'] = self._get_shortcuts()
         body = json.dumps(manifest, default=ustr)
