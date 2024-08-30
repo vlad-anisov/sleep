@@ -15,6 +15,7 @@ class Settings(models.Model):
     lang = fields.Selection(_lang_get, string="Language", compute="_compute_lang", readonly=False, required=True)
     color_scheme = fields.Selection(COLOR_SCHEME_TYPES, string="Theme", compute="_compute_color_scheme", readonly=False, required=True)
     tz = fields.Selection(_tz_get, string="Timezone", compute="_compute_tz", readonly=False, required=True)
+    time = fields.Float(string="Time", compute="_compute_time", readonly=False, required=True)
 
     @api.onchange("color_scheme", "lang", "tz")
     def _onchange_settings(self):
@@ -22,6 +23,8 @@ class Settings(models.Model):
             self.env.user.lang = self.lang
         if self.tz:
             self.env.user.tz = self.tz
+        if self.time:
+            self.env.user.time = self.time
         # request.future_response.set_cookie("color_scheme", "dark")
         request.future_response.set_cookie("color_scheme", self.color_scheme)
         return {
@@ -43,3 +46,7 @@ class Settings(models.Model):
     def _compute_tz(self):
         for record in self:
             record.tz = self.env.user.tz
+
+    def _compute_time(self):
+        for record in self:
+            record.time = self.env.user.time
