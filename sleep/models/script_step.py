@@ -51,7 +51,6 @@ class ScriptStep(models.Model):
         message_id = chat_id.with_context(skip_notify_thread_by_web_push=skip_notify_thread_by_web_push).message_post(
             body=message, message_type="comment", subtype_xmlid="mail.mt_comment", body_is_html=True
         )
-        # message_id.set_message_done()
         self.message_id = message_id
 
     def run(self):
@@ -200,6 +199,7 @@ class ScriptStep(models.Model):
                 try:
                     emailinfo = validate_email(self.user_answer, check_deliverability=False)
                     self.user_answer = emailinfo.normalized
+                    self.env.user.email = self.user_answer
                 except EmailNotValidError as e:
                     self.send_message("Invalid email")
             elif self.type == "time":
@@ -208,6 +208,11 @@ class ScriptStep(models.Model):
                 t, minutes = divmod(float(vals[1]), 60)
                 minutes = minutes / 60.0
                 self.user_answer = str(hours + minutes)
+                time = float(self.user_answer) - 1
+                if time < 0:
+                    time = 24 + time
+                self.env.user.time = time
+                self.script_id.next_script_id = self.script_id.main_script_id.next_script_id
         elif self.type != "nothing":
             self.send_message("Please provide an answer")
         self.state = "post_processing"

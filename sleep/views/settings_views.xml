@@ -11,7 +11,9 @@
                     <field name="tz"/>
                     <field name="time" widget="float_time"/>
                     <field name="color_scheme" widget="radio"/>
-                    <a class="btn btn-link" href="/web/session/logout?redirect=/web">Logout</a>
+                    <div class="d-grid gap-2" colspan="2">
+                        <a class="btn btn-danger py-2" href="/web/session/logout?redirect=/web">Logout</a>
+                    </div>
                 </group>
             </form>
         </field>

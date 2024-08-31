@@ -19,14 +19,13 @@ class Settings(models.Model):
 
     @api.onchange("color_scheme", "lang", "tz")
     def _onchange_settings(self):
+        request.future_response.set_cookie("color_scheme", self.color_scheme)
         if self.lang:
             self.env.user.lang = self.lang
         if self.tz:
             self.env.user.tz = self.tz
         if self.time:
             self.env.user.time = self.time
-        # request.future_response.set_cookie("color_scheme", "dark")
-        request.future_response.set_cookie("color_scheme", self.color_scheme)
         return {
             "action": {
                 "type": "ir.actions.client",
@@ -40,7 +39,6 @@ class Settings(models.Model):
 
     def _compute_color_scheme(self):
         for record in self:
-            # record.color_scheme = "dark"
             record.color_scheme = request.httprequest.cookies.get("color_scheme", "light")
 
     def _compute_tz(self):

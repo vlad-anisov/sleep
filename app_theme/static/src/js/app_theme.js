@@ -86,7 +86,7 @@ let { DropdownItem } = NavBar.components;
 
 DropdownItem.props = {
     ...DropdownItem.props,
-    web_icon: { type: String, optional: true },
+    web_icon: { optional: true },
 };
 
 

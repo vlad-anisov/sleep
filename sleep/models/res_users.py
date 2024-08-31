@@ -1,4 +1,4 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, Command
 from odoo.tools import format_duration
 from datetime import timedelta
 import pytz
@@ -13,6 +13,25 @@ class ResUsers(models.Model):
     time = fields.Float(string="Time", default=23, required=True)
     action_id = fields.Many2one(default=lambda self: self.env.ref("sleep.page_sleepy_chat_action"))
     test_script_count = fields.Integer(string="Test Script Count", default=0)
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        record_ids = super().create(vals_list)
+        sleepy_id = self.env.ref("sleep.sleepy")
+        for record_id in record_ids:
+            record_id.ritual_id = self.sudo().env["ritual"].create({
+                "user_id": record_id.id,
+            })
+            partner_ids = self.env["res.partner"].browse([sleepy_id.partner_id.id, record_id.partner_id.id])
+            record_id.sleepy_chat_id = self.with_user(record_id).env["discuss.channel"].create({
+                "channel_member_ids": [
+                    (0, 0, {"partner_id": partner_id.id}) for partner_id in partner_ids
+                ],
+                "channel_type": "chat",
+                "name": ", ".join(partner_ids.mapped("name")),
+            })
+            self.env["script"].browse(1).with_user(record_id).run()
+        return record_ids
 
     @api.constrains("time")
     def _constrains_time(self):
