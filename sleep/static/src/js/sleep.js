@@ -236,6 +236,7 @@ export class RitualFormController extends FormController {
         let saved = await super.saveButtonClicked();
         if (saved) {
             if (!this.env.inDialog) {
+                await this.model.load();
                 await this.model.root.switchMode("readonly");
             } else {
                 await this.model.actionService.doAction({type: "ir.actions.act_window_close"});
