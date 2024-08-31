@@ -12,12 +12,12 @@ class Settings(models.Model):
     _name = "settings"
 
     name = fields.Char(default="Settings")
-    lang = fields.Selection(_lang_get, string="Language", compute="_compute_lang", readonly=False, required=True)
-    color_scheme = fields.Selection(COLOR_SCHEME_TYPES, string="Theme", compute="_compute_color_scheme", readonly=False, required=True)
-    tz = fields.Selection(_tz_get, string="Timezone", compute="_compute_tz", readonly=False, required=True)
-    time = fields.Float(string="Time", compute="_compute_time", readonly=False, required=True)
+    color_scheme = fields.Selection(COLOR_SCHEME_TYPES, string="Theme", compute="_compute_settings", readonly=False, required=True)
+    lang = fields.Selection(_lang_get, string="Language", compute="_compute_settings", readonly=False, required=True)
+    tz = fields.Selection(_tz_get, string="Timezone", compute="_compute_settings", readonly=False, required=True)
+    time = fields.Char(string="Time", compute="_compute_settings", readonly=False, required=True)
 
-    @api.onchange("color_scheme", "lang", "tz")
+    @api.onchange("color_scheme", "lang", "tz", "time")
     def _onchange_settings(self):
         request.future_response.set_cookie("color_scheme", self.color_scheme)
         if self.lang:
@@ -33,18 +33,9 @@ class Settings(models.Model):
             }
         }
 
-    def _compute_lang(self):
-        for record in self:
-            record.lang = self.env.user.lang
-
-    def _compute_color_scheme(self):
+    def _compute_settings(self):
         for record in self:
             record.color_scheme = request.httprequest.cookies.get("color_scheme", "light")
-
-    def _compute_tz(self):
-        for record in self:
+            record.lang = self.env.user.lang
             record.tz = self.env.user.tz
-
-    def _compute_time(self):
-        for record in self:
             record.time = self.env.user.time

@@ -1,12 +1,16 @@
 /** @odoo-module **/
+
+// Removes actions in header of chat dialog
 import {threadActionsRegistry} from "@mail/core/common/thread_actions";
 
 const allowedThreadActions = new Set(["close"]);
+
 for (const [actionName] of threadActionsRegistry.getEntries()) {
     if (!allowedThreadActions.has(actionName)) {
         threadActionsRegistry.remove(actionName);
     }
 }
+
 threadActionsRegistry.addEventListener("UPDATE", ({detail: {operation, key}}) => {
     if (operation === "add" && !allowedThreadActions.has(key)) {
         threadActionsRegistry.remove(key);
@@ -14,6 +18,7 @@ threadActionsRegistry.addEventListener("UPDATE", ({detail: {operation, key}}) =>
 });
 
 
+// Removes actions in inout of chat dialog
 import {messageActionsRegistry} from "@mail/core/common/message_actions";
 
 const allowedMessageActions = new Set([]);
@@ -22,6 +27,7 @@ for (const [actionName] of messageActionsRegistry.getEntries()) {
         messageActionsRegistry.remove(actionName);
     }
 }
+
 messageActionsRegistry.addEventListener("UPDATE", ({detail: {operation, key}}) => {
     if (operation === "add" && !allowedMessageActions.has(key)) {
         messageActionsRegistry.remove(key);
@@ -29,8 +35,8 @@ messageActionsRegistry.addEventListener("UPDATE", ({detail: {operation, key}}) =
 });
 
 
+// ???
 import {ChatWindowService} from "@mail/core/common/chat_window_service";
-
 import {patch} from "@web/core/utils/patch";
 
 patch(ChatWindowService.prototype, {
@@ -48,8 +54,10 @@ patch(ChatWindowService.prototype, {
     },
 });
 
+
+//
 import {FormRenderer} from "@web/views/form/form_renderer";
-import {onWillRender, onWillDestroy, onMounted, useState, useEffect, markup} from "@odoo/owl";
+import {onWillRender, onWillDestroy } from "@odoo/owl";
 import {useService} from "@web/core/utils/hooks";
 import {session} from '@web/session';
 
@@ -122,6 +130,7 @@ patch(ThreadService.prototype, {
     }
 });
 
+
 import {SelectCreateDialog} from "@web/views/view_dialogs/select_create_dialog";
 
 patch(SelectCreateDialog.prototype, {
@@ -148,7 +157,9 @@ patch(SelectCreateDialog.prototype, {
     }
 });
 
-import {Dialog} from '@web/core/dialog/dialog';
+
+// Removes open wizard on fullscreen for mobile devices
+import {Dialog} from "@web/core/dialog/dialog";
 
 patch(Dialog.prototype, {
     get isFullscreen() {
@@ -157,9 +168,8 @@ patch(Dialog.prototype, {
 });
 
 
-// // задержка перед тем как показать сообщение
+// Adds delay before show messages
 import {DiscussCoreCommon} from "@mail/discuss/core/common/discuss_core_common_service"
-import {delay} from "@web/core/utils/concurrency";
 
 patch(DiscussCoreCommon.prototype, {
     async _handleNotificationNewMessage(notif) {
@@ -207,8 +217,8 @@ patch(DiscussCoreCommon.prototype, {
 
 // Edit button for ritual
 import {FormController} from "@web/views/form/form_controller";
-import {formView} from '@web/views/form/form_view';
-import {registry} from '@web/core/registry';
+import {formView} from "@web/views/form/form_view";
+import {registry} from "@web/core/registry";
 
 export class RitualFormController extends FormController {
     setup() {
@@ -217,6 +227,7 @@ export class RitualFormController extends FormController {
     }
 
     async edit() {
+        await this.model.root.save();
         await this.model.load();
         this.model.root.switchMode("edit")
     }
@@ -227,15 +238,15 @@ export class RitualFormController extends FormController {
             if (!this.env.inDialog) {
                 await this.model.root.switchMode("readonly");
             } else {
-                await this.model.actionService.doAction({type: 'ir.actions.act_window_close'});
+                await this.model.actionService.doAction({type: "ir.actions.act_window_close"});
             }
         }
         return saved;
     }
-
 }
 
-RitualFormController.template = 'sleep.RitualFormView';
+RitualFormController.template = "sleep.RitualFormView";
+
 export const ritualFormViewe = {
     ...formView,
     Controller: RitualFormController
@@ -243,12 +254,13 @@ export const ritualFormViewe = {
 registry.category("views").add("ritual_form", ritualFormViewe);
 
 
-import {Thread} from "@mail/core/common/thread";
-
-patch(Thread.prototype, {
-    isSquashed(msg, prevMsg) {
-        return false;
-    },
-});
+// Removes squashing of messages
+// import {Thread} from "@mail/core/common/thread";
+//
+// patch(Thread.prototype, {
+//     isSquashed(msg, prevMsg) {
+//         return false;
+//     },
+// });
 
 

@@ -67,3 +67,50 @@
 .o-mail-ChatWindow-counter {
     display: none !important;
 }
+
+th[data-name="is_check"] {
+    min-width: 45px !important;
+    width: 45px !important;
+}
+
+// Style for lines in tree view
+.o_row_draggable {
+    line-height: 25px !important;
+}
+
+
+.o_list_renderer .o_data_row {
+    border-bottom-width: 0px !important;
+}
+.modal-body .o_list_renderer .o_data_row {
+   border-bottom-width: 1px !important;
+}
+.modal-body .o_list_renderer .ui-sortable {
+   border-width: 1px !important;
+}
+
+
+.table > :not(caption) > * > * {
+    border-bottom-width: 0px !important;
+}
+.table {
+    --table-bg: #rgba(255, 255, 255, 0.12);
+    --table-striped-bg: transparent !important;
+}
+.o-mail-ChatWindow-command {
+    display: none !important;
+}
+.fa-times {
+    color: $red;
+}
+input[type="time"]::-webkit-calendar-picker-indicator {
+    background: none;
+}
+
+
+.border-bottom-left-radius-20px{
+    border-bottom-left-radius: 20px !important;
+}
+.border-bottom-right-radius-20px{
+    border-bottom-right-radius: 20px !important;
+}

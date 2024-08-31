@@ -1,5 +1,4 @@
-from odoo import models, fields, api, Command
-from odoo.tools import format_duration
+from odoo import models, fields, api
 from datetime import timedelta
 import pytz
 
@@ -10,7 +9,7 @@ class ResUsers(models.Model):
     script_id = fields.Many2one("script", string="Script")
     sleepy_chat_id = fields.Many2one("discuss.channel", string="Sleepy Chat", required=True)
     ritual_id = fields.Many2one("ritual", string="Ritual", required=True)
-    time = fields.Float(string="Time", default=23, required=True)
+    time = fields.Char(string="Time", default="23:00", required=True)
     action_id = fields.Many2one(default=lambda self: self.env.ref("sleep.page_sleepy_chat_action"))
     test_script_count = fields.Integer(string="Test Script Count", default=0)
 
@@ -37,7 +36,7 @@ class ResUsers(models.Model):
     def _constrains_time(self):
         for record in self:
             self.env["ir.cron"].search([("name", "=", "Daily script"), ("user_id", "=", record.id)]).unlink()
-            hour, minute = format_duration(record.time).split(":")
+            hour, minute = record.time.split(":")
             tz = pytz.timezone(record.tz) if record.tz else pytz.utc
             nextcall_datetime = fields.Datetime.now().astimezone(tz).replace(hour=int(hour), minute=int(minute), second=0).astimezone(pytz.utc)
             nextcall_datetime = nextcall_datetime.astimezone(pytz.utc)

@@ -2,16 +2,16 @@
 
 <odoo>
 
-	<record id="view_res_config_settings_appsbar_form" model="ir.ui.view">
-	    <field name="name">res.config.settings.form</field>
-	    <field name="model">res.config.settings</field>
-	    <field name="inherit_id" ref="muk_web_appsbar.view_res_config_settings_form"/>
-	    <field name="arch" type="xml">
-	    	<xpath expr="//field[@name='appbar_image']/../.." position="attributes">
-	    		<attribute name="invisible">1</attribute>
-	    	</xpath>
-	    </field>
-	</record>
+<!--	<record id="view_res_config_settings_appsbar_form" model="ir.ui.view">-->
+<!--	    <field name="name">res.config.settings.form</field>-->
+<!--	    <field name="model">res.config.settings</field>-->
+<!--	    <field name="inherit_id" ref="muk_web_appsbar.view_res_config_settings_form"/>-->
+<!--	    <field name="arch" type="xml">-->
+<!--	    	<xpath expr="//field[@name='appbar_image']/../.." position="attributes">-->
+<!--	    		<attribute name="invisible">1</attribute>-->
+<!--	    	</xpath>-->
+<!--	    </field>-->
+<!--	</record>-->
 
 	<record id="view_res_config_settings_colors_form" model="ir.ui.view">
 	    <field name="name">res.config.settings.form</field>
@@ -64,11 +64,11 @@
     			>
     				<field name="theme_background_image_dark" widget="image" class="ml-4 w-75 bg-transparent"/>
                 </setting>
-	    		<setting string="AppsBar" company_dependent="1" help="Set your own Logo for the appsbar">
-	    			<div class="w-50 row">
-                    	<field name="appbar_image" widget="image" class="oe_avatar bg-transparent"/>
-                    </div>
-                </setting>
+<!--	    		<setting string="AppsBar" company_dependent="1" help="Set your own Logo for the appsbar">-->
+<!--	    			<div class="w-50 row">-->
+<!--                    	<field name="appbar_image" widget="image" class="oe_avatar bg-transparent"/>-->
+<!--                    </div>-->
+<!--                </setting>-->
                 <setting string="Favicon" company_dependent="1" help="Set your own favicon">
 	    			<div class="w-50 row">
                     	<field name="theme_favicon" widget="image" class="oe_avatar bg-transparent"/>

@@ -9,10 +9,10 @@
                 <group>
                     <field name="lang"/>
                     <field name="tz"/>
-                    <field name="time" widget="float_time"/>
+                    <field name="time" widget="timepicker"/>
                     <field name="color_scheme" widget="radio"/>
-                    <div class="d-grid gap-2" colspan="2">
-                        <a class="btn btn-danger py-2" href="/web/session/logout?redirect=/web">Logout</a>
+                    <div class="d-grid gap-2 d-flex justify-content-center align-items-center" colspan="2">
+                        <a class="btn btn-danger py-2" style="width: 100%; max-width: 500px;" href="/web/session/logout?redirect=/web">Logout</a>
                     </div>
                 </group>
             </form>

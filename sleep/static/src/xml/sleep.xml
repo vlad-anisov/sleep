@@ -58,13 +58,36 @@
 
 <t t-name="sleep.RitualFormView" t-inherit="web.FormView">
     <xpath expr="//t[@t-set-slot='layout-buttons']" position="inside">
-            <t t-if="!model.root.isInEdition">
-                <button type="button" class="btn btn-link" t-on-click="edit">Edit</button>
-            </t>
-            <t t-else="">
-                <button type="button" class="btn btn-link" t-on-click="saveButtonClicked">Done</button>
-            </t>
-        </xpath>
+        <t t-if="!model.root.isInEdition">
+            <button type="button" class="btn btn-link" t-on-click="edit">Edit</button>
+        </t>
+        <t t-else="">
+            <button type="button" class="btn btn-link" t-on-click="saveButtonClicked">Done</button>
+        </t>
+    </xpath>
+</t>
+
+<t t-name="sleep.Message" t-inherit="mail.Message" t-inherit-mode="extension">
+    <xpath expr="//div[contains(@class, 'o-mail-Message-bubble')]" position="attributes">
+        <attribute name="t-att-class">
+            {
+                'border': state.isEditing and !message.is_note,
+                'bg-info border-info': !message.isSelfAuthored and !message.is_note and !message.isHighlightedFromMention,
+                'bg-success border-success': message.isSelfAuthored and !message.is_note and !message.isHighlightedFromMention,
+                'bg-warning border-warning': message.isHighlightedFromMention,
+            }
+        </attribute>
+        <attribute name="t-attf-class">
+            {{ isAlignedRight ? 'border-bottom-left-radius-20px' : 'border-bottom-right-radius-20px bg-200' }}
+        </attribute>
+        <attribute name="class" remove="rounded-bottom-3" separator=" "/>
+        <attribute name="style">border-top-right-radius: 20px;border-top-left-radius: 20px;</attribute>
+    </xpath>
+    <xpath expr="(//div[contains(@class, 'o-mail-Message-body')])[2]" position="attributes">
+        <attribute name="t-attf-class">
+            {{ isAlignedRight ? 'btn-primary bg-transparent' : '' }}
+        </attribute>
+    </xpath>
 </t>
 
 </templates>

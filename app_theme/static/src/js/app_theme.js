@@ -7,7 +7,7 @@ import {browser} from "@web/core/browser/browser";
 import {useDebounced} from "@web/core/utils/timing";
 import {SearchBarToggler} from "@web/search/search_bar/search_bar_toggler";
 import {KanbanController} from "@web/views/kanban/kanban_controller";
-import {useEffect, useState} from "@odoo/owl";
+import {useEffect, useState, xml} from "@odoo/owl";
 
 export function useSearchBarToggler() {
     const ui = useService("ui");
@@ -122,18 +122,10 @@ patch(ListRenderer.prototype, {
 })
 
 
-
-
-//
-// import { getActiveActions, archParseBoolean } from "@web/views/utils";
-// patch(getActiveActions.prototype, function (rootNode) {
-//     return {
-//         type: "view",
-//         edit: archParseBoolean(rootNode.getAttribute("edit"), true),
-//         create: archParseBoolean(rootNode.getAttribute("create"), true),
-//         delete: archParseBoolean(rootNode.getAttribute("delete"), true),
-//         duplicate: archParseBoolean(rootNode.getAttribute("duplicate"), true),
-//         link: archParseBoolean(rootNode.getAttribute("link"), true),
-//         unlink: archParseBoolean(rootNode.getAttribute("unlink"), true),
-//     };
-// })
+// import { ActionContainer } from "@web/webclient/actions/action_container";
+// ActionContainer.template = xml`
+//     <t t-name="web.ActionContainer">
+//       <div class="o_action_manager container">
+//         <t t-if="info.Component" t-component="info.Component" className="'o_action'" t-props="info.componentProps" t-key="info.id"/>
+//       </div>
+//     </t>`;

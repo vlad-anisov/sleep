@@ -2,7 +2,7 @@
 <templates xml:space="preserve">
 
     <t t-name="sleep.BooleanIconField">
-        <button style="height:30px;width:30px;" t-attf-class="btn btn-sm mx-2 py-1 px-1 fa btn-{{props.record.data[props.name] ? 'primary ' + props.icon : 'outline-secondary ' + props.no_active_icon}}" t-att-data-tooltip="props.label" t-on-click.prevent.stop="update" />
+        <button style="height:20px; width:20px; padding-top: 3px; padding-left: 2px; font-size: inherit" t-attf-class="btn btn-sm mx-2 fa btn-{{props.record.data[props.name] ? 'primary ' + props.icon : 'outline-secondary ' + props.no_active_icon}}" t-att-data-tooltip="props.label" t-on-click.prevent.stop="update" />
     </t>
 
 </templates>

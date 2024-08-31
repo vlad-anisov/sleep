@@ -2,6 +2,7 @@ from odoo import models, fields, _
 from email_validator import validate_email, EmailNotValidError
 from odoo.tools.safe_eval import safe_eval
 from odoo.exceptions import UserError
+from datetime import timedelta
 
 STATE_TYPES = [
     ("not_running", "Not running"),
@@ -74,7 +75,7 @@ class ScriptStep(models.Model):
             for step_id in self.next_step_ids:
                 buttons += f"""
                     <div class="row px-3">
-                        <button class="btn btn-primary" 
+                        <button class="btn btn-primary" style="border-radius: 20px;"
                         onclick="
                             let el = document.getElementsByClassName('o-mail-Composer-input')[0];
                             el.focus();
@@ -101,7 +102,7 @@ class ScriptStep(models.Model):
             for mood in ("👍", "👌", "👎"):
                 buttons += f"""
                     <div class="row px-3">
-                        <button class="btn btn-primary" 
+                        <button class="btn btn-primary" style="border-radius: 20px;"
                         onclick="
                             let el = document.getElementsByClassName('o-mail-Composer-input')[0];
                             el.focus();
@@ -126,12 +127,12 @@ class ScriptStep(models.Model):
         elif self.type == "time":
             timepicker = f"""
                 <div class="row px-3">
-                    <input type="time" id="timepicker" value="23:15"/>
+                    <input type="time" id="timepicker" value="23:15" onfocus="(e) => e.currentTarget.showPicker()"/>
                 </div>
             """
             button = f"""
                 <div class="row px-3">
-                    <button class="btn btn-primary" 
+                    <button class="btn btn-primary" style="border-radius: 20px;"
                     onclick="
                         let el = document.getElementsByClassName('o-mail-Composer-input')[0];
                         el.focus();
@@ -163,14 +164,14 @@ class ScriptStep(models.Model):
             # Adds link to read the article
             button = f"""
                 <div class="row px-3">
-                    <a class="btn btn-primary" href="/web#id={self.script_id.article_id.id}&model=article&view_type=form">Read</a>
+                    <a class="btn btn-primary" style="border-radius: 20px;" href="/web#id={self.script_id.article_id.id}&model=article&view_type=form">Read</a>
                 </div>
             """
             message = f"{self.message}<br/>{button}"
         elif self.type == "ritual":
             button = f"""
                 <div class="row px-3">
-                    <a class="btn btn-primary" href="/web#id={self.env.user.ritual_id.id}&model=ritual&view_type=form">Go</a>
+                    <a class="btn btn-primary" style="border-radius: 20px;" href="/web#id={self.env.user.ritual_id.id}&model=ritual&view_type=form">Go</a>
                 </div>
             """
             message = f"{self.message}<br/>{button}"
@@ -203,15 +204,10 @@ class ScriptStep(models.Model):
                 except EmailNotValidError as e:
                     self.send_message("Invalid email")
             elif self.type == "time":
-                vals = self.user_answer.split(':')
-                t, hours = divmod(float(vals[0]), 24)
-                t, minutes = divmod(float(vals[1]), 60)
-                minutes = minutes / 60.0
-                self.user_answer = str(hours + minutes)
-                time = float(self.user_answer) - 1
-                if time < 0:
-                    time = 24 + time
-                self.env.user.time = time
+                hour, minute = self.user_answer.split(":")
+                time = (fields.Datetime.now().replace(hour=int(hour), minute=int(minute)) - timedelta(hours=1))
+                self.user_answer = time.strftime("%H:%M")
+                self.env.user.time = self.user_answer
                 self.script_id.next_script_id = self.script_id.main_script_id.next_script_id
         elif self.type != "nothing":
             self.send_message("Please provide an answer")

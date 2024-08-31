@@ -136,3 +136,26 @@
   padding-left: 11px !important;
   padding-right: 11px !important;
 }
+
+.modal-header {
+    border-bottom: 0px !important;
+}
+.modal-footer {
+  border-top: 0px !important;
+}
+.table-sm > :not(caption) > * > * {
+    padding: 0.75rem;
+}
+.modal-content{
+  border: 0px !important;
+}
+
+//.modal-body{
+//  border-radius: 30px !important;
+//}
+//.o_form_view{
+//  border-radius: 30px !important;
+//}
+//.modal-dialog {
+//  border-radius: 30px !important;
+//}

@@ -32,11 +32,9 @@
                 <templates>
                     <t t-name="kanban-box">
                         <div t-attf-class="oe_kanban_global_click pt-3 pb-3">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col">
-                                        <field name="name"/>
-                                    </div>
+                            <div class="row">
+                                <div class="col">
+                                    <field name="name"/>
                                 </div>
                             </div>
                         </div>
