@@ -10,8 +10,9 @@ class DiscussChannel(models.Model):
 
     def message_post(self, **kwargs):
         result = super().message_post(**kwargs)
-        step_id = self.env.user.script_id.step_ids.filtered(lambda s: s.state == "waiting")[:1]
-        if step_id:
-            step_id.user_answer = kwargs.get("body")
-            step_id.run()
+        if self == self.env.user.sleepy_chat_id:
+            step_id = self.env.user.script_id.step_ids.filtered(lambda s: s.state == "waiting")[:1]
+            if step_id:
+                step_id.user_answer = kwargs.get("body")
+                step_id.run()
         return result

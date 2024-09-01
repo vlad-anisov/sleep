@@ -150,6 +150,11 @@
   border: 0px !important;
 }
 
+
+.o_field_html a:not(.btn) {
+    color: $primary !important;
+}
+
 //.modal-body{
 //  border-radius: 30px !important;
 //}
