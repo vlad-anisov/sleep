@@ -155,6 +155,10 @@ patch(ListRenderer.prototype, {
 
 window.addEventListener('locationchange', function () {
     $("a[role='menuitem']").removeClass('text-primary')
-    const url = window.location.href.split('model=')[1].split('&')[0].replaceAll(".", "_")
-    $(`a[data-menu-xmlid*='${url}']`).addClass('text-primary')
+    if (window.location.href){
+        const url = window.location.href.split('model=')[1].split('&')[0].replaceAll(".", "_")
+        $(`a[data-menu-xmlid*='${url}']`).addClass('text-primary')
+    } else {
+        $("a[role='menuitem']").first().addClass('text-primary')
+    }
 });
