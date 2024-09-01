@@ -7,7 +7,7 @@ import {browser} from "@web/core/browser/browser";
 import {useDebounced} from "@web/core/utils/timing";
 import {SearchBarToggler} from "@web/search/search_bar/search_bar_toggler";
 import {KanbanController} from "@web/views/kanban/kanban_controller";
-import {useEffect, useState, xml} from "@odoo/owl";
+import {onMounted, useEffect, useState, xml} from "@odoo/owl";
 
 export function useSearchBarToggler() {
     const ui = useService("ui");
@@ -88,6 +88,13 @@ DropdownItem.props = {
     ...DropdownItem.props,
     web_icon: { optional: true },
 };
+patch(DropdownItem.prototype, {
+    setup() {
+        onMounted(() => {
+            window.dispatchEvent(new Event("locationchange"));
+        });
+    }
+})
 
 
 // Auto dark/light theme
