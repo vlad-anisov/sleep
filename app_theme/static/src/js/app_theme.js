@@ -161,16 +161,16 @@ patch(ListRenderer.prototype, {
 })();
 
 window.addEventListener('locationchange', function () {
-    $("a[role='menuitem']").removeClass('text-primary')
+    $("a[role='menuitem']").removeClass('primary')
     if (window.location.href){
         let url = window.location.href.split('model=')[1]
         if (url) {
             url = url.split('&')[0].replaceAll(".", "_")
-            $(`a[data-menu-xmlid*='${url}']`).addClass('text-primary')
+            $(`a[data-menu-xmlid*='${url}']`).addClass('primary')
         } else {
-            $("a[role='menuitem']").first().addClass('text-primary')
+            $("a[role='menuitem']").first().addClass('primary')
         }
     } else {
-        $("a[role='menuitem']").first().addClass('text-primary')
+        $("a[role='menuitem']").first().addClass('primary')
     }
 });
