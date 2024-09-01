@@ -119,7 +119,7 @@ patch(ListRenderer.prototype, {
     get displayRowCreates() {
         return this.canCreate;
     }
-})
+});
 
 
 // import { ActionContainer } from "@web/webclient/actions/action_container";
