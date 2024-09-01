@@ -129,3 +129,32 @@ patch(ListRenderer.prototype, {
 //         <t t-if="info.Component" t-component="info.Component" className="'o_action'" t-props="info.componentProps" t-key="info.id"/>
 //       </div>
 //     </t>`;
+
+
+(() => {
+    let oldPushState = history.pushState;
+    history.pushState = function pushState() {
+        let ret = oldPushState.apply(this, arguments);
+        window.dispatchEvent(new Event('pushstate'));
+        window.dispatchEvent(new Event('locationchange'));
+        return ret;
+    };
+
+    let oldReplaceState = history.replaceState;
+    history.replaceState = function replaceState() {
+        let ret = oldReplaceState.apply(this, arguments);
+        window.dispatchEvent(new Event('replacestate'));
+        window.dispatchEvent(new Event('locationchange'));
+        return ret;
+    };
+
+    window.addEventListener('popstate', () => {
+        window.dispatchEvent(new Event('locationchange'));
+    });
+})();
+
+window.addEventListener('locationchange', function () {
+    $("a[role='menuitem']").removeClass('text-primary')
+    const url = window.location.href.split('model=')[1].split('&')[0].replaceAll(".", "_")
+    $(`a[data-menu-xmlid*='${url}']`).addClass('text-primary')
+});
