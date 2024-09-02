@@ -25,7 +25,8 @@
 
     <t t-name="sleep.NavBar.SectionsMenu" t-inherit="web.NavBar.SectionsMenu" t-inherit-mode="extension">
     <xpath expr="//div[hasclass('o_menu_sections')]" position="attributes">
-        <attribute name="class" add="d-flex" remove="d-none d-md-flex flex-grow-1 flex-shrink-1 w-0" separator=" "/>
+        <attribute name="class" add="d-flex justify-content-around" remove="d-none d-md-flex flex-grow-1 flex-shrink-1 w-0" separator=" "/>
+        <attribute name="style">width: 100%</attribute>
     </xpath>
         <xpath expr="//DropdownItem" position="attributes">
         <attribute name="web_icon">section.webIcon</attribute>
@@ -48,14 +49,14 @@
                 tabindex="0"
                 t-att-style="props.style"
             >
-                <div class="d-flex align-items-center flex-column">
+                <div class="d-flex align-items-center flex-column" style="width:50px">
                     <div class="row">
                     <div class="col d-flex justify-content-center">
                          <t t-tag="'i'" class="fa fa-lg" t-att-class="props.web_icon"/>
                     </div>
                 </div>
                     <div class="row">
-                    <div class="col">
+                    <div class="col" style="font-size:11px;">
                         <t t-slot="default"/>
                     </div>
                 </div>

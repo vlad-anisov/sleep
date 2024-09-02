@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+    <record id="provider_apple_auth" model="auth.oauth.provider">
+        <field name="name">Sign in with Apple</field>
+        <field name="client_id">dummy</field>
+        <field name="apple_team_id">dummy</field>
+        <field name="apple_key_id">dummy</field>
+        <field name="scope">name email</field>
+        <field name="data_endpoint">https://appleid.apple.com</field>
+        <field name="auth_endpoint">https://appleid.apple.com/auth/authorize</field>
+        <field name="validation_endpoint">https://appleid.apple.com/auth/token</field>
+        <field name="css_class">fa fa-fw fa-apple</field>
+        <field name="body">Log in with Apple</field>
+        <field name="apple_provider">true</field>
+        <field name="enabled">true</field>
+    </record>
+</odoo>

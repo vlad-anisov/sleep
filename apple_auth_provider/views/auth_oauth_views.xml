@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_oauth_provider_form" model="ir.ui.view">
+        <field name="name">auth.oauth.provider.form.kanak</field>
+        <field name="model">auth.oauth.provider</field>
+        <field name="inherit_id" ref="auth_oauth.view_oauth_provider_form" />
+        <field name="arch" type="xml">
+            <field name='client_id' position='after'>
+                <field
+                    name='apple_provider'
+                    invisible="1" />
+                <field
+                    name='apple_team_id'
+                    required="apple_provider"
+                    invisible="not apple_provider" />
+                <field
+                    name="apple_key_id"
+                    required="apple_provider"
+                    invisible="not apple_provider" />
+                <field
+                    name="apple_key_file"
+                    required="apple_provider"
+                    invisible="not apple_provider" />
+            </field>
+        </field>
+    </record>
+</odoo>

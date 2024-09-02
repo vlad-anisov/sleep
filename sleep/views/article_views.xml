@@ -52,6 +52,5 @@
     </record>
 
     <menuitem id="article_menu" name="Articles" parent="sleep_root_menu" sequence="2" action="article_action" web_icon="fa-regular fa-newspaper"/>
-    <menuitem id="todo_menu" name="ToDo" parent="sleep_root_menu" sequence="4" action="article_action" web_icon="fa-regular fa-circle-check"/>
 
 </odoo>
