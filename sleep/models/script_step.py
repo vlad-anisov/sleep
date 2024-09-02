@@ -151,7 +151,7 @@ class ScriptStep(models.Model):
                         }};
                         el.dispatchEvent(new window.KeyboardEvent('keydown', {{ key: 'Enter' }}));
                         ">
-                        Set
+                        {_("Set time")}
                     </button>
                 </div>
             """
@@ -164,14 +164,14 @@ class ScriptStep(models.Model):
             # Adds link to read the article
             button = f"""
                 <div class="row px-3">
-                    <a class="btn btn-primary" style="border-radius: 20px;" href="/web#id={self.script_id.article_id.id}&model=article&view_type=form">Read</a>
+                    <a class="btn btn-primary" style="border-radius: 20px;" href="/web#id={self.script_id.article_id.id}&model=article&view_type=form">{_("Read article")}</a>
                 </div>
             """
             message = f"{self.message}<br/>{button}"
         elif self.type == "ritual":
             button = f"""
                 <div class="row px-3">
-                    <a class="btn btn-primary" style="border-radius: 20px;" href="/web#id={self.env.user.ritual_id.id}&model=ritual&view_type=form">Go</a>
+                    <a class="btn btn-primary" style="border-radius: 20px;" href="/web#id={self.env.user.ritual_id.id}&model=ritual&view_type=form">{_("Start ritual")}</a>
                 </div>
             """
             message = f"{self.message}<br/>{button}"
@@ -212,7 +212,7 @@ class ScriptStep(models.Model):
         elif self.type != "nothing":
             self.send_message("Please provide an answer")
         self.state = "post_processing"
-        if self.type not in ("article", "ritual"):
+        if self.type != "nothing":
             self.message_id.body = self.message
 
     def post_processing(self):

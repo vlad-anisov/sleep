@@ -558,3 +558,24 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:sleep.ritual_form
 msgid "✨ Ritual is done ✨"
 msgstr "✨ Ритуал закончен ✨"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Start ritual"
+msgstr "Начать ритуал"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Read article"
+msgstr "Читать статью"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Set time"
+msgstr "Установить время"
