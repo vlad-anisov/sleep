@@ -4,7 +4,7 @@ from odoo import models, fields, api
 class Ritual(models.Model):
     _name = "ritual"
 
-    name = fields.Char(string="Name", default="Ritual")
+    name = fields.Char(string="Name", default="Ritual", translate=True)
     line_ids = fields.Many2many("ritual.line", string="Lines")
     user_id = fields.Many2one("res.users", string="User", required=True)
     is_check = fields.Boolean(string="Check", compute="_compute_is_check", store=True)

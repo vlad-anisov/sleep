@@ -11,7 +11,7 @@ COLOR_SCHEME_TYPES = [
 class Settings(models.Model):
     _name = "settings"
 
-    name = fields.Char(default="Settings")
+    name = fields.Char(default="Settings", translate=True)
     color_scheme = fields.Selection(COLOR_SCHEME_TYPES, string="Theme", compute="_compute_settings", readonly=False, required=True)
     lang = fields.Selection(_lang_get, string="Language", compute="_compute_settings", readonly=False, required=True)
     tz = fields.Selection(_tz_get, string="Timezone", compute="_compute_settings", readonly=False, required=True)

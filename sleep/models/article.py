@@ -4,8 +4,8 @@ from odoo import models, fields
 class Article(models.Model):
     _name = "article"
 
-    name = fields.Char(string="Name")
-    text = fields.Html(string="Text")
+    name = fields.Char(string="Name", translate=True)
+    text = fields.Html(string="Text", translate=True)
     user_ids = fields.Many2many("res.users", string="Users")
     is_available = fields.Boolean(string="Is available", compute="_compute_is_available")
 
