@@ -579,3 +579,17 @@ msgstr "Читать статью"
 #, python-format
 msgid "Set time"
 msgstr "Установить время"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Enabled"
+msgstr "Включил"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Enable notifications"
+msgstr "Включить уведомления"

@@ -21,6 +21,7 @@ TYPES = [
     ("mood", "Mood"),
     ("ritual_line", "Ritual line"),
     ("ritual", "Ritual"),
+    ("push", "Push"),
 ]
 
 
@@ -156,6 +157,34 @@ class ScriptStep(models.Model):
                 </div>
             """
             message = f"{self.message}<br/>{timepicker}<br/>{button}"
+        elif self.type == "push":
+            button = f"""
+                <div class="row px-3">
+                    <button class="btn btn-primary" style="border-radius: 20px;"
+                    onclick="Notification.requestPermission().then((permissionResult) => {{
+                        if (permissionResult === 'granted') {{
+                            let el = document.getElementsByClassName('o-mail-Composer-input')[0];
+                            el.focus();
+                            el.value = '';
+                            el.dispatchEvent(new window.KeyboardEvent('keydown', {{ key: 'Backspace' }}));
+                            el.dispatchEvent(new window.KeyboardEvent('keyup', {{ key: 'Backspace' }}));
+                            el.dispatchEvent(new window.InputEvent('input'));
+                            el.dispatchEvent(new window.InputEvent('change'));
+                            for (const char of '{_("Enabled")}') {{
+                                el.value += char;
+                                el.dispatchEvent(new window.KeyboardEvent('keydown', {{key: char}}));
+                                el.dispatchEvent(new window.KeyboardEvent('keyup', {{key: char}}));
+                                el.dispatchEvent(new window.InputEvent('input'));
+                                el.dispatchEvent(new window.InputEvent('change'));
+                            }};
+                            el.dispatchEvent(new window.KeyboardEvent('keydown', {{ key: 'Enter' }}));
+                        }}
+                    }})">
+                    {_("Enable notifications")}
+                    </button>
+                </div>
+            """
+            message = f"{self.message}<br/>{button}"
         elif self.type == "article":
             # Adds access to new article for user
             self.script_id.sudo().article_id.user_ids += self.env.user
