@@ -15,15 +15,15 @@ class WebManifest(MainWebManifest):
             'scope': '/web',
             'start_url': '/web',
             'display': 'standalone',
-            'background_color': '#01a2ff',
-            'theme_color': '#01a2ff',
+            # 'background_color': '#01a2ff',
+            # 'theme_color': '#01a2ff',
             'prefer_related_applications': False,
-            "description": "Eva: Healthy sleep in 30 days",
-            "screenshots": [{
-                "src": "/sleep/static/img/screenshot.png",
-                "sizes": "367x794",
-                "type": "image/png",
-            }],
+            # "description": "Eva: Healthy sleep in 30 days",
+            # "screenshots": [{
+            #     "src": "/sleep/static/img/screenshot.png",
+            #     "sizes": "367x794",
+            #     "type": "image/png",
+            # }],
         }
         icon_sizes = ['192x192', '512x512']
         manifest['icons'] = [{

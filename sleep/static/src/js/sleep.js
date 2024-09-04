@@ -57,7 +57,8 @@ patch(ChatWindowService.prototype, {
 
 //
 import {FormRenderer} from "@web/views/form/form_renderer";
-import {onWillRender, onWillDestroy } from "@odoo/owl";
+import {onWillRender, onWillDestroy, onMounted} from "@odoo/owl";
+import {loadJS} from "@web/core/assets";
 import {useService} from "@web/core/utils/hooks";
 import {session} from '@web/session';
 
@@ -80,6 +81,18 @@ patch(FormRenderer.prototype, {
                 this.threadService.chatWindowService.close(chatWindow);
             }
         });
+        onMounted(() => {
+            const value_html = $("div[name='plotly_chart']");
+            if (value_html) {
+                loadJS("/web_widget_plotly_chart/static/src/lib/plotly/plotly-2.18.2.min.js")
+                const div = value_html.find(".plotly-graph-div").first().text();
+                const script = value_html.find("script").first().text();
+                // value_html.replaceWith(div)
+                new Function(script)();
+            }
+
+        }
+        )
     }
 });
 

@@ -72,8 +72,8 @@
         <attribute name="t-att-class">
             {
                 'border': state.isEditing and !message.is_note,
-                'bg-info border-info': !message.isSelfAuthored and !message.is_note and !message.isHighlightedFromMention,
-                'bg-success border-success': message.isSelfAuthored and !message.is_note and !message.isHighlightedFromMention,
+                'bg-info border-info bg-gradient': !message.isSelfAuthored and !message.is_note and !message.isHighlightedFromMention,
+                'bg-success border-success bg-gradient': message.isSelfAuthored and !message.is_note and !message.isHighlightedFromMention,
                 'bg-warning border-warning': message.isHighlightedFromMention,
             }
         </attribute>

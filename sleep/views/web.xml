@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <odoo>
-        <template id="webclient_bootstrap" inherit_id="web.webclient_bootstrap">
+        <template id="webclient_bootstrap_icon" inherit_id="web.webclient_bootstrap">
             <xpath expr="//link[@rel='apple-touch-icon']" position="replace">
                 <link rel="apple-touch-icon" href="/sleep/static/img/odoo-icon-512x512.png"/>
+            </xpath>
+        </template>
+
+        <template id="webclient_bootstrap_color" inherit_id="muk_web_colors.webclient_bootstrap">
+            <xpath expr="//meta[@name='theme-color']" position="replace">
+                <meta name="theme-color" t-att-content="'#1b1d26' if request.httprequest.cookies.get('color_scheme') == 'dark' else '#ffffff'"/>
             </xpath>
         </template>
     </odoo>

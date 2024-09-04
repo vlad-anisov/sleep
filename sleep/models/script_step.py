@@ -76,7 +76,7 @@ class ScriptStep(models.Model):
             for step_id in self.next_step_ids:
                 buttons += f"""
                     <div class="row px-3">
-                        <button class="btn btn-primary" style="border-radius: 20px;"
+                        <button class="btn btn-primary bg-gradient" style="border-radius: 20px;"
                         onclick="
                             let el = document.getElementsByClassName('o-mail-Composer-input')[0];
                             el.focus();
@@ -103,7 +103,7 @@ class ScriptStep(models.Model):
             for mood in ("👍", "👌", "👎"):
                 buttons += f"""
                     <div class="row px-3">
-                        <button class="btn btn-primary" style="border-radius: 20px;"
+                        <button class="btn btn-primary bg-gradient" style="border-radius: 20px;"
                         onclick="
                             let el = document.getElementsByClassName('o-mail-Composer-input')[0];
                             el.focus();
@@ -125,6 +125,8 @@ class ScriptStep(models.Model):
                         </button>
                     </div><br/>"""
             message = f"{self.message}<br/>{buttons}"[:-5]
+        elif self.type == "time" and "{0}" in self.message:
+            message = self.message.format(self.env.user.time)
         elif self.type == "time":
             timepicker = f"""
                 <div class="row px-3">
@@ -133,7 +135,7 @@ class ScriptStep(models.Model):
             """
             button = f"""
                 <div class="row px-3">
-                    <button class="btn btn-primary" style="border-radius: 20px;"
+                    <button class="btn btn-primary bg-gradient" style="border-radius: 20px;"
                     onclick="
                         let el = document.getElementsByClassName('o-mail-Composer-input')[0];
                         el.focus();
@@ -160,7 +162,7 @@ class ScriptStep(models.Model):
         elif self.type == "push":
             button = f"""
                 <div class="row px-3">
-                    <button class="btn btn-primary" style="border-radius: 20px;"
+                    <button class="btn btn-primary bg-gradient" style="border-radius: 20px;"
                     onclick="Notification.requestPermission().then((permissionResult) => {{
                         if (permissionResult === 'granted') {{
                             let el = document.getElementsByClassName('o-mail-Composer-input')[0];
@@ -193,14 +195,14 @@ class ScriptStep(models.Model):
             # Adds link to read the article
             button = f"""
                 <div class="row px-3">
-                    <a class="btn btn-primary" style="border-radius: 20px;" href="/web#id={self.script_id.article_id.id}&model=article&view_type=form">{_("Read article")}</a>
+                    <a class="btn btn-primary bg-gradient" style="border-radius: 20px;" href="/web#id={self.script_id.article_id.id}&model=article&view_type=form">{_("Read article")}</a>
                 </div>
             """
             message = f"{self.message}<br/>{button}"
         elif self.type == "ritual":
             button = f"""
                 <div class="row px-3">
-                    <a class="btn btn-primary" style="border-radius: 20px;" href="/web#id={self.env.user.ritual_id.id}&model=ritual&view_type=form">{_("Start ritual")}</a>
+                    <a class="btn btn-primary bg-gradient" style="border-radius: 20px;" href="/web#id={self.env.user.ritual_id.id}&model=ritual&view_type=form">{_("Start ritual")}</a>
                 </div>
             """
             message = f"{self.message}<br/>{button}"
