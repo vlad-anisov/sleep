@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="chat_form" model="ir.ui.view">
+        <field name="name">chat.form</field>
+        <field name="model">chat</field>
+        <field name="arch" type="xml">
+            <form>
+            </form>
+        </field>
+    </record>
+
+    <record id="chat_action" model="ir.actions.act_window">
+        <field name="name">Chat</field>
+        <field name="res_model">chat</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">form</field>
+        <field name="res_id">1</field>
+    </record>
+
+    <menuitem web_icon="fa-regular fa-comment" id="chat_menu" name="Chat" action="chat_action" sequence="1"
+              parent="sleep_root_menu"/>
+
+</odoo>

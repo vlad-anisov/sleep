@@ -48,7 +48,7 @@ class ScriptStep(models.Model):
     def send_message(self, message):
         if not message and self.type == "nothing":
             return
-        chat_id = self.env.user.sleepy_chat_id.with_user(self.env.ref("sleep.sleepy"))
+        chat_id = self.env.user.chat_id.with_user(self.env.ref("sleep.eva"))
         skip_notify_thread_by_web_push = self.env.context.get("skip_notify_thread_by_web_push", True)
         message_id = chat_id.with_context(skip_notify_thread_by_web_push=skip_notify_thread_by_web_push).message_post(
             body=message, message_type="comment", subtype_xmlid="mail.mt_comment", body_is_html=True

@@ -16,7 +16,7 @@
     ],
     'depends': [
         'web_enterprise',
-        'muk_web_chatter',
+        # 'muk_web_chatter',
         # 'muk_web_dialog',
         # 'muk_web_appsbar',
         'muk_web_colors',
@@ -57,7 +57,6 @@
         'static/description/banner.png',
         'static/description/theme_screenshot.png'
     ],
-    'installable': True,
     'application': False,
     'auto_install': False,
     'post_init_hook': '_setup_module',

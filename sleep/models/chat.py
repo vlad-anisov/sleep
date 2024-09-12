@@ -1,7 +1,7 @@
 from odoo import models, fields
 
 
-class PageSleepyChat(models.Model):
-    _name = "page.sleepy.chat"
+class Chat(models.Model):
+    _name = "chat"
 
     name = fields.Char(string="Name", default=" ")

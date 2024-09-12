@@ -2,10 +2,10 @@
 <odoo>
     <data>
 
-        <record id="sleepy" model="res.users">
-            <field name="name">Sleepy</field>
-            <field name="login">sleepy</field>
-            <field name="password">sleepy</field>
+        <record id="eva" model="res.users">
+            <field name="name">Eva</field>
+            <field name="login">eva</field>
+            <field name="password">eva</field>
         </record>
 
     </data>

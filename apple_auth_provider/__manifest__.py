@@ -44,7 +44,6 @@
         'python': ['PyJWT'],
     },
     'images': ["static/description/banner.gif"],
-    'installable': True,
     'application': False,
     'auto_install': False,
     'price': 69,

@@ -1,8 +1,8 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_script,access_script,model_script,base.group_user,1,1,1,1
 access_script_step,access_script_step,model_script_step,base.group_user,1,1,1,1
-access_page_sleepy_chat,access_page_sleepy_chat,model_page_sleepy_chat,base.group_user,1,0,0,0
-access_page_about,access_page_about,model_page_about,base.group_user,1,0,0,0
+access_chat,access_chat,model_chat,base.group_user,1,0,0,0
+access_about,access_about,model_about,base.group_user,1,0,0,0
 access_article_system,access_article_system,model_article,base.group_system,1,1,1,1
 access_article_user,access_article_user,model_article,base.group_user,1,0,0,0
 access_ritual_system,access_ritual_system,sleep.model_ritual,base.group_system,1,1,0,0

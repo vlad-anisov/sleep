@@ -37,7 +37,7 @@ messageActionsRegistry.addEventListener("UPDATE", ({detail: {operation, key}}) =
 
 // ???
 import {ChatWindowService} from "@mail/core/common/chat_window_service";
-import {patch} from "@web/core/utils/patch";
+import { patch } from "@web/core/utils/patch";
 
 patch(ChatWindowService.prototype, {
     async _onClose(chatWindow, options) {
@@ -107,9 +107,9 @@ patch(Composer.prototype, {
 });
 
 
-import {ThreadService} from "@mail/core/common/thread_service";
+import {Thread} from "@mail/core/common/thread_model";
 
-patch(ThreadService.prototype, {
+patch(Thread.prototype, {
     async loadAround2(thread) {
         let {messages} = await this.rpc(this.getFetchRoute(thread), {
             ...this.getFetchParams(thread)

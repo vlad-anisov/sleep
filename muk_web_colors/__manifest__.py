@@ -41,7 +41,6 @@
     'images': [
         'static/description/banner.png',
     ],
-    'installable': True,
     'application': False,
     'auto_install': False,
     'uninstall_hook': '_uninstall_cleanup',

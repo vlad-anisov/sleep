@@ -6,5 +6,5 @@ class IrHttp(models.AbstractModel):
 
     def session_info(self):
         result = super().session_info()
-        result["sleepy_chat_id"] = self.env.user.sleepy_chat_id.id
+        result["chat_id"] = self.env.user.chat_id.id
         return result

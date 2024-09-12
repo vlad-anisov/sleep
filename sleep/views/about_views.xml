@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-    <record id="page_about_form" model="ir.ui.view">
-        <field name="name">page.about.form</field>
-        <field name="model">page.about</field>
+    <record id="about_form" model="ir.ui.view">
+        <field name="name">about.form</field>
+        <field name="model">about</field>
         <field name="arch" type="xml">
             <form>
                 <div class="row">
@@ -30,9 +30,9 @@
         </field>
     </record>
 
-    <record id="page_about_action" model="ir.actions.act_window">
+    <record id="about_action" model="ir.actions.act_window">
         <field name="name">About app</field>
-        <field name="res_model">page.about</field>
+        <field name="res_model">about</field>
         <field name="type">ir.actions.act_window</field>
         <field name="view_mode">form</field>
         <field name="res_id">1</field>

@@ -23,7 +23,6 @@
             'web_window_title/static/src/js/web_window_title.js',
         ],
     },
-    'installable': True,
     'auto_install': False,
     'application': False,
 }

@@ -7,22 +7,22 @@ class ResUsers(models.Model):
     _inherit = "res.users"
 
     script_id = fields.Many2one("script", string="Script")
-    sleepy_chat_id = fields.Many2one("discuss.channel", string="Sleepy Chat", required=True)
+    chat_id = fields.Many2one("discuss.channel", string="Chat", required=True)
     ritual_id = fields.Many2one("ritual", string="Ritual", required=True)
     time = fields.Char(string="Time", default="23:00", required=True)
-    action_id = fields.Many2one(default=lambda self: self.env.ref("sleep.page_sleepy_chat_action"))
+    action_id = fields.Many2one(default=lambda self: self.env.ref("sleep.chat_action"))
     test_script_count = fields.Integer(string="Test Script Count", default=0)
 
     @api.model_create_multi
     def create(self, vals_list):
         record_ids = super().create(vals_list)
-        sleepy_id = self.env.ref("sleep.sleepy")
+        eva_id = self.env.ref("sleep.eva")
         for record_id in record_ids:
             record_id.ritual_id = self.sudo().env["ritual"].create({
                 "user_id": record_id.id,
             })
-            partner_ids = self.env["res.partner"].browse([sleepy_id.partner_id.id, record_id.partner_id.id])
-            record_id.sleepy_chat_id = self.with_user(record_id).env["discuss.channel"].create({
+            partner_ids = self.env["res.partner"].browse([eva_id.partner_id.id, record_id.partner_id.id])
+            record_id.chat_id = self.with_user(record_id).env["discuss.channel"].create({
                 "channel_member_ids": [
                     (0, 0, {"partner_id": partner_id.id}) for partner_id in partner_ids
                 ],
