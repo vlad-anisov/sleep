@@ -593,3 +593,241 @@ msgstr "Включил"
 #, python-format
 msgid "Enable notifications"
 msgstr "Включить уведомления"
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/discuss/typing/typing.js:0
+#, python-format
+msgid "%s is typing..."
+msgstr " %s набирает текст"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "A bit stressed 👎"
+msgstr "Немного стрессовый 👎"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "All right 👍"
+msgstr "Всё в порядке 👍"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Busy 👎"
+msgstr "Напряженный 👎"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Can’t complain 👌"
+msgstr "Не могу пожаловаться 👌"
+
+#. module: sleep
+#: model_terms:ir.actions.act_window,help:sleep.sound_action
+msgid "Coming soon"
+msgstr "Скоро будет"
+
+#. module: sleep
+#: model_terms:ir.ui.view,arch_db:sleep.webclient_offline
+msgid ""
+"Check your network connection and come back here. App will load as soon as "
+"you're back online."
+msgstr "Проверьте подключение к сети и вернитесь сюда. Приложение загрузится, как только вы вернетесь в сеть."
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Could be worse 👌"
+msgstr "Могло быть и хуже 👌"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Excited 👎"
+msgstr "Волнуюсь 👎"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Exhausted 👎"
+msgstr "Измученный 👎"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Fantastic 👍"
+msgstr "Фантастический 👍"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Fine 👍"
+msgstr "Прекрасно 👍"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Frustrated 👎"
+msgstr "Разочарованный 👎"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Good enough 👌"
+msgstr "Достаточно хорошо 👌"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Good 👍"
+msgstr "Хорошо 👍"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Great 👍"
+msgstr "Отлично 👍"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Little nervous 👎"
+msgstr "Немного нервничаю 👎"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Medium well 👌"
+msgstr "Средний 👌"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Not bad 👍"
+msgstr "Не плохо 👍"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Not feeling great 👎"
+msgstr "Чувствую себя неважно 👎"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Not too well 👎"
+msgstr "Не слишком хорошо 👎"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Nothing much 👌"
+msgstr "Ничего особенного 👌"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Okay 👌"
+msgstr "Хорошо 👌"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Pretty well 👍"
+msgstr "Очень хорошо 👍"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Same old 👌"
+msgstr "Все как обычно 👌"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Stressed out 👎"
+msgstr "В стрессовом состоянии 👎"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Usual 👌"
+msgstr "Обычный 👌"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Very good 👍"
+msgstr "Очень хорошо 👍"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Very well 👍"
+msgstr "Очень хорошо 👍"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Well 👍"
+msgstr "Неплохо"
+
+#. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/script_step.py:0
+#, python-format
+msgid "Worried 👎"
+msgstr "Так себе 👎"
+
+#. module: sleep
+#: model:ir.actions.act_window,name:sleep.sound_action
+#: model:ir.ui.menu,name:sleep.sound_menu
+msgid "Sounds"
+msgstr "Звуки"
+
+#. module: sleep
+#: model_terms:ir.ui.view,arch_db:sleep.webclient_offline
+msgid "You are offline"
+msgstr "Вы не в сети"
+
+#. module: sleep
+#: model_terms:ir.actions.act_window,help:sleep.sound_action
+msgid "In development"
+msgstr "В разработке"
+
+#. module: sleep
+#: model:ir.actions.act_window,name:sleep.chat_action
+#: model:ir.model.fields,field_description:sleep.field_res_users__chat_id
+#: model:ir.ui.menu,name:sleep.chat_menu
+msgid "Chat"
+msgstr "Чат"

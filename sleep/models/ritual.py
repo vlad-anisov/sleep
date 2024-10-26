@@ -16,11 +16,17 @@ class Ritual(models.Model):
                 record.is_check = True
                 step_id = self.env.user.script_id.step_ids.filtered(lambda s: s.type == "ritual" and s.state == "waiting")[:1]
                 if step_id:
-                    step_id.type = "nothing"
-                    step_id.run()
+                    step_id.user_answer = "ready"
+                    step_id.message_id.body = step_id.message
             else:
                 record.is_check = False
 
+    # def read(self, fields=None, load='_classic_read'):
+    #     step_id = self.env.user.script_id.step_ids.filtered(lambda s: s.type == "ritual" and s.state == "waiting")[:1]
+    #     if step_id:
+    #         step_id.user_answer = "ready"
+    #         step_id.message_id.body = step_id.message
+    #     return super().read(fields=fields, load=load)
 
     @api.model
     def open(self):

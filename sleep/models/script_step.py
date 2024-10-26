@@ -3,6 +3,7 @@ from email_validator import validate_email, EmailNotValidError
 from odoo.tools.safe_eval import safe_eval
 from odoo.exceptions import UserError
 from datetime import timedelta
+import random
 
 STATE_TYPES = [
     ("not_running", "Not running"),
@@ -72,11 +73,15 @@ class ScriptStep(models.Model):
 
     def pre_processing(self):
         if self.type == "next_step_name":
+            if "{0}" in self.message:
+                message = self.message.format(self.env.user.time)
+            else:
+                message = self.message
             buttons = ""
             for step_id in self.next_step_ids:
                 buttons += f"""
                     <div class="row px-3">
-                        <button class="btn btn-primary bg-gradient" style="border-radius: 20px;"
+                        <button class="btn btn-primary" style="border-radius: 20px;"
                         onclick="
                             let el = document.getElementsByClassName('o-mail-Composer-input')[0];
                             el.focus();
@@ -97,13 +102,47 @@ class ScriptStep(models.Model):
                             {step_id.name}
                         </button>
                     </div><br/>"""
-            message = f"{self.message}<br/>{buttons}"[:-5]
+            message = f"{message}<br/>{buttons}"[:-5]
         elif self.type == "mood":
             buttons = ""
-            for mood in ("👍", "👌", "👎"):
+            positive = [
+                _("Well 👍"),
+                _("Great 👍"),
+                _("Very well 👍"),
+                _("All right 👍"),
+                _("Fine 👍"),
+                _("Good 👍"),
+                _("Very good 👍"),
+                _("Not bad 👍"),
+                _("Pretty well 👍"),
+                _("Fantastic 👍"),
+            ]
+            neutral = [
+                _("Okay 👌"),
+                _("Nothing much 👌"),
+                _("Usual 👌"),
+                _("Could be worse 👌"),
+                _("Same old 👌"),
+                _("Can’t complain 👌"),
+                _("Medium well 👌"),
+                _("Good enough 👌"),
+            ]
+            negative = [
+                _("Not too well 👎"),
+                _("Not feeling great 👎"),
+                _("A bit stressed 👎"),
+                _("Little nervous 👎"),
+                _("Exhausted 👎"),
+                _("Worried 👎"),
+                _("Stressed out 👎"),
+                _("Busy 👎"),
+                _("Frustrated 👎"),
+                _("Excited 👎"),
+            ]
+            for mood in (random.choice(positive), random.choice(neutral), random.choice(negative)):
                 buttons += f"""
                     <div class="row px-3">
-                        <button class="btn btn-primary bg-gradient" style="border-radius: 20px;"
+                        <button class="btn btn-primary" style="border-radius: 20px;"
                         onclick="
                             let el = document.getElementsByClassName('o-mail-Composer-input')[0];
                             el.focus();
@@ -125,8 +164,6 @@ class ScriptStep(models.Model):
                         </button>
                     </div><br/>"""
             message = f"{self.message}<br/>{buttons}"[:-5]
-        elif self.type == "time" and "{0}" in self.message:
-            message = self.message.format(self.env.user.time)
         elif self.type == "time":
             timepicker = f"""
                 <div class="row px-3">
@@ -135,7 +172,7 @@ class ScriptStep(models.Model):
             """
             button = f"""
                 <div class="row px-3">
-                    <button class="btn btn-primary bg-gradient" style="border-radius: 20px;"
+                    <button class="btn btn-primary" style="border-radius: 20px;"
                     onclick="
                         let el = document.getElementsByClassName('o-mail-Composer-input')[0];
                         el.focus();
@@ -162,7 +199,7 @@ class ScriptStep(models.Model):
         elif self.type == "push":
             button = f"""
                 <div class="row px-3">
-                    <button class="btn btn-primary bg-gradient" style="border-radius: 20px;"
+                    <button class="btn btn-primary" style="border-radius: 20px;"
                     onclick="Notification.requestPermission().then((permissionResult) => {{
                         if (permissionResult === 'granted') {{
                             let el = document.getElementsByClassName('o-mail-Composer-input')[0];
@@ -193,16 +230,21 @@ class ScriptStep(models.Model):
             # Adds next script to current script
             self.script_id.next_script_id = self.script_id.main_script_id.next_script_id
             # Adds link to read the article
+            menu_id = self.env.ref("sleep.sleep_root_menu")
+            # action_id = self.env.ref("sleep.chat_action")
+            article_id = self.script_id.article_id
             button = f"""
                 <div class="row px-3">
-                    <a class="btn btn-primary bg-gradient" style="border-radius: 20px;" href="/web#id={self.script_id.article_id.id}&model=article&view_type=form">{_("Read article")}</a>
+                    <a class="btn btn-primary" style="border-radius: 20px;" href="/web#id={article_id.id}&model=article&view_type=form&menu_id={menu_id.id}">{_("Read article")}</a>
                 </div>
             """
             message = f"{self.message}<br/>{button}"
         elif self.type == "ritual":
+            menu_id = self.env.ref("sleep.sleep_root_menu")
+            ritual_id = self.env.user.ritual_id
             button = f"""
                 <div class="row px-3">
-                    <a class="btn btn-primary bg-gradient" style="border-radius: 20px;" href="/web#id={self.env.user.ritual_id.id}&model=ritual&view_type=form">{_("Start ritual")}</a>
+                    <a class="btn btn-primary" style="border-radius: 20px;" href="/web#id={ritual_id.id}&model=ritual&view_type=form&menu_id={menu_id.id}">{_("Start ritual")}</a>
                 </div>
             """
             message = f"{self.message}<br/>{button}"
@@ -243,8 +285,10 @@ class ScriptStep(models.Model):
         elif self.type != "nothing":
             self.send_message("Please provide an answer")
         self.state = "post_processing"
-        if self.type != "nothing":
-            self.message_id.body = self.message
+        chat_id = self.env.user.chat_id.with_user(self.env.ref("sleep.eva"))
+        for message_id in chat_id.message_ids.filtered(lambda m: '<div class="row px-3">' in m.body):
+            message_id.body = "".join(message_id.body.split('<div class="row px-3">')[0].split('<br/>')[:-1])
+        # self.message_id.body = self.message
 
     def post_processing(self):
         next_step_id = self.next_step_ids[:1]
@@ -255,8 +299,3 @@ class ScriptStep(models.Model):
         self.state = "done"
         if next_step_id:
             next_step_id.run()
-        elif self.env.user.test_script_count < 1 and self.script_id.next_script_id:
-            self.env.user.test_script_count += 1
-            self.script_id.next_script_id.run()
-        else:
-            self.env.user.test_script_count = 0

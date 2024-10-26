@@ -8,7 +8,11 @@
             <form create="0" delete="0">
                 <field name="user_ids" invisible="1"/>
                 <field name="name" invisible="1"/>
-                <field name="text" readonly="1"/>
+                <field name="short_name" invisible="1"/>
+                <field name="description" invisible="1"/>
+                <field name="emoji" invisible="1"/>
+                <field name="color" invisible="1"/>
+                <field name="text" readonly="0"  widget="html" options="{'codeview': true}"/>
             </form>
         </field>
     </record>
@@ -29,16 +33,32 @@
         <field name="arch" type="xml">
             <kanban create="0">
                 <field name="name"/>
+                <field name="short_name"/>
+                <field name="emoji"/>
+                <field name="color"/>
+                <field name="second_color"/>
                 <templates>
-                    <t t-name="kanban-box">
+                    <t t-set="color_name" t-value="0,120,255"/>
+                    <div t-name="kanban-box" class="article bg-200"
+                         t-attf-style="background-color: rgba(0, 0, 0, 1);border-radius: 20px; border: 0px !important;background-image: radial-gradient(ellipse at center bottom, rgba(#{record.color.value},1), rgba(#{record.second_color.value},1)"
+                    >
                         <div t-attf-class="oe_kanban_global_click pt-3 pb-3">
-                            <div class="row">
+                            <div class="row" style="z-index: 10 !important; position: relative; color: white;">
                                 <div class="col">
-                                    <field name="name"/>
+                                    <div class="row">
+                                        <field name="short_name" style="font-size: 20px;font-weight: bold;"/>
+                                    </div>
+                                    <div class="row">
+                                        <field name="description" style="font-size: 15px;"/>
+<!--                                        <span style="font-size: 15px;">asdadasda asd asd adas dasd dasdas das </span>-->
+                                    </div>
+                                </div>
+                                <div class="col-3 d-grid gap-2 d-flex justify-content-center align-items-center pe-5">
+                                    <field name="emoji" style="position: absolute;font-size: 70px;"/>
                                 </div>
                             </div>
                         </div>
-                    </t>
+                    </div>
                 </templates>
             </kanban>
         </field>

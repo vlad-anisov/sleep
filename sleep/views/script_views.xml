@@ -29,15 +29,15 @@
                                 <field name="next_step_ids" widget="many2many_tags"/>
                             </tree>
                             <form>
-                                <header>
-                                    <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
-                                    <button name="run" type="object" string="Run"/>
-                                </header>
+<!--                                <header>-->
+<!--                                    <field name="state" widget="statusbar" options="{'clickable': '1'}"/>-->
+<!--                                    <button name="run" type="object" string="Run"/>-->
+<!--                                </header>-->
                                 <group>
                                     <field name="name"/>
                                     <field name="message" widget="html" options="{'codeview': true}"/>
                                     <field name="type"/>
-                                    <field name="code" widget="code" options="{'mode': 'python'}"/>
+<!--                                    <field name="code" widget="code" options="{'mode': 'python'}"/>-->
                                     <field name="script_id" invisible="1"/>
                                     <field name="next_step_ids" widget="many2many_tags" domain="[('script_id', '=', script_id)]"/>
                                 </group>

@@ -10,3 +10,4 @@ access_ritual_user,access_ritual_user,sleep.model_ritual,base.group_user,1,1,0,0
 access_ritual_line,access_ritual_line,sleep.model_ritual_line,base.group_user,1,1,1,1
 access_settings,access_settings,sleep.model_settings,base.group_user,1,1,0,0
 access_statistic,access_statistic,sleep.model_statistic,base.group_user,1,1,1,1
+access_sound,access_sound,sleep.model_sound,base.group_user,1,0,0,0

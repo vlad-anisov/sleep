@@ -37,12 +37,22 @@ class Script(models.Model):
     def run(self):
         self.ensure_one()
         user_id = self.user_id or self.env.user
+        # user_id.chat_id.with_user(self.env.ref("sleep.eva")).message_ids.unlink()
 
         if self.is_main:
             main_script_id = self
             self.user_id = False
+            first_step_id = user_id.script_id.step_ids.sorted(key=lambda s: (s.sequence, s.id))[:1]
+            if first_step_id.state != "done":
+                first_step_id.message_id.unlink()
         else:
             main_script_id = self.next_script_id or self.main_script_id
+            first_step_id = user_id.script_id.step_ids.sorted(key=lambda s: (s.sequence, s.id))[:1]
+            if first_step_id.state != "done":
+                first_step_id.message_id.unlink()
+                user_id.not_active_days += 1
+            else:
+                user_id.not_active_days = 0
             self.unlink()
 
         script_id = main_script_id.create_script(user_id)
@@ -50,7 +60,12 @@ class Script(models.Model):
             user_id.script_id.unlink()
         user_id.script_id = script_id
         user_id.with_user(user_id).sudo().ritual_id.line_ids.is_check = False
-        script_id.with_user(user_id).with_context(skip_notify_thread_by_web_push=False).step_ids.sorted(key=lambda s: (s.sequence, s.id))[:1].run()
+
+        step_id = script_id.with_user(user_id).step_ids.sorted(key=lambda s: (s.sequence, s.id))[:1]
+        if user_id.not_active_days < 7:
+            step_id.with_context(skip_notify_thread_by_web_push=False).send_message(step_id.message)
+            step_id.message_id.unlink()
+        step_id.run()
 
     def _compute_state(self):
         for record in self:

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="sound_action" model="ir.actions.act_window">
+        <field name="name">Sounds</field>
+        <field name="res_model">sound</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">kanban</field>
+        <field name="help" type="html">
+            <h1>
+                In development
+            </h1>
+            <h1>
+                Coming soon
+            </h1>
+            <h1 style="font-size: 100px">
+                👨‍💻
+            </h1>
+        </field>
+    </record>
+
+    <menuitem id="sound_menu" name="Sounds" action="sound_action" sequence="4"
+              parent="sleep_root_menu" web_icon="fa-music"/>
+
+</odoo>

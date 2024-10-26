@@ -19,7 +19,7 @@
         <field name="view_mode">graph,tree,form</field>
     </record>
 
-    <menuitem id="statistic_menu" name="Statistic" action="statistic_action" sequence="4"
-              parent="sleep_root_menu" web_icon="fa-line-chart"/>
+<!--    <menuitem id="statistic_menu" name="Statistic" action="statistic_action" sequence="4"-->
+<!--              parent="sleep_root_menu" web_icon="fa-line-chart"/>-->
 
 </odoo>

@@ -22,12 +22,16 @@
     //    padding-bottom: 126px !important;
     //}
     @include media-breakpoint-down(md) {
-        padding-bottom: 71px !important;
+        padding-bottom: 101px !important;
     }
 }
 .o-mail-ChatWindow-typing{
-    padding-bottom: 60px !important;
+    padding-bottom: 80px !important;
     background-color: transparent !important;
+}
+
+.o-mail-DateSection {
+    z-index: 1;
 }
 
 .o-mail-Composer {
@@ -39,7 +43,7 @@
         bottom: 0px !important;
         right: 0px !important;
         left: 0px !important;
-        padding-bottom: 60px !important;
+        padding-bottom: 80px !important;
     }
 }
 
@@ -69,8 +73,19 @@
 }
 
 th[data-name="is_check"] {
-    min-width: 45px !important;
-    width: 45px !important;
+    min-width: 50px !important;
+    max-width: 50px !important;
+    width: 50px !important;
+    padding: 0px !important;
+}
+th[data-name="sequence"] {
+    min-width: 50px !important;
+    max-width: 50px !important;
+    width: 50px !important;
+    padding: 0px !important;
+}
+th[data-name="name"] {
+    width: 100% !important;
 }
 
 // Style for lines in tree view
@@ -93,6 +108,10 @@ th[data-name="is_check"] {
 
 .table > :not(caption) > * > * {
     border-bottom-width: 0px !important;
+    box-shadow: inset 0 0 0 0 rgba(0,0,0,0);
+    background-color: transparent !important;
+    //border-radius: 20px !important;
+    //color: $body-color !important;
 }
 .table {
     --table-bg: #rgba(255, 255, 255, 0.12);
@@ -115,3 +134,300 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .border-bottom-right-radius-20px{
     border-bottom-right-radius: 20px !important;
 }
+
+.o_kanban_record {
+    margin-bottom: 8px !important;
+    margin-top: 8px !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+}
+
+
+//.btn-primary {
+//    box-shadow: 0px 0px 30px 5px rgba(0, 120, 255, 1) !important;
+//}
+
+.o-mail-Message-textContent:has(button) {
+    box-shadow: 0px 0px 150px 15px rgba(0, 120, 255, 1);
+}
+.o-mail-Message-textContent:has(a) {
+    box-shadow: 0px 0px 150px 15px rgba(0, 120, 255, 1);
+}
+
+.o-mail-Message-body:has(button) {
+    box-shadow: inset 0px 0px 10px 1px rgba(0, 120, 255, 0.3) !important;
+}
+.o-mail-Message-body:has(a) {
+    box-shadow: inset 0px 0px 10px 1px rgba(0, 120, 255, 0.3) !important;
+}
+//.o-mail-Message-textContent{
+//    z-index: 10;
+//}
+
+
+
+.img-fluid {
+    //box-shadow: 0px 0px 100px 10px rgba(0, 120, 255, 1) !important;
+    border-radius: 20px !important;
+    position:relative !important;
+    //z-index:2 !important;
+    background-size:cover !important;
+    width: 512px !important;
+    max-height: 512px !important;
+    padding-bottom:100%;
+    &::after {
+        width:100% !important;
+        height:100% !important;
+        transform:scale(1.05) !important;
+        background-size:cover !important;
+        z-index:-1 !important;
+        position:absolute !important;
+        content:'' !important;
+        background:inherit !important;
+        //filter:blur(20px) !important;
+        -webkit-filter:blur(20px) !important;
+        //opacity:0.8;
+  }
+}
+.img2 {
+    //box-shadow: 0px 0px 100px 10px rgba(0, 120, 255, 1) !important;
+    border-radius: 20px !important;
+    position:relative !important;
+    z-index:2 !important;
+    background-size:cover !important;
+    height: 300px !important;
+  //  &::after {
+  //      width:100%;
+  //      height:100%;
+  //      z-index:1;
+  //      position:absolute;
+  //      content:'';
+  //      background:inherit;
+  //      filter:blur(20px);
+  //      transform:scale(1.05);
+  //      opacity:0.8;
+  //}
+}
+
+//.o_control_panel{
+//    background-image: linear-gradient(rgba(0, 120, 255, 0.3), rgba(0, 0, 0, 0) );
+//}
+
+
+
+.table {
+    --table-hover-color: inherit;
+}
+
+.text-primary{
+    background-color: $primary !important;
+    background-image: var(--gradient) !important;
+    color: $body-color !important;
+    border-radius: 20px;
+}
+.text-primary:not(tr) {
+    box-shadow: 0px 0px 100px 1px rgb(0, 120, 255);
+}
+.text-primary td{
+    box-shadow: 0px 0px 100px 1px rgb(0, 120, 255);
+}
+.text-info{
+    border-radius: 20px;
+}
+.text-primary button{
+    background-color: $primary !important;
+    background-image: var(--gradient) !important;
+    //color: $body-color !important;
+    //box-shadow: 0px 0px 100px 10px rgba(0, 120, 255, 1);
+    //border-radius: 20px;
+}
+tr.text-info{
+    //background-color: $gray-200 !important;
+    color: $body-color !important;
+    //box-shadow: 0px 0px 100px 10px rgba(0, 120, 255, 1);
+    //border-radius: 20px;
+}
+.o_ritual_form_view .o_form_renderer {
+    padding: 0px 0px 0px 0px !important;
+}
+
+.oe_read_only table {
+    border-collapse: separate !important;
+    border-spacing: 0px 20px !important;
+    padding: 40px 20px 80px 20px !important;
+}
+.oe_edit_only table {
+    border-collapse: separate !important;
+    border-spacing: 0px 20px !important;
+    padding: 40px 20px 80px 20px !important;
+}
+
+td:first-child,
+th:first-child {
+  border-radius: 20px 0 0 20px;
+}
+
+// Set border-radius on the top-right and bottom-right of the last table data on the table row
+td:last-child,
+th:last-child {
+  border-radius: 0 20px 20px 0;
+  width: 100%;
+}
+
+.o_list_char {
+    height: 60px;
+}
+.o_field_x2many_list_row_add {
+    height: 60px;
+}
+.modal-content:has(.o_field_x2many_list_row_add) footer {
+    display: none;
+}
+.modal-body .o_list_renderer .ui-sortable {
+    border-bottom-width: 0px !important;
+}
+
+.o_field_boolean_sleep_icon {
+    height: 30px;
+}
+.o_field_handle {
+    height: 30px;
+}
+
+.o_boolean_sleep_icon_cell {
+    width: 30px !important;
+}
+.o_handle_cell {
+    width: 30px !important;
+}
+
+
+.o-mail-Thread-jumpPresent {
+    bottom: -11px !important;
+}
+
+
+
+
+
+//*:not(header) {
+//    animation: show 0.5s ease-out forwards;
+//}
+//*:not(select) {
+//    transition: all 0.5s ease-out;
+//}
+
+
+.o-mail-Message-bubble {
+      animation: show 0.5s ease-out forwards !important;
+}
+.o-mail-Message-body {
+      animation: show 0.5s ease-out forwards !important;
+}
+
+.modal-content {
+    animation: show 0.3s ease-out forwards !important;
+}
+
+.o_form_renderer {
+    animation: show 0.5s ease-out forwards !important;
+}
+.done {
+    animation: show 0.5s ease-out forwards !important;
+}
+.o_kanban_renderer {
+    animation: show 0.5s ease-out forwards !important;
+}
+.o_control_panel_main {
+    animation: show 0.5s ease-out forwards !important;
+}
+button:not(.fa-times,.rounded-circle) {
+    animation: show 0.5s ease-out forwards !important;
+}
+//span {
+//    animation: show 0.5s ease-out forwards !important;
+//}
+
+tr {
+    transition: all 0.3s ease-out !important;
+    border-color: $gray-200;
+}
+tbody {
+    border-color: $gray-200 !important;
+}
+.o_nav_entry {
+    transition: all 0.3s ease-out !important;
+}
+.fa-times {
+    transition: all 0s ease-out !important;
+}
+.ui-sortable-handle {
+    transition: all 0s ease-out !important;
+}
+.rounded-circle{
+    transition: all 0s ease-out !important;
+}
+.modal {
+    animation: show 0.3s ease-out forwards !important;
+}
+//tr .text-primary{
+//    //animation: show 0.5s ease-out forwards;
+//    transition: all 0.5s ease-out;
+//}
+//tr .text-info{
+//    //animation: show 0.5s ease-out forwards;
+//    transition: all 1s;
+//    opacity: 1;
+//}
+
+@keyframes show {
+ 0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+
+.modal-content {
+    border-radius: 20px !important;
+}
+
+td {
+    //height: 30px !important;
+    //justify-content: center !important;
+    //align-items: center !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    //display: table !important;
+    //flex-direction: column !important;
+    //display: flex !important;
+}
+.o_list_char {
+    text-align: start !important;
+}
+.o_field_x2many_list_row_add {
+    text-align: start !important;
+}
+
+.flex-column {
+    transition: all 0s;
+}
+.row {
+    transition: all 0s;
+}
+.col {
+    transition: all 0s;
+}
+i {
+    transition: all 0s;
+}
+//select {
+//    cursor: pointer;
+//    min-width: 50px;
+//    -webkit-appearance: none;
+//    -moz-appearance: none;
+//    appearance: none;
+//    background: transparent url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='7' height='4' viewBox='0 0 7 4'><polygon fill='%23D1D1D1' points='3.5 4 7 0 0 0'/></svg>") no-repeat right center;
+//    border-radius: 0;
+//    color: #D1D1D1;
+//}

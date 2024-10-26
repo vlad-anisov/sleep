@@ -7,16 +7,17 @@
         <field name="arch" type="xml">
             <form js_class="ritual_form">
                 <field name="is_check" invisible="1"/>
-                <div class="oe_read_only text-center pt-5" invisible="is_check == False" style="font-size: 20px">
+                <div class="oe_read_only text-center done" invisible="is_check == False" style="font-size: 20px; padding-top: 200px">
                     ✨ Ritual is done ✨
                 </div>
                 <div class="oe_read_only" invisible="is_check == True">
                     <field name="line_ids" nolabel="1" readonly="1">
                         <tree no_open="1" default_order="sequence desc, id desc"
-                              decoration-muted="is_check == False" decoration-primary="is_check == True">
-                            <field name="is_check" nolabel="1" widget="boolean_sleep_icon"
+                              decoration-primary="is_check == True"
+                              decoration-info="is_check == False">
+                            <field name="is_check" nolabel="1" widget="boolean_sleep_icon" string=""
                                    options="{'icon': 'fa-check rounded-circle', 'no_active_icon': 'rounded-circle'}"/>
-                            <field name="name" readonly="1" nolabel="1"/>
+                            <field name="name" readonly="1" nolabel="1" string=""/>
                         </tree>
                     </field>
                 </div>
@@ -27,7 +28,7 @@
                                 <button name="add_line" string="Add line" class="btn-link" type="object"/>
                             </control>
                             <field name="sequence" widget="handle" nolabel="1" height="100px"/>
-                            <field name="name" nolabel="1"  height="100px"/>
+                            <field name="name" nolabel="1" height="100px" string=""/>
                         </tree>
                     </field>
                 </div>

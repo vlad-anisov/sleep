@@ -50,9 +50,9 @@
                 t-att-style="props.style"
             >
                 <div class="d-flex align-items-center flex-column" style="width:50px">
-                    <div class="row">
+                    <div class="row" style="height: 20px">
                     <div class="col d-flex justify-content-center">
-                         <t t-tag="'i'" class="fa fa-lg" t-att-class="props.web_icon"/>
+                         <t t-tag="'i'" class="fa" t-att-class="props.web_icon" style="font-size: 24px"/>
                     </div>
                 </div>
                     <div class="row">

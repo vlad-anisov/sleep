@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-    <menuitem id="sleep_root_menu" name="Sleep" sequence="0" web_icon="website,static/description/icon.png"/>
+    <menuitem id="sleep_root_menu" name="Sleep" sequence="0" web_icon="sleep,static/description/icon.png"/>
 
 </odoo>

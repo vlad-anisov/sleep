@@ -43,7 +43,7 @@
 
 /* Disable border where click on kanban record */
 .o_kanban_renderer .oe_kanban_card:focus-visible.oe_kanban_global_click, .o_kanban_renderer .oe_kanban_card:focus-visible.oe_kanban_global_click_edit, .o_kanban_renderer .oe_kanban_card:focus-visible .oe_kanban_global_click, .o_kanban_renderer .oe_kanban_card:focus-visible .oe_kanban_global_click_edit, .o_kanban_renderer .oe_kanban_card:focus-within.oe_kanban_global_click, .o_kanban_renderer .oe_kanban_card:focus-within.oe_kanban_global_click_edit, .o_kanban_renderer .oe_kanban_card:focus-within .oe_kanban_global_click, .o_kanban_renderer .oe_kanban_card:focus-within .oe_kanban_global_click_edit, .o_kanban_renderer .o_kanban_record:focus-visible.oe_kanban_global_click, .o_kanban_renderer .o_kanban_record:focus-visible.oe_kanban_global_click_edit, .o_kanban_renderer .o_kanban_record:focus-visible .oe_kanban_global_click, .o_kanban_renderer .o_kanban_record:focus-visible .oe_kanban_global_click_edit, .o_kanban_renderer .o_kanban_record:focus-within.oe_kanban_global_click, .o_kanban_renderer .o_kanban_record:focus-within.oe_kanban_global_click_edit, .o_kanban_renderer .o_kanban_record:focus-within .oe_kanban_global_click, .o_kanban_renderer .o_kanban_record:focus-within .oe_kanban_global_click_edit {
-     outline: thin solid rgba(255, 0, 0, 0) !important;
+     outline: none !important;
 }
 
 /* Transparent background for images*/
@@ -72,7 +72,7 @@
 
 /* Styles for left padding of rows in x2many fields (from odoo styles) */
 .o_field_x2many.o_field_x2many_list .o_list_renderer tr > :first-child {
-    padding-left: 0.3rem;
+    padding-left: 0.5rem;
 }
 
 .o_form_view.o_xxs_form_view .o_inner_group .o_wrap_field .o_cell .o_field_widget {

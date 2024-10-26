@@ -18,7 +18,7 @@
         <field name="res_id">1</field>
     </record>
 
-    <menuitem web_icon="fa-regular fa-comment" id="chat_menu" name="Chat" action="chat_action" sequence="1"
+    <menuitem web_icon="fa-comment" id="chat_menu" name="Chat" action="chat_action" sequence="1"
               parent="sleep_root_menu"/>
 
 </odoo>

@@ -15,8 +15,8 @@ class WebManifest(MainWebManifest):
             'scope': '/web',
             'start_url': '/web',
             'display': 'standalone',
-            # 'background_color': '#01a2ff',
-            # 'theme_color': '#01a2ff',
+            'background_color': '#141e36',
+            'theme_color': '#141e36',
             'prefer_related_applications': False,
             # "description": "Eva: Healthy sleep in 30 days",
             # "screenshots": [{
@@ -27,7 +27,7 @@ class WebManifest(MainWebManifest):
         }
         icon_sizes = ['192x192', '512x512']
         manifest['icons'] = [{
-            'src': '/sleep/static/img/odoo-icon-%s.png' % size,
+            'src': '/sleep/static/img/odoo-icon-%s.webp' % size,
             'sizes': size,
             'type': 'image/png',
             "purpose": "maskable",
@@ -38,4 +38,7 @@ class WebManifest(MainWebManifest):
             ('Content-Type', 'application/manifest+json'),
         ])
         return response
+
+    def _icon_path(self):
+        return 'sleep/static/img/odoo-icon-192x192.webp'
 

@@ -59,10 +59,10 @@
 <t t-name="sleep.RitualFormView" t-inherit="web.FormView">
     <xpath expr="//t[@t-set-slot='layout-buttons']" position="inside">
         <t t-if="!model.root.isInEdition">
-            <button type="button" class="btn btn-link" t-on-click="edit">Edit</button>
+            <button type="button" class="btn btn-link ps-1" t-on-click="edit">Edit</button>
         </t>
         <t t-else="">
-            <button type="button" class="btn btn-link" t-on-click="saveButtonClicked">Done</button>
+            <button type="button" class="btn btn-link ps-1" t-on-click="saveButtonClicked">Done</button>
         </t>
     </xpath>
 </t>
@@ -81,13 +81,25 @@
             {{ isAlignedRight ? 'border-bottom-left-radius-20px' : 'border-bottom-right-radius-20px bg-200' }}
         </attribute>
         <attribute name="class" remove="rounded-bottom-3" separator=" "/>
-        <attribute name="style">border-top-right-radius: 20px;border-top-left-radius: 20px;</attribute>
+        <attribute name="style">z-index:1;border-top-right-radius: 20px;border-top-left-radius: 20px;</attribute>
     </xpath>
     <xpath expr="(//div[contains(@class, 'o-mail-Message-body')])[2]" position="attributes">
         <attribute name="t-attf-class">
             {{ isAlignedRight ? 'btn-primary bg-transparent' : '' }}
         </attribute>
+        <attribute name="t-attf-style">
+            {{ isAlignedRight ? 'z-index:2;border-top-right-radius: 20px !important;border-top-left-radius: 20px !important;border-bottom-right-radius: 0px !important;border-bottom-left-radius: 20px !important;' : 'z-index:2;border-top-right-radius: 20px !important;border-top-left-radius: 20px !important;border-bottom-right-radius: 20px !important;border-bottom-left-radius: 0px !important;' }}
+        </attribute>
     </xpath>
+    <xpath expr="//div[contains(@class, 'o-mail-Message-textContent')]" position="attributes">
+<!--        <attribute name="style">border-top-right-radius: 20px;border-top-left-radius: 20px;border-bottom-right-radius: 20px;border-bottom-left-radius: 20px;</attribute>-->
+        <attribute name="t-attf-style">
+            {{ isAlignedRight ? 'border-top-right-radius: 20px;border-top-left-radius: 20px;border-bottom-right-radius: 0px;border-bottom-left-radius: 20px;' : 'border-top-right-radius: 20px;border-top-left-radius: 20px;border-bottom-right-radius: 20px;border-bottom-left-radius: 0px;' }}
+        </attribute>
+    </xpath>
+<!--    <xpath expr="//div[contains(@class, 'o-mail-Message')]" position="attributes">-->
+<!--        <attribute name="style">z-index: 100</attribute>-->
+<!--    </xpath>-->
 </t>
 
 </templates>

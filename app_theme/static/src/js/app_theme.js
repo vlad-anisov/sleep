@@ -98,16 +98,23 @@ patch(DropdownItem.prototype, {
 
 
 // Auto dark/light theme
+// if (window.matchMedia) {
+//     var match = window.matchMedia('(prefers-color-scheme: dark)')
+//     if (!cookie.get("color_scheme")) {
+//         cookie.set("color_scheme", match.matches ? "dark" : "light");
+//         window.location.reload();
+//     }
+//     match.addEventListener('change', () => {
+//         cookie.set("color_scheme", match.matches ? "dark" : "light");
+//         window.location.reload();
+//     })
+// }
 if (window.matchMedia) {
     var match = window.matchMedia('(prefers-color-scheme: dark)')
     if (!cookie.get("color_scheme")) {
-        cookie.set("color_scheme", match.matches ? "dark" : "light");
+        cookie.set("color_scheme", "dark");
         window.location.reload();
     }
-    match.addEventListener('change', () => {
-        cookie.set("color_scheme", match.matches ? "dark" : "light");
-        window.location.reload();
-    })
 }
 
 import { ControlPanel } from "@web/search/control_panel/control_panel";

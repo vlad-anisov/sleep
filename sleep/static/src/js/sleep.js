@@ -37,9 +37,15 @@ messageActionsRegistry.addEventListener("UPDATE", ({detail: {operation, key}}) =
 
 // ???
 import {ChatWindowService} from "@mail/core/common/chat_window_service";
-import { patch } from "@web/core/utils/patch";
+import {onWillRender, onWillDestroy, onMounted} from "@odoo/owl";
+import {patch} from "@web/core/utils/patch";
 
 patch(ChatWindowService.prototype, {
+    // setup(...args) {
+    //     super.setup(...args);
+    //
+    // },
+
     async _onClose(chatWindow, options) {
         if (this.ui.isSmall && !this.store.discuss.isActive) {
             // If we are in mobile and discuss is not open, it means the
@@ -57,7 +63,6 @@ patch(ChatWindowService.prototype, {
 
 //
 import {FormRenderer} from "@web/views/form/form_renderer";
-import {onWillRender, onWillDestroy, onMounted} from "@odoo/owl";
 import {loadJS} from "@web/core/assets";
 import {useService} from "@web/core/utils/hooks";
 import {session} from '@web/session';
@@ -67,32 +72,23 @@ patch(FormRenderer.prototype, {
         super.setup();
         this.threadService = useService("mail.thread");
         onWillRender(() => {
-            if (this.props.record.model.config.resModel == "page.sleepy.chat") {
-                let thread = this.mailStore.Thread.get({model: "discuss.channel", id: session.sleepy_chat_id});
+            if (this.props.record.model.config.resModel == "chat") {
+                let thread = this.mailStore.Thread.get({model: "discuss.channel", id: session.chat_id});
                 if (!thread)
-                    thread = this.mailStore.Thread.insert({model: "discuss.channel", id: session.sleepy_chat_id});
+                    thread = this.mailStore.Thread.insert({model: "discuss.channel", id: session.chat_id});
                 this.threadService.open(thread)
             }
         });
         onWillDestroy(() => {
-            const thread = this.mailStore.Thread.get({model: "discuss.channel", id: session.sleepy_chat_id});
+            const thread = this.mailStore.Thread.get({model: "discuss.channel", id: session.chat_id});
             const chatWindow = this.threadService.store.discuss.chatWindows.find((c) => c.thread?.eq(thread));
             if (chatWindow) {
                 this.threadService.chatWindowService.close(chatWindow);
             }
         });
         onMounted(() => {
-            const value_html = $("div[name='plotly_chart']");
-            if (value_html) {
-                loadJS("/web_widget_plotly_chart/static/src/lib/plotly/plotly-2.18.2.min.js")
-                const div = value_html.find(".plotly-graph-div").first().text();
-                const script = value_html.find("script").first().text();
-                // value_html.replaceWith(div)
-                new Function(script)();
-            }
-
-        }
-        )
+           $(".o-mail-Message-textContent").css('z-index', 1);
+        });
     }
 });
 
@@ -107,9 +103,12 @@ patch(Composer.prototype, {
 });
 
 
-import {Thread} from "@mail/core/common/thread_model";
+import {ThreadService} from "@mail/core/common/thread_service";
+import { prettifyMessageContent } from "@mail/utils/common/format";
+import { loadEmoji } from "@web/core/emoji_picker/emoji_picker";
+import { browser } from "@web/core/browser/browser";
 
-patch(Thread.prototype, {
+patch(ThreadService.prototype, {
     async loadAround2(thread) {
         let {messages} = await this.rpc(this.getFetchRoute(thread), {
             ...this.getFetchParams(thread)
@@ -140,6 +139,96 @@ patch(Thread.prototype, {
         thread.loadNewer = false;
         thread.loadOlder = true;
         this._enrichMessagesWithTransient(thread);
+    },
+
+    async post(
+        thread,
+        body,
+        {
+            attachments = [],
+            isNote = false,
+            parentId,
+            mentionedChannels = [],
+            mentionedPartners = [],
+            cannedResponseIds,
+        } = {}
+    ) {
+        let tmpMsg;
+        const params = await this.getMessagePostParams({
+            attachments,
+            body,
+            cannedResponseIds,
+            isNote,
+            mentionedChannels,
+            mentionedPartners,
+            thread,
+        });
+        const tmpId = this.messageService.getNextTemporaryId();
+        params.context = { ...this.user.context, ...params.context, temporary_id: tmpId };
+        if (parentId) {
+            params.post_data.parent_id = parentId;
+        }
+        if (thread.type === "chatter") {
+            params.thread_id = thread.id;
+            params.thread_model = thread.model;
+        } else {
+            const tmpData = {
+                id: tmpId,
+                attachments: attachments,
+                res_id: thread.id,
+                model: "discuss.channel",
+            };
+            tmpData.author = this.store.self;
+            if (parentId) {
+                tmpData.parentMessage = this.store.Message.get(parentId);
+            }
+            const prettyContent = await prettifyMessageContent(
+                body,
+                this.messageService.getMentionsFromText(body, {
+                    mentionedChannels,
+                    mentionedPartners,
+                })
+            );
+            const { emojis } = await loadEmoji();
+            const recentEmojis = JSON.parse(
+                browser.localStorage.getItem("web.emoji.frequent") || "{}"
+            );
+            const emojisInContent =
+                prettyContent.match(/\p{Emoji_Presentation}|\p{Emoji}\uFE0F/gu) ?? [];
+            for (const codepoints of emojisInContent) {
+                if (emojis.some((emoji) => emoji.codepoints === codepoints)) {
+                    recentEmojis[codepoints] ??= 0;
+                    recentEmojis[codepoints]++;
+                }
+            }
+            browser.localStorage.setItem("web.emoji.frequent", JSON.stringify(recentEmojis));
+            tmpMsg = this.store.Message.insert(
+                {
+                    ...tmpData,
+                    body: prettyContent,
+                    res_id: thread.id,
+                    model: thread.model,
+                    temporary_id: tmpId,
+                },
+                { html: true }
+            );
+            // thread.messages.push(tmpMsg);
+            thread.seen_message_id = tmpMsg.id;
+        }
+        const data = await this.rpc(this.getMessagePostRoute(thread), params);
+        tmpMsg?.delete();
+        if (!data) {
+            return;
+        }
+        if (data.id in this.store.Message.records) {
+            data.temporary_id = null;
+        }
+        const message = this.store.Message.insert(data, { html: true });
+        thread.messages.add(message);
+        if (!message.isEmpty && this.store.hasLinkPreviewFeature) {
+            this.rpc("/mail/link_preview", { message_id: data.id }, { silent: true });
+        }
+        return message;
     }
 });
 
@@ -185,46 +274,249 @@ patch(Dialog.prototype, {
 import {DiscussCoreCommon} from "@mail/discuss/core/common/discuss_core_common_service"
 
 patch(DiscussCoreCommon.prototype, {
-    async _handleNotificationNewMessage(notif) {
-        let self = this;
-        if (notif.payload.message.author.name === "Sleepy") {
-            const {id} = notif.payload;
-            self.rpc(
-                "/discuss/channel/notify_typing",
-                {
-                    channel_id: id,
-                    is_typing: true,
-                    is_sleepy: true,
-                },
-                {silent: true}
-            ).then(() => {
-                setTimeout(() => {
-                    self.rpc(
-                        "/discuss/channel/notify_typing",
-                        {
-                            channel_id: id,
-                            is_typing: false,
-                            is_sleepy: true,
-                        },
-                        {silent: true}
-                    ).then(() => {
-                        super._handleNotificationNewMessage(notif);
-                        const { id, message: messageData } = notif.payload;
-                        let thread = self.store.Thread.get({ model: "discuss.channel", id });
-                        if (!thread || !thread.type) {
-                            thread = self.threadService.fetchChannel(id);
-                            if (!thread) {
-                                return;
-                            }
-                        }
-                        self.threadService.loadAround3(thread);
-                    })
-                }, 2000);
-            })
-        } else {
-            await super._handleNotificationNewMessage(notif);
-        }
-    }
+    setup() {
+        this.messagingService.isReady.then((data) => {
+            for (const channelData of data.channels) {
+                this.createChannelThread(channelData);
+            }
+            this.threadService.sortChannels();
+            this.busService.subscribe("discuss.channel/joined", (payload) => {
+                const {channel, invited_by_user_id: invitedByUserId} = payload;
+                const thread = this.store.Thread.insert({
+                    ...channel,
+                    model: "discuss.channel",
+                    type: channel.channel_type,
+                });
+                if (invitedByUserId && invitedByUserId !== this.store.user?.user?.id) {
+                    this.notificationService.add(
+                        _t("You have been invited to #%s", thread.displayName),
+                        {type: "info"}
+                    );
+                }
+            });
+            this.busService.subscribe("discuss.channel/last_interest_dt_changed", (payload) => {
+                const {id, last_interest_dt} = payload;
+                const channel = this.store.Thread.get({model: "discuss.channel", id});
+                if (channel) {
+                    channel.last_interest_dt = last_interest_dt;
+                    if (channel.type !== "channel") {
+                        this.threadService.sortChannels();
+                    }
+                }
+            });
+            this.busService.subscribe("discuss.channel/leave", (payload) => {
+                const thread = this.store.Thread.insert({
+                    ...payload,
+                    model: "discuss.channel",
+                });
+                this.notificationService.add(_t("You unsubscribed from %s.", thread.displayName), {
+                    type: "info",
+                });
+                thread.delete();
+            });
+            this.busService.subscribe("discuss.channel/delete", (payload) => {
+                const thread = this.store.Thread.insert({
+                    id: payload.id,
+                    model: "discuss.channel",
+                });
+                const filteredStarredMessages = [];
+                let starredCounter = 0;
+                for (const msg of this.store.discuss.starred.messages) {
+                    if (!msg.originThread?.eq(thread)) {
+                        filteredStarredMessages.push(msg);
+                    } else {
+                        starredCounter++;
+                    }
+                }
+                this.store.discuss.starred.messages = filteredStarredMessages;
+                this.store.discuss.starred.counter -= starredCounter;
+                this.store.discuss.inbox.messages = this.store.discuss.inbox.messages.filter(
+                    (msg) => !msg.originThread?.eq(thread)
+                );
+                this.store.discuss.inbox.counter -= thread.message_needaction_counter;
+                this.store.discuss.history.messages = this.store.discuss.history.messages.filter(
+                    (msg) => !msg.originThread?.eq(thread)
+                );
+                this.threadService.closeChatWindow?.(thread);
+                if (thread.eq(this.store.discuss.thread)) {
+                    this.threadService.setDiscussThread(this.store.discuss.inbox);
+                }
+                thread.messages.splice(0, thread.messages.length);
+                thread.delete();
+            });
+            this.busService.addEventListener("notification", ({detail: notifications}) => {
+                // Do not handle new message notification if the channel was just left. This issue
+                // occurs because the "discuss.channel/leave" and the "discuss.channel/new_message"
+                // notifications come from the bus as a batch.
+                const channelsLeft = new Set(
+                    notifications
+                        .filter(({type}) => type === "discuss.channel/leave")
+                        .map(({payload}) => payload.id)
+                );
+                let i = 0
+                for (const notif of notifications.filter(
+                    ({payload, type}) =>
+                        type === "discuss.channel/new_message" && !channelsLeft.has(payload.id)
+                )) {
+
+                    let self = this;
+                    if (notif.payload.message.author.name === "Eva") {
+                        setTimeout(() => {
+                            setTimeout(() => {
+                                const {id} = notif.payload;
+                                self.rpc(
+                                    "/discuss/channel/notify_typing",
+                                    {
+                                        channel_id: id,
+                                        is_typing: true,
+                                        is_eva: true,
+                                    },
+                                    {silent: true}
+                                ).then(() => {
+                                    setTimeout(() => {
+                                        self.rpc(
+                                            "/discuss/channel/notify_typing",
+                                            {
+                                                channel_id: id,
+                                                is_typing: false,
+                                                is_eva: true,
+                                            },
+                                            {silent: true}
+                                        ).then(() => {
+                                            self._handleNotificationNewMessage(notif);
+                                        })
+                                    }, 3000);
+                                });
+                            }, 1000);
+
+                        }, 6000 * i)
+
+                        i++;
+                    } else {
+                        self._handleNotificationNewMessage(notif);
+                    }
+
+
+                }
+            });
+            this.busService.subscribe("discuss.channel/transient_message", (payload) => {
+                const channel = this.store.Thread.get({
+                    model: "discuss.channel",
+                    id: payload.res_id,
+                });
+                const {body, res_id, model} = payload;
+                const lastMessageId = this.messageService.getLastMessageId();
+                const message = this.store.Message.insert(
+                    {
+                        author: this.store.odoobot,
+                        body,
+                        id: lastMessageId + 0.01,
+                        is_note: true,
+                        is_transient: true,
+                        res_id,
+                        model,
+                    },
+                    {html: true}
+                );
+                channel.messages.push(message);
+                channel.transientMessages.push(message);
+            });
+            this.busService.subscribe("discuss.channel/unpin", (payload) => {
+                const thread = this.store.Thread.get({model: "discuss.channel", id: payload.id});
+                if (thread) {
+                    thread.is_pinned = false;
+                    this.notificationService.add(
+                        _t("You unpinned your conversation with %s", thread.displayName),
+                        {type: "info"}
+                    );
+                }
+            });
+            this.busService.subscribe("discuss.channel.member/fetched", (payload) => {
+                const {channel_id, last_message_id, partner_id} = payload;
+                const channel = this.store.Thread.get({model: "discuss.channel", id: channel_id});
+                if (channel) {
+                    const seenInfo = channel.seenInfos.find(
+                        (seenInfo) => seenInfo.partner.id === partner_id
+                    );
+                    if (seenInfo) {
+                        seenInfo.lastFetchedMessage = {id: last_message_id};
+                    }
+                }
+            });
+            this.busService.subscribe("discuss.channel.member/seen", (payload) => {
+                const {channel_id, last_message_id, partner_id} = payload;
+                const channel = this.store.Thread.get({model: "discuss.channel", id: channel_id});
+                if (!channel) {
+                    // for example seen from another browser, the current one has no
+                    // knowledge of the channel
+                    return;
+                }
+                if (partner_id && partner_id === this.store.user?.id) {
+                    this.threadService.updateSeen(channel, last_message_id);
+                }
+                const seenInfo = channel.seenInfos.find(
+                    (seenInfo) => seenInfo.partner.id === partner_id
+                );
+                if (seenInfo) {
+                    seenInfo.lastSeenMessage = {id: last_message_id};
+                }
+            });
+            this.env.bus.addEventListener("mail.message/delete", ({detail: {message}}) => {
+                if (message.originThread) {
+                    if (message.id > message.originThread.seen_message_id) {
+                        message.originThread.message_unread_counter--;
+                    }
+                }
+            });
+        });
+    },
+
+
+    // async _handleNotificationNewMessage(notif) {
+    //     let self = this;
+    //     if (notif.payload.message.author.name === "Eva") {
+    //         const {id} = notif.payload;
+    //         self.rpc(
+    //             "/discuss/channel/notify_typing",
+    //             {
+    //                 channel_id: id,
+    //                 is_typing: true,
+    //                 is_eva: true,
+    //             },
+    //             {silent: true}
+    //         ).then(async () => {
+    //             setTimeout(() => {
+    //                 self.rpc(
+    //                     "/discuss/channel/notify_typing",
+    //                     {
+    //                         channel_id: id,
+    //                         is_typing: false,
+    //                         is_eva: true,
+    //                     },
+    //                     {silent: true}
+    //                 ).then(async () => {
+    //
+    //                     // super._handleNotificationNewMessage(notif);
+    //
+    //
+    //                     // const { id, message: messageData } = notif.payload;
+    //                     // let thread = self.store.Thread.get({ model: "discuss.channel", id });
+    //                     // if (!thread || !thread.type) {
+    //                     //     thread = self.threadService.fetchChannel(id);
+    //                     //     if (!thread) {
+    //                     //         return;
+    //                     //     }
+    //                     // }
+    //
+    //
+    //                     // self.threadService.loadAround3(thread);
+    //                 })
+    //             }, 2000);
+    //         })
+    //     } else {
+    //         await super._handleNotificationNewMessage(notif);
+    //     }
+    // }
 })
 
 
@@ -269,12 +561,12 @@ registry.category("views").add("ritual_form", ritualFormViewe);
 
 
 // Removes squashing of messages
-// import {Thread} from "@mail/core/common/thread";
-//
-// patch(Thread.prototype, {
-//     isSquashed(msg, prevMsg) {
-//         return false;
-//     },
-// });
+import {Thread} from "@mail/core/common/thread";
+
+patch(Thread.prototype, {
+    isSquashed(msg, prevMsg) {
+        return false;
+    },
+});
 
 

@@ -16,7 +16,7 @@
     ],
     "data": [
         "security/ir.model.access.csv",
-        # "data/res_users_data.xml",
+        "data/res_users_data.xml",
         "data/ir_rule_data.xml",
         "views/script_views.xml",
         "views/menuitems.xml",
@@ -27,6 +27,7 @@
         "views/ritual_line_views.xml",
         "views/settings_views.xml",
         "views/statistic_views.xml",
+        "views/sound_views.xml",
         "views/web.xml",
     ],
     "assets": {
