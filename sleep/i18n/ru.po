@@ -21,7 +21,10 @@ msgid "About app"
 msgstr "О приложении"
 
 #. module: sleep
+#. odoo-python
+#: code:addons/sleep/models/ritual_line.py:0
 #: model_terms:ir.ui.view,arch_db:sleep.ritual_form
+#, python-format
 msgid "Add line"
 msgstr "Добавить задачу"
 
