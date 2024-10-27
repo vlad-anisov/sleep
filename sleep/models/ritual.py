@@ -6,7 +6,7 @@ class Ritual(models.Model):
 
     name = fields.Char(string="Name", default="Ritual", translate=True)
     line_ids = fields.Many2many("ritual.line", string="Lines")
-    user_id = fields.Many2one("res.users", string="User", required=True)
+    user_id = fields.Many2one("res.users", string="User", required=True, ondelete="cascade")
     is_check = fields.Boolean(string="Check", compute="_compute_is_check", store=True)
 
     @api.depends("line_ids.is_check")
