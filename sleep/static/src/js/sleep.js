@@ -292,7 +292,7 @@ patch(DiscussCoreCommon.prototype, {
                 )) {
 
                     let self = this;
-                    if (notif.payload.message.author.name === "Eva") {
+                    if (["Ева", "Eva"].includes(notif.payload.message.author.name)) {
                         setTimeout(() => {
                             setTimeout(() => {
                                 const {id} = notif.payload;
