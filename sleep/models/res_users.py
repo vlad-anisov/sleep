@@ -19,7 +19,7 @@ class ResUsers(models.Model):
         record_ids = super().create(vals_list)
         eva_id = self.env.ref("sleep.eva")
         for record_id in record_ids:
-            record_id.action_id = self.env.ref("sleep.chat_action")
+            record_id.action_id = self.sudo().env.ref("sleep.chat_action")
             record_id.ritual_id = self.sudo().env["ritual"].create({
                 "user_id": record_id.id,
             })
