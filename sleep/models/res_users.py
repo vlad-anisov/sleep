@@ -11,7 +11,7 @@ class ResUsers(models.Model):
     chat_id = fields.Many2one("discuss.channel", string="Chat", required=True, ondelete="cascade")
     ritual_id = fields.Many2one("ritual", string="Ritual", required=True, ondelete="cascade")
     time = fields.Char(string="Time", default="23:00", required=True)
-    action_id = fields.Many2one(default=lambda self: self.env.ref("sleep.chat_action"))
+    # action_id = fields.Many2one(default=lambda self: self.env.ref("sleep.chat_action"))
     not_active_days = fields.Integer(string="Not active days")
 
     @api.model_create_multi
@@ -19,6 +19,7 @@ class ResUsers(models.Model):
         record_ids = super().create(vals_list)
         eva_id = self.env.ref("sleep.eva")
         for record_id in record_ids:
+            record_id.action_id = self.env.ref("sleep.chat_action")
             record_id.ritual_id = self.sudo().env["ritual"].create({
                 "user_id": record_id.id,
             })
