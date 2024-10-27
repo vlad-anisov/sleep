@@ -9,7 +9,7 @@
                 <field name="user_ids" invisible="1"/>
                 <field name="name" invisible="1"/>
                 <field name="short_name" invisible="1"/>
-                <field name="description" invisible="0"/>
+                <field name="description" invisible="1"/>
                 <field name="emoji" invisible="1"/>
                 <field name="color" invisible="1"/>
                 <field name="text" readonly="1"  widget="html" options="{'codeview': true}" style="margin-bottom: 0px !important;"/>
