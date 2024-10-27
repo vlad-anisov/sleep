@@ -4,7 +4,7 @@ from odoo import models, fields, _, api
 class RitualLine(models.Model):
     _name = "ritual.line"
 
-    name = fields.Char(string="Name", required=True, translate=True)
+    name = fields.Char(string="Name", required=True, translate=False)
     sequence = fields.Integer(string="Sequence")
     is_check = fields.Boolean(string="Check")
     is_base = fields.Boolean(string="Base")

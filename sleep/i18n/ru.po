@@ -831,3 +831,16 @@ msgstr "В разработке"
 #: model:ir.ui.menu,name:sleep.chat_menu
 msgid "Chat"
 msgstr "Чат"
+
+#. module: sleep
+#: model:ir.model.fields,field_description:sleep.field_about__name
+#: model:ir.model.fields,field_description:sleep.field_article__name
+#: model:ir.model.fields,field_description:sleep.field_chat__name
+#: model:ir.model.fields,field_description:sleep.field_res_users__name
+#: model:ir.model.fields,field_description:sleep.field_ritual__name
+#: model:ir.model.fields,field_description:sleep.field_ritual_line__name
+#: model:ir.model.fields,field_description:sleep.field_script__name
+#: model:ir.model.fields,field_description:sleep.field_script_step__name
+#: model:ir.model.fields,field_description:sleep.field_settings__name
+msgid "Name"
+msgstr "Название"
