@@ -25,7 +25,7 @@ class RitualLine(models.Model):
         if line_ids:
             return {
                 "type": "ir.actions.act_window",
-                "name": "Add line",
+                "name": _("Add line"),
                 "res_model": "ritual.line",
                 "view_mode": "tree",
                 "target": "new",
