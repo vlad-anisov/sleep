@@ -20,7 +20,8 @@ class ResUsers(models.Model):
         eva_id = self.env.ref("sleep.eva")
         for record_id in record_ids:
             record_id.write({
-                "action_id": self.env["ir.actions.actions"]._for_xml_id("sleep.chat_action")["id"]
+                "action_id": self.env["ir.actions.actions"]._for_xml_id("sleep.chat_action")["id"],
+                "lang": "ru_RU",
             })
             record_id.ritual_id = self.sudo().env["ritual"].create({
                 "user_id": record_id.id,

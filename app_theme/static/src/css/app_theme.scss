@@ -56,7 +56,7 @@
   left: 0;
   z-index: 100;
   padding-top: 7px !important;
-  height: 80px !important;
+  height: 60px !important;
   @supports (-webkit-touch-callout: none) {
     height: 80px !important;
   }
@@ -94,7 +94,10 @@
 /* Added padding-top for navbar in form and kanban*/
 .o_action_manager > .o_form_view > .o_form_view_container > .o_content > .o_form_renderer {
   padding-top: 60px;
-  padding-bottom: 80px !important;
+  padding-bottom: 60px !important;
+  @supports (-webkit-touch-callout: none) {
+    padding-bottom: 80px !important;
+  }
 
   //@include media-breakpoint-up(md) {
   //   padding-top: 130px !important;
@@ -119,6 +122,10 @@
   //  padding-bottom: 60px !important;
   //  padding-top: 113px !important;
   //}
+}
+
+.o_kanban_ghost {
+  display: none !important;
 }
 
 
