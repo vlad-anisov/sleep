@@ -8,6 +8,7 @@
             <form>
                 <group>
                     <field name="name"/>
+                    <field name="sequence"/>
                 </group>
             </form>
         </field>
