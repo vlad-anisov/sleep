@@ -23,7 +23,7 @@
                 </div>
                 <div class="oe_edit_only">
                     <field name="line_ids" nolabel="1" readonly="0"  height="100px">
-                        <tree no_open="1" default_order="sequence desc, id desc"  height="100px">
+                        <tree no_open="0" default_order="sequence desc, id desc"  height="100px">
                             <control>
                                 <button name="add_line" string="Add line" class="btn-link" type="object"/>
                             </control>
