@@ -52,7 +52,7 @@ class ResUsers(models.Model):
     @api.constrains("time")
     def _constrains_time(self):
         for record in self:
-            self.env["ir.cron"].search([("name", "=", "Daily script"), ("user_id", "=", record.id)]).unlink()
+            self.env["ir.cron"].search([("name", "like", "daily script"), ("user_id", "=", record.id)]).unlink()
             hour, minute = record.time.split(":")
             tz = pytz.timezone(record.tz) if record.tz else pytz.utc
             nextcall_datetime = fields.Datetime.now().astimezone(tz).replace(hour=int(hour), minute=int(minute), second=0).astimezone(pytz.utc)
