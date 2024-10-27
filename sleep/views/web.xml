@@ -3,7 +3,7 @@
     <odoo>
         <template id="webclient_bootstrap_icon" inherit_id="web.webclient_bootstrap">
             <xpath expr="//link[@rel='apple-touch-icon']" position="replace">
-                <link rel="apple-touch-icon" href="/sleep/static/img/odoo-icon-513x513.webp"/>
+                <link rel="apple-touch-icon" href="/sleep/static/img/odoo-icon-512x512.webp"/>
 <!--                <script src="https://kit.fontawesome.com/ccaf136dc3.js" crossorigin="anonymous"></script>-->
             </xpath>
         </template>
