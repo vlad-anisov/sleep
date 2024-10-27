@@ -118,6 +118,10 @@
   padding-bottom: 61px !important; //FIXME
   border: 0px !important;
 
+  @supports (-webkit-touch-callout: none) {
+    padding-bottom: 81px !important;
+  }
+
   //@include media-breakpoint-up(md) {
   //  padding-bottom: 60px !important;
   //  padding-top: 113px !important;
