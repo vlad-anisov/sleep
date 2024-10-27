@@ -61,7 +61,7 @@ class ResUsers(models.Model):
                 nextcall_datetime = nextcall_datetime + timedelta(days=1)
             nextcall_datetime = nextcall_datetime.strftime(f"%Y-%m-%d %H:%M:%S")
             self.env["ir.cron"].create({
-                "name": "Daily script",
+                "name": f"{record.name} daily script",
                 "interval_number": 1,
                 "interval_type": "days",
                 "model_id": self.env.ref("sleep.model_script").id,
