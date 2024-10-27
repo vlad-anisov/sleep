@@ -11,7 +11,8 @@ class Article(models.Model):
     image = fields.Image(string="Image")
     short_name = fields.Char(string="Short name")
     emoji = fields.Char(string="Emoji")
-    color = fields.Char(string="Char")
+    color = fields.Char(string="Color")
+    first_color = fields.Char(string="First color")
     second_color = fields.Char(string="Second color", compute="_compute_second_color")
     description = fields.Char(string="Description")
 
@@ -21,8 +22,8 @@ class Article(models.Model):
 
     def _compute_second_color(self):
         for record in self:
-            if record.color:
-                colors = [int(x) for x in record.color.split(",")]
+            if record.first_color:
+                colors = [int(x) for x in record.first_color.split(",")]
                 record.second_color = ",".join([str(x/3) for x in colors])
             else:
                 record.second_color = "0,0,0,0"

@@ -1,6 +1,6 @@
 {
     "name": "Sleep",
-    "version": "17.0.6.0",
+    "version": "17.0.7.0",
     "category": "",
     "summary": "Summary",
     "description": """ Description """,
