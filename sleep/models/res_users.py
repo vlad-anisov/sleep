@@ -8,8 +8,8 @@ class ResUsers(models.Model):
 
     name = fields.Char(translate=True)
     script_id = fields.Many2one("script", string="Script")
-    chat_id = fields.Many2one("discuss.channel", string="Chat", required=True)
-    ritual_id = fields.Many2one("ritual", string="Ritual", required=True)
+    chat_id = fields.Many2one("discuss.channel", string="Chat", required=True, ondelete="cascade")
+    ritual_id = fields.Many2one("ritual", string="Ritual", required=True, ondelete="cascade")
     time = fields.Char(string="Time", default="23:00", required=True)
     action_id = fields.Many2one(default=lambda self: self.env.ref("sleep.chat_action"))
     not_active_days = fields.Integer(string="Not active days")

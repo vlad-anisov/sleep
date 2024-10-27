@@ -716,7 +716,7 @@ msgstr "Немного нервничаю 👎"
 #: code:addons/sleep/models/script_step.py:0
 #, python-format
 msgid "Medium well 👌"
-msgstr "Средний 👌"
+msgstr "Средне 👌"
 
 #. module: sleep
 #. odoo-python
