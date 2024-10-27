@@ -12,7 +12,7 @@
                 <field name="description" invisible="1"/>
                 <field name="emoji" invisible="1"/>
                 <field name="color" invisible="1"/>
-                <field name="text" readonly="0"  widget="html" options="{'codeview': true}"/>
+                <field name="text" readonly="1"  widget="html" options="{'codeview': true}"/>
             </form>
         </field>
     </record>
@@ -38,7 +38,7 @@
                 <field name="color"/>
                 <field name="second_color"/>
                 <templates>
-                    <t t-set="color_name" t-value="0,120,255"/>
+<!--                    <t t-set="color_name" t-value="0,120,255"/>-->
                     <div t-name="kanban-box" class="article bg-200"
                          t-attf-style="background-color: rgba(0, 0, 0, 1);border-radius: 20px; border: 0px !important;background-image: radial-gradient(ellipse at center bottom, rgba(#{record.color.value},1), rgba(#{record.second_color.value},1)"
                     >
