@@ -62,35 +62,35 @@ patch(ChatWindowService.prototype, {
 
 
 //
-import {FormRenderer} from "@web/views/form/form_renderer";
-import {loadJS} from "@web/core/assets";
-import {useService} from "@web/core/utils/hooks";
-import {session} from '@web/session';
-
-patch(FormRenderer.prototype, {
-    setup() {
-        super.setup();
-        this.threadService = useService("mail.thread");
-        onWillRender(() => {
-            if (this.props.record.model.config.resModel == "chat") {
-                let thread = this.mailStore.Thread.get({model: "discuss.channel", id: session.chat_id});
-                if (!thread)
-                    thread = this.mailStore.Thread.insert({model: "discuss.channel", id: session.chat_id});
-                this.threadService.open(thread)
-            }
-        });
-        onWillDestroy(() => {
-            const thread = this.mailStore.Thread.get({model: "discuss.channel", id: session.chat_id});
-            const chatWindow = this.threadService.store.discuss.chatWindows.find((c) => c.thread?.eq(thread));
-            if (chatWindow) {
-                this.threadService.chatWindowService.close(chatWindow);
-            }
-        });
-        onMounted(() => {
-           $(".o-mail-Message-textContent").css('z-index', 1);
-        });
-    }
-});
+// import {FormRenderer} from "@web/views/form/form_renderer";
+// import {loadJS} from "@web/core/assets";
+// import {useService} from "@web/core/utils/hooks";
+// import {session} from '@web/session';
+//
+// patch(FormRenderer.prototype, {
+//     setup() {
+//         super.setup();
+//         this.threadService = useService("mail.thread");
+//         onWillRender(() => {
+//             if (this.props.record.model.config.resModel == "chat") {
+//                 let thread = this.mailStore.Thread.get({model: "discuss.channel", id: session.chat_id});
+//                 if (!thread)
+//                     thread = this.mailStore.Thread.insert({model: "discuss.channel", id: session.chat_id});
+//                 this.threadService.open(thread)
+//             }
+//         });
+//         onWillDestroy(() => {
+//             const thread = this.mailStore.Thread.get({model: "discuss.channel", id: session.chat_id});
+//             const chatWindow = this.threadService.store.discuss.chatWindows.find((c) => c.thread?.eq(thread));
+//             if (chatWindow) {
+//                 this.threadService.chatWindowService.close(chatWindow);
+//             }
+//         });
+//         onMounted(() => {
+//            $(".o-mail-Message-textContent").css('z-index', 1);
+//         });
+//     }
+// });
 
 
 import {Composer} from "@mail/core/common/composer";
