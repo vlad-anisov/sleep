@@ -73,9 +73,9 @@ patch(FormRenderer.prototype, {
         this.threadService = useService("mail.thread");
         onWillRender(() => {
             if (this.props.record.model.config.resModel == "chat") {
-                let thread = this.mailStore.Thread.get({model: "discuss.channel", id: session.chat_id});
-                if (!thread)
-                    thread = this.mailStore.Thread.insert({model: "discuss.channel", id: session.chat_id});
+                // let thread = this.mailStore.Thread.get({model: "discuss.channel", id: session.chat_id});
+                // if (!thread)
+                let thread = this.mailStore.Thread.insert({model: "discuss.channel", id: session.chat_id});
                 this.threadService.open(thread)
             }
         });
