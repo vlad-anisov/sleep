@@ -272,14 +272,25 @@ patch(Dialog.prototype, {
 
 // Adds delay before show messages
 import {DiscussCoreCommon} from "@mail/discuss/core/common/discuss_core_common_service"
+import { Record } from "@mail/core/common/record";
 
 patch(DiscussCoreCommon.prototype, {
     setup() {
+        this.busService.addEventListener(
+            "connect",
+            () =>
+                this.store.imStatusTrackedPersonas.forEach((p) => {
+                    const model = p.type === "partner" ? "res.partner" : "mail.guest";
+                    this.busService.addChannel(`odoo-presence-${model}_${p.id}`);
+                }),
+            { once: true }
+        );
         this.messagingService.isReady.then((data) => {
-            for (const channelData of data.channels) {
-                this.createChannelThread(channelData);
-            }
-            this.threadService.sortChannels();
+            Record.MAKE_UPDATE(() => {
+                for (const channelData of data.channels) {
+                    this.insertInitChannel(channelData);
+                }
+            });
             this.busService.subscribe("discuss.channel/joined", (payload) => {
                 const { channel, invited_by_user_id: invitedByUserId } = payload;
                 const thread = this.store.Thread.insert({
@@ -295,14 +306,7 @@ patch(DiscussCoreCommon.prototype, {
                 }
             });
             this.busService.subscribe("discuss.channel/last_interest_dt_changed", (payload) => {
-                const { id, last_interest_dt } = payload;
-                const channel = this.store.Thread.get({ model: "discuss.channel", id });
-                if (channel) {
-                    channel.last_interest_dt = last_interest_dt;
-                    if (channel.type !== "channel") {
-                        this.threadService.sortChannels();
-                    }
-                }
+                this.store.Thread.insert({ model: "discuss.channel", ...payload });
             });
             this.busService.subscribe("discuss.channel/leave", (payload) => {
                 const thread = this.store.Thread.insert({
@@ -377,34 +381,13 @@ patch(DiscussCoreCommon.prototype, {
                 }
             });
             this.busService.subscribe("discuss.channel.member/fetched", (payload) => {
-                const { channel_id, last_message_id, partner_id } = payload;
-                const channel = this.store.Thread.get({ model: "discuss.channel", id: channel_id });
-                if (channel) {
-                    const seenInfo = channel.seenInfos.find(
-                        (seenInfo) => seenInfo.partner.id === partner_id
-                    );
-                    if (seenInfo) {
-                        seenInfo.lastFetchedMessage = { id: last_message_id };
-                    }
-                }
-            });
-            this.busService.subscribe("discuss.channel.member/seen", (payload) => {
-                const { channel_id, last_message_id, partner_id } = payload;
-                const channel = this.store.Thread.get({ model: "discuss.channel", id: channel_id });
-                if (!channel) {
-                    // for example seen from another browser, the current one has no
-                    // knowledge of the channel
-                    return;
-                }
-                if (partner_id && partner_id === this.store.user?.id) {
-                    this.threadService.updateSeen(channel, last_message_id);
-                }
-                const seenInfo = channel.seenInfos.find(
-                    (seenInfo) => seenInfo.partner.id === partner_id
-                );
-                if (seenInfo) {
-                    seenInfo.lastSeenMessage = { id: last_message_id };
-                }
+                const { channel_id, id, last_message_id, partner_id } = payload;
+                this.store.ChannelMember.insert({
+                    id,
+                    lastFetchedMessage: { id: last_message_id },
+                    persona: { type: "partner", id: partner_id },
+                    thread: { id: channel_id, model: "discuss.channel" },
+                });
             });
             this.env.bus.addEventListener("mail.message/delete", ({ detail: { message } }) => {
                 if (message.originThread) {
