@@ -27,6 +27,12 @@
             padding-bottom: 101px !important;
         }
     }
+    @include media-breakpoint-up(md) {
+        padding-bottom: 81px !important;
+        @supports (-webkit-touch-callout: none) {
+            padding-bottom: 101px !important;
+        }
+    }
 }
 .o-mail-ChatWindow-typing{
     padding-bottom: 60px !important;
@@ -43,6 +49,18 @@
 .o-mail-Composer {
     display: none !important;
     @include media-breakpoint-down(md) {
+        //background-color: transparent !important;
+        //backdrop-filter: blur(30px) !important;
+        position: fixed !important;
+        bottom: 0px !important;
+        right: 0px !important;
+        left: 0px !important;
+        padding-bottom: 60px !important;
+        @supports (-webkit-touch-callout: none) {
+            padding-bottom: 80px !important;
+        }
+    }
+    @include media-breakpoint-up(md) {
         //background-color: transparent !important;
         //backdrop-filter: blur(30px) !important;
         position: fixed !important;
