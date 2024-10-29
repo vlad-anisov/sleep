@@ -275,6 +275,7 @@ import {DiscussCoreCommon} from "@mail/discuss/core/common/discuss_core_common_s
 
 patch(DiscussCoreCommon.prototype, {
     setup() {
+        super.setup(...arguments);
         this.messagingService.isReady.then((data) => {
             this.busService.addEventListener("notification", ({ detail: notifications }) => {
                 // Do not handle new message notification if the channel was just left. This issue
