@@ -62,175 +62,175 @@ patch(ChatWindowService.prototype, {
 
 
 //
-// import {FormRenderer} from "@web/views/form/form_renderer";
-// import {loadJS} from "@web/core/assets";
-// import {useService} from "@web/core/utils/hooks";
-// import {session} from '@web/session';
-//
-// patch(FormRenderer.prototype, {
-//     setup() {
-//         super.setup();
-//         this.threadService = useService("mail.thread");
-//         onWillRender(() => {
-//             if (this.props.record.model.config.resModel == "chat") {
-//                 let thread = this.mailStore.Thread.get({model: "discuss.channel", id: session.chat_id});
-//                 if (!thread)
-//                     thread = this.mailStore.Thread.insert({model: "discuss.channel", id: session.chat_id});
-//                 this.threadService.open(thread)
-//             }
-//         });
-//         onWillDestroy(() => {
-//             const thread = this.mailStore.Thread.get({model: "discuss.channel", id: session.chat_id});
-//             const chatWindow = this.threadService.store.discuss.chatWindows.find((c) => c.thread?.eq(thread));
-//             if (chatWindow) {
-//                 this.threadService.chatWindowService.close(chatWindow);
-//             }
-//         });
-//         onMounted(() => {
-//            $(".o-mail-Message-textContent").css('z-index', 1);
-//         });
-//     }
-// });
+import {FormRenderer} from "@web/views/form/form_renderer";
+import {loadJS} from "@web/core/assets";
+import {useService} from "@web/core/utils/hooks";
+import {session} from '@web/session';
+
+patch(FormRenderer.prototype, {
+    setup() {
+        super.setup();
+        this.threadService = useService("mail.thread");
+        onWillRender(() => {
+            if (this.props.record.model.config.resModel == "chat") {
+                let thread = this.mailStore.Thread.get({model: "discuss.channel", id: session.chat_id});
+                if (!thread)
+                    thread = this.mailStore.Thread.insert({model: "discuss.channel", id: session.chat_id});
+                this.threadService.open(thread)
+            }
+        });
+        onWillDestroy(() => {
+            const thread = this.mailStore.Thread.get({model: "discuss.channel", id: session.chat_id});
+            const chatWindow = this.threadService.store.discuss.chatWindows.find((c) => c.thread?.eq(thread));
+            if (chatWindow) {
+                this.threadService.chatWindowService.close(chatWindow);
+            }
+        });
+        onMounted(() => {
+           $(".o-mail-Message-textContent").css('z-index', 1);
+        });
+    }
+});
 
 
-// import {Composer} from "@mail/core/common/composer";
-//
-// patch(Composer.prototype, {
-//     async sendMessage() {
-//         await super.sendMessage();
-//         await this.threadService.loadAround2(this.props.composer.thread);
-//     },
-// });
-//
-//
-// import {ThreadService} from "@mail/core/common/thread_service";
-// import { prettifyMessageContent } from "@mail/utils/common/format";
-// import { loadEmoji } from "@web/core/emoji_picker/emoji_picker";
-// import { browser } from "@web/core/browser/browser";
-//
-// patch(ThreadService.prototype, {
-//     async loadAround2(thread) {
-//         let {messages} = await this.rpc(this.getFetchRoute(thread), {
-//             ...this.getFetchParams(thread)
-//         });
-//         let originalMessages = JSON.parse(JSON.stringify(messages));
-//         for (const message of messages) {
-//             if (this.user.userId === message.author.user.id) {
-//                 break;
-//             } else {
-//                 const index = originalMessages.findIndex(function (el) {
-//                     return el.id === message.id;
-//                 });
-//                 if (index !== -1) {
-//                     originalMessages.splice(index, 1);
-//                 }
-//             }
-//         }
-//         thread.messages = this.store.Message.insert(originalMessages.reverse(), {html: true});
-//         thread.loadNewer = false;
-//         thread.loadOlder = true;
-//         this._enrichMessagesWithTransient(thread);
-//     },
-//     async loadAround3(thread) {
-//         let {messages} = await this.rpc(this.getFetchRoute(thread), {
-//             ...this.getFetchParams(thread)
-//         });
-//         thread.messages = this.store.Message.insert(messages.reverse(), {html: true});
-//         thread.loadNewer = false;
-//         thread.loadOlder = true;
-//         this._enrichMessagesWithTransient(thread);
-//     },
-//
-//     async post(
-//         thread,
-//         body,
-//         {
-//             attachments = [],
-//             isNote = false,
-//             parentId,
-//             mentionedChannels = [],
-//             mentionedPartners = [],
-//             cannedResponseIds,
-//         } = {}
-//     ) {
-//         let tmpMsg;
-//         const params = await this.getMessagePostParams({
-//             attachments,
-//             body,
-//             cannedResponseIds,
-//             isNote,
-//             mentionedChannels,
-//             mentionedPartners,
-//             thread,
-//         });
-//         const tmpId = this.messageService.getNextTemporaryId();
-//         params.context = { ...this.user.context, ...params.context, temporary_id: tmpId };
-//         if (parentId) {
-//             params.post_data.parent_id = parentId;
-//         }
-//         if (thread.type === "chatter") {
-//             params.thread_id = thread.id;
-//             params.thread_model = thread.model;
-//         } else {
-//             const tmpData = {
-//                 id: tmpId,
-//                 attachments: attachments,
-//                 res_id: thread.id,
-//                 model: "discuss.channel",
-//             };
-//             tmpData.author = this.store.self;
-//             if (parentId) {
-//                 tmpData.parentMessage = this.store.Message.get(parentId);
-//             }
-//             const prettyContent = await prettifyMessageContent(
-//                 body,
-//                 this.messageService.getMentionsFromText(body, {
-//                     mentionedChannels,
-//                     mentionedPartners,
-//                 })
-//             );
-//             const { emojis } = await loadEmoji();
-//             const recentEmojis = JSON.parse(
-//                 browser.localStorage.getItem("web.emoji.frequent") || "{}"
-//             );
-//             const emojisInContent =
-//                 prettyContent.match(/\p{Emoji_Presentation}|\p{Emoji}\uFE0F/gu) ?? [];
-//             for (const codepoints of emojisInContent) {
-//                 if (emojis.some((emoji) => emoji.codepoints === codepoints)) {
-//                     recentEmojis[codepoints] ??= 0;
-//                     recentEmojis[codepoints]++;
-//                 }
-//             }
-//             browser.localStorage.setItem("web.emoji.frequent", JSON.stringify(recentEmojis));
-//             tmpMsg = this.store.Message.insert(
-//                 {
-//                     ...tmpData,
-//                     body: prettyContent,
-//                     res_id: thread.id,
-//                     model: thread.model,
-//                     temporary_id: tmpId,
-//                 },
-//                 { html: true }
-//             );
-//             // thread.messages.push(tmpMsg);
-//             thread.seen_message_id = tmpMsg.id;
-//         }
-//         const data = await this.rpc(this.getMessagePostRoute(thread), params);
-//         tmpMsg?.delete();
-//         if (!data) {
-//             return;
-//         }
-//         if (data.id in this.store.Message.records) {
-//             data.temporary_id = null;
-//         }
-//         const message = this.store.Message.insert(data, { html: true });
-//         thread.messages.add(message);
-//         if (!message.isEmpty && this.store.hasLinkPreviewFeature) {
-//             this.rpc("/mail/link_preview", { message_id: data.id }, { silent: true });
-//         }
-//         return message;
-//     }
-// });
+import {Composer} from "@mail/core/common/composer";
+
+patch(Composer.prototype, {
+    async sendMessage() {
+        await super.sendMessage();
+        await this.threadService.loadAround2(this.props.composer.thread);
+    },
+});
+
+
+import {ThreadService} from "@mail/core/common/thread_service";
+import { prettifyMessageContent } from "@mail/utils/common/format";
+import { loadEmoji } from "@web/core/emoji_picker/emoji_picker";
+import { browser } from "@web/core/browser/browser";
+
+patch(ThreadService.prototype, {
+    async loadAround2(thread) {
+        let {messages} = await this.rpc(this.getFetchRoute(thread), {
+            ...this.getFetchParams(thread)
+        });
+        let originalMessages = JSON.parse(JSON.stringify(messages));
+        for (const message of messages) {
+            if (this.user.userId === message.author.user.id) {
+                break;
+            } else {
+                const index = originalMessages.findIndex(function (el) {
+                    return el.id === message.id;
+                });
+                if (index !== -1) {
+                    originalMessages.splice(index, 1);
+                }
+            }
+        }
+        thread.messages = this.store.Message.insert(originalMessages.reverse(), {html: true});
+        thread.loadNewer = false;
+        thread.loadOlder = true;
+        this._enrichMessagesWithTransient(thread);
+    },
+    async loadAround3(thread) {
+        let {messages} = await this.rpc(this.getFetchRoute(thread), {
+            ...this.getFetchParams(thread)
+        });
+        thread.messages = this.store.Message.insert(messages.reverse(), {html: true});
+        thread.loadNewer = false;
+        thread.loadOlder = true;
+        this._enrichMessagesWithTransient(thread);
+    },
+
+    async post(
+        thread,
+        body,
+        {
+            attachments = [],
+            isNote = false,
+            parentId,
+            mentionedChannels = [],
+            mentionedPartners = [],
+            cannedResponseIds,
+        } = {}
+    ) {
+        let tmpMsg;
+        const params = await this.getMessagePostParams({
+            attachments,
+            body,
+            cannedResponseIds,
+            isNote,
+            mentionedChannels,
+            mentionedPartners,
+            thread,
+        });
+        const tmpId = this.messageService.getNextTemporaryId();
+        params.context = { ...this.user.context, ...params.context, temporary_id: tmpId };
+        if (parentId) {
+            params.post_data.parent_id = parentId;
+        }
+        if (thread.type === "chatter") {
+            params.thread_id = thread.id;
+            params.thread_model = thread.model;
+        } else {
+            const tmpData = {
+                id: tmpId,
+                attachments: attachments,
+                res_id: thread.id,
+                model: "discuss.channel",
+            };
+            tmpData.author = this.store.self;
+            if (parentId) {
+                tmpData.parentMessage = this.store.Message.get(parentId);
+            }
+            const prettyContent = await prettifyMessageContent(
+                body,
+                this.messageService.getMentionsFromText(body, {
+                    mentionedChannels,
+                    mentionedPartners,
+                })
+            );
+            const { emojis } = await loadEmoji();
+            const recentEmojis = JSON.parse(
+                browser.localStorage.getItem("web.emoji.frequent") || "{}"
+            );
+            const emojisInContent =
+                prettyContent.match(/\p{Emoji_Presentation}|\p{Emoji}\uFE0F/gu) ?? [];
+            for (const codepoints of emojisInContent) {
+                if (emojis.some((emoji) => emoji.codepoints === codepoints)) {
+                    recentEmojis[codepoints] ??= 0;
+                    recentEmojis[codepoints]++;
+                }
+            }
+            browser.localStorage.setItem("web.emoji.frequent", JSON.stringify(recentEmojis));
+            tmpMsg = this.store.Message.insert(
+                {
+                    ...tmpData,
+                    body: prettyContent,
+                    res_id: thread.id,
+                    model: thread.model,
+                    temporary_id: tmpId,
+                },
+                { html: true }
+            );
+            // thread.messages.push(tmpMsg);
+            thread.seen_message_id = tmpMsg.id;
+        }
+        const data = await this.rpc(this.getMessagePostRoute(thread), params);
+        tmpMsg?.delete();
+        if (!data) {
+            return;
+        }
+        if (data.id in this.store.Message.records) {
+            data.temporary_id = null;
+        }
+        const message = this.store.Message.insert(data, { html: true });
+        thread.messages.add(message);
+        if (!message.isEmpty && this.store.hasLinkPreviewFeature) {
+            this.rpc("/mail/link_preview", { message_id: data.id }, { silent: true });
+        }
+        return message;
+    }
+});
 
 
 import {SelectCreateDialog} from "@web/views/view_dialogs/select_create_dialog";
