@@ -62,35 +62,35 @@ patch(ChatWindowService.prototype, {
 
 
 //
-import {FormRenderer} from "@web/views/form/form_renderer";
-import {loadJS} from "@web/core/assets";
-import {useService} from "@web/core/utils/hooks";
-import {session} from '@web/session';
-
-patch(FormRenderer.prototype, {
-    setup() {
-        super.setup();
-        this.threadService = useService("mail.thread");
-        onWillRender(() => {
-            if (this.props.record.model.config.resModel == "chat") {
-                let thread = this.mailStore.Thread.get({model: "discuss.channel", id: session.chat_id});
-                if (!thread)
-                    thread = this.mailStore.Thread.insert({model: "discuss.channel", id: session.chat_id});
-                this.threadService.open(thread)
-            }
-        });
-        onWillDestroy(() => {
-            const thread = this.mailStore.Thread.get({model: "discuss.channel", id: session.chat_id});
-            const chatWindow = this.threadService.store.discuss.chatWindows.find((c) => c.thread?.eq(thread));
-            if (chatWindow) {
-                this.threadService.chatWindowService.close(chatWindow);
-            }
-        });
-        onMounted(() => {
-           $(".o-mail-Message-textContent").css('z-index', 1);
-        });
-    }
-});
+// import {FormRenderer} from "@web/views/form/form_renderer";
+// import {loadJS} from "@web/core/assets";
+// import {useService} from "@web/core/utils/hooks";
+// import {session} from '@web/session';
+//
+// patch(FormRenderer.prototype, {
+//     setup() {
+//         super.setup();
+//         this.threadService = useService("mail.thread");
+//         onWillRender(() => {
+//             if (this.props.record.model.config.resModel == "chat") {
+//                 let thread = this.mailStore.Thread.get({model: "discuss.channel", id: session.chat_id});
+//                 if (!thread)
+//                     thread = this.mailStore.Thread.insert({model: "discuss.channel", id: session.chat_id});
+//                 this.threadService.open(thread)
+//             }
+//         });
+//         onWillDestroy(() => {
+//             const thread = this.mailStore.Thread.get({model: "discuss.channel", id: session.chat_id});
+//             const chatWindow = this.threadService.store.discuss.chatWindows.find((c) => c.thread?.eq(thread));
+//             if (chatWindow) {
+//                 this.threadService.chatWindowService.close(chatWindow);
+//             }
+//         });
+//         onMounted(() => {
+//            $(".o-mail-Message-textContent").css('z-index', 1);
+//         });
+//     }
+// });
 
 
 // import {Composer} from "@mail/core/common/composer";
@@ -271,116 +271,116 @@ patch(Dialog.prototype, {
 
 
 // Adds delay before show messages
-import {DiscussCoreCommon} from "@mail/discuss/core/common/discuss_core_common_service"
-
-patch(DiscussCoreCommon.prototype, {
-    setup() {
-        this.messagingService.isReady.then((data) => {
-            this.busService.addEventListener("notification", ({ detail: notifications }) => {
-                // Do not handle new message notification if the channel was just left. This issue
-                // occurs because the "discuss.channel/leave" and the "discuss.channel/new_message"
-                // notifications come from the bus as a batch.
-                const channelsLeft = new Set(
-                    notifications
-                        .filter(({ type }) => type === "discuss.channel/leave")
-                        .map(({ payload }) => payload.id)
-                );
-                let i = 0
-                for (const notif of notifications.filter(
-                    ({ payload, type }) =>
-                        type === "discuss.channel/new_message" && !channelsLeft.has(payload.id)
-                )) {
-
-                    let self = this;
-                    if (["Ева", "Eva"].includes(notif.payload.message.author.name)) {
-                        setTimeout(() => {
-                            setTimeout(() => {
-                                const {id} = notif.payload;
-                                self.rpc(
-                                    "/discuss/channel/notify_typing",
-                                    {
-                                        channel_id: id,
-                                        is_typing: true,
-                                        is_eva: true,
-                                    },
-                                    {silent: true}
-                                ).then(() => {
-                                    setTimeout(() => {
-                                        self.rpc(
-                                            "/discuss/channel/notify_typing",
-                                            {
-                                                channel_id: id,
-                                                is_typing: false,
-                                                is_eva: true,
-                                            },
-                                            {silent: true}
-                                        ).then(() => {
-                                            self._handleNotificationNewMessage(notif);
-                                        })
-                                    }, 3000);
-                                });
-                            }, 1000);
-
-                        }, 6000 * i)
-
-                        i++;
-                    } else {
-                        self._handleNotificationNewMessage(notif);
-                    }
-
-
-                }
-            });
-        });
-    },
-
-
-    // async _handleNotificationNewMessage(notif) {
-    //     let self = this;
-    //     if (notif.payload.message.author.name === "Eva") {
-    //         const {id} = notif.payload;
-    //         self.rpc(
-    //             "/discuss/channel/notify_typing",
-    //             {
-    //                 channel_id: id,
-    //                 is_typing: true,
-    //                 is_eva: true,
-    //             },
-    //             {silent: true}
-    //         ).then(async () => {
-    //             setTimeout(() => {
-    //                 self.rpc(
-    //                     "/discuss/channel/notify_typing",
-    //                     {
-    //                         channel_id: id,
-    //                         is_typing: false,
-    //                         is_eva: true,
-    //                     },
-    //                     {silent: true}
-    //                 ).then(async () => {
-    //
-    //                     // super._handleNotificationNewMessage(notif);
-    //
-    //
-    //                     // const { id, message: messageData } = notif.payload;
-    //                     // let thread = self.store.Thread.get({ model: "discuss.channel", id });
-    //                     // if (!thread || !thread.type) {
-    //                     //     thread = self.threadService.fetchChannel(id);
-    //                     //     if (!thread) {
-    //                     //         return;
-    //                     //     }
-    //                     // }
-    //
-    //
-    //                     // self.threadService.loadAround3(thread);
-    //                 })
-    //             }, 2000);
-    //         })
-    //     } else {
-    //         await super._handleNotificationNewMessage(notif);
-    //     }
-    // }
-})
+// import {DiscussCoreCommon} from "@mail/discuss/core/common/discuss_core_common_service"
+//
+// patch(DiscussCoreCommon.prototype, {
+//     setup() {
+//         this.messagingService.isReady.then((data) => {
+//             this.busService.addEventListener("notification", ({ detail: notifications }) => {
+//                 // Do not handle new message notification if the channel was just left. This issue
+//                 // occurs because the "discuss.channel/leave" and the "discuss.channel/new_message"
+//                 // notifications come from the bus as a batch.
+//                 const channelsLeft = new Set(
+//                     notifications
+//                         .filter(({ type }) => type === "discuss.channel/leave")
+//                         .map(({ payload }) => payload.id)
+//                 );
+//                 let i = 0
+//                 for (const notif of notifications.filter(
+//                     ({ payload, type }) =>
+//                         type === "discuss.channel/new_message" && !channelsLeft.has(payload.id)
+//                 )) {
+//
+//                     let self = this;
+//                     if (["Ева", "Eva"].includes(notif.payload.message.author.name)) {
+//                         setTimeout(() => {
+//                             setTimeout(() => {
+//                                 const {id} = notif.payload;
+//                                 self.rpc(
+//                                     "/discuss/channel/notify_typing",
+//                                     {
+//                                         channel_id: id,
+//                                         is_typing: true,
+//                                         is_eva: true,
+//                                     },
+//                                     {silent: true}
+//                                 ).then(() => {
+//                                     setTimeout(() => {
+//                                         self.rpc(
+//                                             "/discuss/channel/notify_typing",
+//                                             {
+//                                                 channel_id: id,
+//                                                 is_typing: false,
+//                                                 is_eva: true,
+//                                             },
+//                                             {silent: true}
+//                                         ).then(() => {
+//                                             self._handleNotificationNewMessage(notif);
+//                                         })
+//                                     }, 3000);
+//                                 });
+//                             }, 1000);
+//
+//                         }, 6000 * i)
+//
+//                         i++;
+//                     } else {
+//                         self._handleNotificationNewMessage(notif);
+//                     }
+//
+//
+//                 }
+//             });
+//         });
+//     },
+//
+//
+//     // async _handleNotificationNewMessage(notif) {
+//     //     let self = this;
+//     //     if (notif.payload.message.author.name === "Eva") {
+//     //         const {id} = notif.payload;
+//     //         self.rpc(
+//     //             "/discuss/channel/notify_typing",
+//     //             {
+//     //                 channel_id: id,
+//     //                 is_typing: true,
+//     //                 is_eva: true,
+//     //             },
+//     //             {silent: true}
+//     //         ).then(async () => {
+//     //             setTimeout(() => {
+//     //                 self.rpc(
+//     //                     "/discuss/channel/notify_typing",
+//     //                     {
+//     //                         channel_id: id,
+//     //                         is_typing: false,
+//     //                         is_eva: true,
+//     //                     },
+//     //                     {silent: true}
+//     //                 ).then(async () => {
+//     //
+//     //                     // super._handleNotificationNewMessage(notif);
+//     //
+//     //
+//     //                     // const { id, message: messageData } = notif.payload;
+//     //                     // let thread = self.store.Thread.get({ model: "discuss.channel", id });
+//     //                     // if (!thread || !thread.type) {
+//     //                     //     thread = self.threadService.fetchChannel(id);
+//     //                     //     if (!thread) {
+//     //                     //         return;
+//     //                     //     }
+//     //                     // }
+//     //
+//     //
+//     //                     // self.threadService.loadAround3(thread);
+//     //                 })
+//     //             }, 2000);
+//     //         })
+//     //     } else {
+//     //         await super._handleNotificationNewMessage(notif);
+//     //     }
+//     // }
+// })
 
 
 // Edit button for ritual
