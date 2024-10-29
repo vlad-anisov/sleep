@@ -275,7 +275,145 @@ import {DiscussCoreCommon} from "@mail/discuss/core/common/discuss_core_common_s
 
 patch(DiscussCoreCommon.prototype, {
     setup() {
-        super.setup(...arguments);
+        this.messagingService.isReady.then((data) => {
+            for (const channelData of data.channels) {
+                this.createChannelThread(channelData);
+            }
+            this.threadService.sortChannels();
+            this.busService.subscribe("discuss.channel/joined", (payload) => {
+                const { channel, invited_by_user_id: invitedByUserId } = payload;
+                const thread = this.store.Thread.insert({
+                    ...channel,
+                    model: "discuss.channel",
+                    type: channel.channel_type,
+                });
+                if (invitedByUserId && invitedByUserId !== this.store.user?.user?.id) {
+                    this.notificationService.add(
+                        _t("You have been invited to #%s", thread.displayName),
+                        { type: "info" }
+                    );
+                }
+            });
+            this.busService.subscribe("discuss.channel/last_interest_dt_changed", (payload) => {
+                const { id, last_interest_dt } = payload;
+                const channel = this.store.Thread.get({ model: "discuss.channel", id });
+                if (channel) {
+                    channel.last_interest_dt = last_interest_dt;
+                    if (channel.type !== "channel") {
+                        this.threadService.sortChannels();
+                    }
+                }
+            });
+            this.busService.subscribe("discuss.channel/leave", (payload) => {
+                const thread = this.store.Thread.insert({
+                    ...payload,
+                    model: "discuss.channel",
+                });
+                this.notificationService.add(_t("You unsubscribed from %s.", thread.displayName), {
+                    type: "info",
+                });
+                thread.delete();
+            });
+            this.busService.subscribe("discuss.channel/delete", (payload) => {
+                const thread = this.store.Thread.insert({
+                    id: payload.id,
+                    model: "discuss.channel",
+                });
+                const filteredStarredMessages = [];
+                let starredCounter = 0;
+                for (const msg of this.store.discuss.starred.messages) {
+                    if (!msg.originThread?.eq(thread)) {
+                        filteredStarredMessages.push(msg);
+                    } else {
+                        starredCounter++;
+                    }
+                }
+                this.store.discuss.starred.messages = filteredStarredMessages;
+                this.store.discuss.starred.counter -= starredCounter;
+                this.store.discuss.inbox.messages = this.store.discuss.inbox.messages.filter(
+                    (msg) => !msg.originThread?.eq(thread)
+                );
+                this.store.discuss.inbox.counter -= thread.message_needaction_counter;
+                this.store.discuss.history.messages = this.store.discuss.history.messages.filter(
+                    (msg) => !msg.originThread?.eq(thread)
+                );
+                this.threadService.closeChatWindow?.(thread);
+                if (thread.eq(this.store.discuss.thread)) {
+                    this.threadService.setDiscussThread(this.store.discuss.inbox);
+                }
+                thread.messages.splice(0, thread.messages.length);
+                thread.delete();
+            });
+            this.busService.subscribe("discuss.channel/transient_message", (payload) => {
+                const channel = this.store.Thread.get({
+                    model: "discuss.channel",
+                    id: payload.res_id,
+                });
+                const { body, res_id, model } = payload;
+                const lastMessageId = this.messageService.getLastMessageId();
+                const message = this.store.Message.insert(
+                    {
+                        author: this.store.odoobot,
+                        body,
+                        id: lastMessageId + 0.01,
+                        is_note: true,
+                        is_transient: true,
+                        res_id,
+                        model,
+                    },
+                    { html: true }
+                );
+                channel.messages.push(message);
+                channel.transientMessages.push(message);
+            });
+            this.busService.subscribe("discuss.channel/unpin", (payload) => {
+                const thread = this.store.Thread.get({ model: "discuss.channel", id: payload.id });
+                if (thread) {
+                    thread.is_pinned = false;
+                    this.notificationService.add(
+                        _t("You unpinned your conversation with %s", thread.displayName),
+                        { type: "info" }
+                    );
+                }
+            });
+            this.busService.subscribe("discuss.channel.member/fetched", (payload) => {
+                const { channel_id, last_message_id, partner_id } = payload;
+                const channel = this.store.Thread.get({ model: "discuss.channel", id: channel_id });
+                if (channel) {
+                    const seenInfo = channel.seenInfos.find(
+                        (seenInfo) => seenInfo.partner.id === partner_id
+                    );
+                    if (seenInfo) {
+                        seenInfo.lastFetchedMessage = { id: last_message_id };
+                    }
+                }
+            });
+            this.busService.subscribe("discuss.channel.member/seen", (payload) => {
+                const { channel_id, last_message_id, partner_id } = payload;
+                const channel = this.store.Thread.get({ model: "discuss.channel", id: channel_id });
+                if (!channel) {
+                    // for example seen from another browser, the current one has no
+                    // knowledge of the channel
+                    return;
+                }
+                if (partner_id && partner_id === this.store.user?.id) {
+                    this.threadService.updateSeen(channel, last_message_id);
+                }
+                const seenInfo = channel.seenInfos.find(
+                    (seenInfo) => seenInfo.partner.id === partner_id
+                );
+                if (seenInfo) {
+                    seenInfo.lastSeenMessage = { id: last_message_id };
+                }
+            });
+            this.env.bus.addEventListener("mail.message/delete", ({ detail: { message } }) => {
+                if (message.originThread) {
+                    if (message.id > message.originThread.seen_message_id) {
+                        message.originThread.message_unread_counter--;
+                    }
+                }
+            });
+        });
         this.messagingService.isReady.then((data) => {
             this.busService.addEventListener("notification", ({ detail: notifications }) => {
                 // Do not handle new message notification if the channel was just left. This issue
