@@ -28,7 +28,7 @@ class WebManifest(MainWebManifest):
         }
         icon_sizes = ['192x192', '512x512']
         manifest['icons'] = [{
-            'src': '/sleep/static/img/odoo-icon-%s.webp' % size,
+            'src': '/sleep/static/img/odoo-icon-%s.png' % size,
             'sizes': size,
             'type': 'image/png',
             "purpose": "maskable",
@@ -41,5 +41,5 @@ class WebManifest(MainWebManifest):
         return response
 
     def _icon_path(self):
-        return 'sleep/static/img/odoo-icon-192x192.webp'
+        return 'sleep/static/img/odoo-icon-192x192.png'
 
