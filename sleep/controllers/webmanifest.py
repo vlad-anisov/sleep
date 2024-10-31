@@ -12,6 +12,7 @@ class WebManifest(MainWebManifest):
         web_app_name = request.env['ir.config_parameter'].sudo().get_param('web.web_app_name', 'Odoo')
         manifest = {
             'name': web_app_name,
+            "short_name": "eva",
             'scope': '/web',
             'start_url': '/web',
             'display': 'standalone',
