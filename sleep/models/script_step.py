@@ -51,6 +51,8 @@ class ScriptStep(models.Model):
             return
         chat_id = self.env.user.chat_id.with_user(self.env.ref("sleep.eva"))
         skip_notify_thread_by_web_push = self.env.context.get("skip_notify_thread_by_web_push", True)
+        if self.env.context.get("only_push"):
+            skip_notify_thread_by_web_push = False
         message_id = chat_id.with_context(skip_notify_thread_by_web_push=skip_notify_thread_by_web_push).message_post(
             body=message, message_type="comment", subtype_xmlid="mail.mt_comment", body_is_html=True
         )
@@ -229,6 +231,13 @@ class ScriptStep(models.Model):
             self.script_id.sudo().article_id.user_ids += self.env.user
             # Adds next script to current script
             self.script_id.next_script_id = self.script_id.main_script_id.next_script_id
+
+            new_ritual_line_id = self.script_id.sudo().ritual_line_id
+            ritual_line_id = self.env["ritual.line"].search(
+                [("name", "=", new_ritual_line_id.name), ("is_base", "=", True), ("create_uid", "=", self.env.user.id)]
+            )
+            if not ritual_line_id:
+                ritual_line_id = new_ritual_line_id.copy()
             # Adds link to read the article
             menu_id = self.env.ref("sleep.sleep_root_menu")
             # action_id = self.env.ref("sleep.chat_action")

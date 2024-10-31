@@ -3,7 +3,7 @@
     <data>
 
         <record id="eva" model="res.users">
-            <field name="name">Eva</field>
+            <field name="name">Ева</field>
             <field name="login">eva</field>
             <field name="password">eva</field>
         </record>

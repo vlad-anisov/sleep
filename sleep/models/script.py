@@ -62,10 +62,9 @@ class Script(models.Model):
         user_id.with_user(user_id).sudo().ritual_id.line_ids.is_check = False
 
         step_id = script_id.with_user(user_id).step_ids.sorted(key=lambda s: (s.sequence, s.id))[:1]
-        if user_id.not_active_days < 7:
-            step_id.with_context(skip_notify_thread_by_web_push=False).send_message(step_id.message)
-            step_id.message_id.unlink()
         step_id.run()
+        if user_id.not_active_days < 7:
+            step_id.with_context(only_push=True, message_id=step_id.message_id).send_message(step_id.message)
 
     def _compute_state(self):
         for record in self:
