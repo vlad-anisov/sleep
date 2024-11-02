@@ -337,6 +337,13 @@ patch(DiscussCoreCommon.prototype, {
                 thread.messages.splice(0, thread.messages.length);
                 thread.delete();
             });
+            this.busService.subscribe("discuss.channel/fetch", (payload) => {
+                const thread = this.store.Thread.insert({
+                    id: payload.id,
+                    model: "discuss.channel",
+                });
+                this.threadService.loadAround(thread);
+            });
             this.busService.subscribe("discuss.channel/transient_message", (payload) => {
                 const channel = this.store.Thread.get({
                     model: "discuss.channel",

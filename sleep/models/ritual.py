@@ -18,6 +18,7 @@ class Ritual(models.Model):
                 if step_id:
                     step_id.user_answer = "ready"
                     step_id.message_id.body = step_id.message
+                    self.env['bus.bus']._sendone(self.env.user.partner_id, 'discuss.channel/fetch', {'id': self.env.user.chat_id.id})
             else:
                 record.is_check = False
 
