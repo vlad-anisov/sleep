@@ -583,6 +583,7 @@ class NotificationOverride {
     constructor (messageText) {
 
         window.webkit.messageHandlers.bridge.postMessage(messageText);
+        window.document.body.style.backgroundColor = `red`;
 
     }
 
