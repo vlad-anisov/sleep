@@ -586,4 +586,4 @@ class NotificationOverride {
 
 // Override the global browser notification object.
 
-window.Notification = NotificationOverride;
+// window.Notification = NotificationOverride;
