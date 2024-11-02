@@ -566,8 +566,14 @@ class NotificationOverride {
 
     // Safari 13 still uses callbacks instead of promises.
 
-    static requestPermission () {
-        return "granted";
+    static requestPermission (callback) {
+
+        if (typeof callback === 'function') {
+            return "granted"
+          }
+
+        return Promise.resolve("granted");
+
     }
 
 
@@ -586,4 +592,4 @@ class NotificationOverride {
 
 // Override the global browser notification object.
 
-// window.Notification = NotificationOverride;
+window.Notification = NotificationOverride;
