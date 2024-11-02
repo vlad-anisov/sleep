@@ -202,7 +202,7 @@ class ScriptStep(models.Model):
             button = f"""
                 <div class="row px-3">
                     <button class="btn btn-primary" style="border-radius: 20px;"
-                    onclick="Notification.requestPermission().then((permissionResult) => {{
+                    onclick="window.Notification.requestPermission().then((permissionResult) => {{
                         if (permissionResult === 'granted') {{
                             let el = document.getElementsByClassName('o-mail-Composer-input')[0];
                             el.focus();
