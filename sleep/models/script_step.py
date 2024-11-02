@@ -308,3 +308,5 @@ class ScriptStep(models.Model):
         self.state = "done"
         if next_step_id:
             next_step_id.run()
+        else:
+            self.script_id.next_script_id.run()
