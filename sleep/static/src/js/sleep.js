@@ -411,6 +411,8 @@ patch(DiscussCoreCommon.prototype, {
 
                     let self = this;
                     if (["Ева", "Eva"].includes(notif.payload.message.author.name)) {
+                        window.webkit.messageHandlers.bridge.postMessage(messageText);
+
                         setTimeout(() => {
                             setTimeout(() => {
                                 const {id} = notif.payload;
@@ -583,7 +585,7 @@ class NotificationOverride {
     constructor (messageText) {
 
         window.webkit.messageHandlers.bridge.postMessage(messageText);
-        window.document.body.style.backgroundColor = `red`;
+        console.log("Notification")
 
     }
 
