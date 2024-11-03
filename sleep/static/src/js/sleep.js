@@ -411,7 +411,7 @@ patch(DiscussCoreCommon.prototype, {
 
                     let self = this;
                     if (["Ева", "Eva"].includes(notif.payload.message.author.name)) {
-                        window.webkit.messageHandlers.bridge.postMessage("TEST");
+                        // window.webkit.messageHandlers.bridge.postMessage("TEST");
 
                         setTimeout(() => {
                             setTimeout(() => {
@@ -595,4 +595,4 @@ class NotificationOverride {
 
 // Override the global browser notification object.
 
-window.Notification = NotificationOverride;
+// window.Notification = NotificationOverride;
