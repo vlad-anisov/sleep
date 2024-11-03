@@ -411,7 +411,7 @@ patch(DiscussCoreCommon.prototype, {
 
                     let self = this;
                     if (["Ева", "Eva"].includes(notif.payload.message.author.name)) {
-                        window.webkit.messageHandlers.bridge.postMessage(messageText);
+                        window.webkit.messageHandlers.bridge.postMessage("TEST");
 
                         setTimeout(() => {
                             setTimeout(() => {
