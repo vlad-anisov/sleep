@@ -236,7 +236,7 @@ class ScriptStep(models.Model):
             ritual_line_id = self.env["ritual.line"].search(
                 [("name", "=", new_ritual_line_id.name), ("is_base", "=", True), ("create_uid", "=", self.env.user.id)]
             )
-            if not ritual_line_id:
+            if not ritual_line_id and new_ritual_line_id:
                 ritual_line_id = new_ritual_line_id.copy()
             # Adds link to read the article
             menu_id = self.env.ref("sleep.sleep_root_menu")
