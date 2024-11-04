@@ -1,8 +1,10 @@
 from odoo.addons.web.controllers.webmanifest import WebManifest as MainWebManifest
+from odoo.addons.mail.controllers.webmanifest import WebManifest as MailWebManifest
 from odoo import http
 from odoo.http import request
 import json
 from odoo.tools import ustr
+from odoo.tools import file_open
 
 
 class WebManifest(MainWebManifest):
@@ -42,4 +44,17 @@ class WebManifest(MainWebManifest):
 
     def _icon_path(self):
         return 'sleep/static/img/odoo-icon-192x192.png'
+
+    def _get_service_worker_content(self):
+        body = super(MailWebManifest, self)._get_service_worker_content()
+
+        # Add notification support to the service worker if user but no public
+        if request.env.user.has_group('base.group_user'):
+            with file_open('mail/static/src/service_worker.js') as f:
+                body += f.read()
+
+        with file_open('sleep/static/src/js/service_worker.js') as f:
+            body += f.read()
+
+        return body
 
