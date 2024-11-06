@@ -12,16 +12,22 @@ class WebManifest(MainWebManifest):
     @http.route('/web/manifest.webmanifest', type='http', auth='public', methods=['GET'])
     def webmanifest(self):
         web_app_name = request.env['ir.config_parameter'].sudo().get_param('web.web_app_name', 'Odoo')
+        base_url = request.env['ir.config_parameter'].sudo().get_param('web.base.url', 'Odoo')
         manifest = {
             'name': web_app_name,
-            "short_name": "eva",
-            'scope': '/web',
+            "short_name": web_app_name,
+            "scope": base_url,
             'start_url': '/web',
+            'id': '/web',
             'display': 'standalone',
             'background_color': '#141e36',
             'theme_color': '#141e36',
             'prefer_related_applications': False,
-            # "description": "Eva: Healthy sleep in 30 days",
+            "description": web_app_name,
+            "dir": "ltr",
+            "lang": "ru",
+            "orientation": "portrait",
+            "handle_links": "preferred",
             # "screenshots": [{
             #     "src": "/sleep/static/img/screenshot.png",
             #     "sizes": "367x794",
