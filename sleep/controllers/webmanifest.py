@@ -28,6 +28,13 @@ class WebManifest(MainWebManifest):
             "lang": "ru",
             "orientation": "portrait",
             "handle_links": "preferred",
+            "launch_handler": {
+                "client_mode": ["auto"]
+            },
+            "categories": ["health", "lifestyle", "health & fitness"],
+            "scope_extensions": [
+                {"origin": "*.sleepcourse.ru"},
+            ],
             # "screenshots": [{
             #     "src": "/sleep/static/img/screenshot.png",
             #     "sizes": "367x794",
@@ -35,12 +42,20 @@ class WebManifest(MainWebManifest):
             # }],
         }
         icon_sizes = ['192x192', '512x512']
-        manifest['icons'] = [{
-            'src': '/sleep/static/img/odoo-icon-%s.png' % size,
-            'sizes': size,
+        manifest['icons'] = [
+        {
+            'src': '/sleep/static/img/odoo-icon-%s.png' % '192x192',
+            'sizes': '192x192',
+            'type': 'image/png',
+            "purpose": "any",
+        },
+        {
+            'src': '/sleep/static/img/odoo-icon-%s.png' % '512x512',
+            'sizes': '512x512',
             'type': 'image/png',
             "purpose": "maskable",
-        } for size in icon_sizes]
+        }
+        ]
         manifest['shortcuts'] = self._get_shortcuts()
         body = json.dumps(manifest, default=ustr)
         response = request.make_response(body, [
