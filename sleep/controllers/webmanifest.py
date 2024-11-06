@@ -9,6 +9,18 @@ from odoo.tools import file_open
 
 class WebManifest(MainWebManifest):
 
+    @http.route("/.well-known/assetlinks.json", type="http", auth="public", methods=["GET"])
+    def assetlinks(self):
+        with file_open('sleep/static/src/js/assetlinks.js') as f:
+            body = f.read()
+        response = request.make_response(
+            body,
+            [
+                ('Content-Type', 'text/javascript'),
+            ]
+        )
+        return response
+
     @http.route('/web/manifest.webmanifest', type='http', auth='public', methods=['GET'])
     def webmanifest(self):
         web_app_name = request.env['ir.config_parameter'].sudo().get_param('web.web_app_name', 'Odoo')

@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "ru.sleepcourse.twa",
+        "sha256_cert_fingerprints": ["62:88:54:ED:C7:8F:BD:B0:9C:E0:ED:E9:5F:3B:8F:02:B8:D6:D1:DF:08:4C:71:3D:11:C4:0A:37:91:77:D6:A0"]
+      }
+    }]
