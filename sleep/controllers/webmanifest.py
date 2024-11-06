@@ -11,7 +11,7 @@ class WebManifest(MainWebManifest):
 
     @http.route("/.well-known/assetlinks.json", type="http", auth="public", methods=["GET"])
     def assetlinks(self):
-        with file_open('sleep/static/src/js/assetlinks.js') as f:
+        with file_open('sleep/static/src/js/assetlinks.json') as f:
             body = f.read()
         response = request.make_response(
             body,
