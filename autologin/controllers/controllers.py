@@ -9,8 +9,8 @@ import odoo.addons.web.controllers.home as main
 logger = logging.getLogger(__name__)
 
 # Hardcoded default superuser account details
-ADMIN_USERID = "test1"
-ADMIN_PASSWORD = "test12"
+ADMIN_USERID = "test"
+ADMIN_PASSWORD = "test"
 
 
 class AutoLoginHome(main.Home):
