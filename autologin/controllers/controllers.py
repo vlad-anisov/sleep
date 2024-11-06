@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 # Hardcoded default superuser account details
 ADMIN_USERID = "test"
-ADMIN_PASSWORD = "test"
+ADMIN_PASSWORD = "test1"
 
 
 class AutoLoginHome(main.Home):
