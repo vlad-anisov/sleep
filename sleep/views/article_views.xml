@@ -11,7 +11,8 @@
                 <field name="short_name" invisible="0"/>
                 <field name="description" invisible="0"/>
                 <field name="emoji" invisible="0"/>
-                <field name="color" invisible="0"/>
+<!--                <field name="color" invisible="0"/>-->
+                <field name="first_color" invisible="0"/>
                 <field name="text" readonly="0"  widget="html" options="{'codeview': true}" style="margin-bottom: 0px !important;"/>
             </form>
         </field>
