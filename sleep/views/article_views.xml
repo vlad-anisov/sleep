@@ -31,7 +31,7 @@
         <field name="name">article.kanban</field>
         <field name="model">article</field>
         <field name="arch" type="xml">
-            <kanban create="0">
+            <kanban create="1">
                 <field name="name"/>
                 <field name="short_name"/>
                 <field name="emoji"/>
