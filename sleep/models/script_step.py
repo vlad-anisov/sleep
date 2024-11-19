@@ -275,10 +275,10 @@ class ScriptStep(models.Model):
                                     }}
                                 }}
                             }} catch (error) {{
-                                console.log('billing is not available.');
+                                alert('billing is not available.');
                             }}
                         }} else {{
-                          console.log('DigitalGoodsService is not available.');
+                          alert('DigitalGoodsService is not available.');
                         }}
                     }}">
                     {_("Enable notifications")}
