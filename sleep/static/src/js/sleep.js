@@ -616,8 +616,8 @@ async function inviteFriends() {
                     },
                 ];
                 const request = new PaymentRequest(paymentMethodData);
-                const paymentResponse = await request.show();
-                const { purchaseToken } = paymentResponse.details;
+                // const paymentResponse = await request.show();
+                // const { purchaseToken } = paymentResponse.details;
                 //
                 // let paymentComplete;
                 // if (validatePurchaseOnBackend(purchaseToken)) {
