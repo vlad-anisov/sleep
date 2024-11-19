@@ -606,18 +606,18 @@ async function inviteFriends() {
             const service = await window.getDigitalGoodsService('https://play.google.com/billing');
             const itemDetails = await service.getDetails(['product_1']);
             for (const item of itemDetails) {
-                displayItem(item.title, item.description, item.price);
-                // const paymentMethodData = [
-                //     {
-                //         supportedMethods: 'https://play.google.com/billing',
-                //         data: {
-                //             sku: item.itemId,
-                //         },
-                //     },
-                // ];
-                // const request = new PaymentRequest(paymentMethodData);
-                // const paymentResponse = await request.show();
-                // const { purchaseToken } = paymentResponse.details;
+                // displayItem(item.title, item.description, item.price);
+                const paymentMethodData = [
+                    {
+                        supportedMethods: 'https://play.google.com/billing',
+                        data: {
+                            sku: item.itemId,
+                        },
+                    },
+                ];
+                const request = new PaymentRequest(paymentMethodData);
+                const paymentResponse = await request.show();
+                const { purchaseToken } = paymentResponse.details;
                 //
                 // let paymentComplete;
                 // if (validatePurchaseOnBackend(purchaseToken)) {
