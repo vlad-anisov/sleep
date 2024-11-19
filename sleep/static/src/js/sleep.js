@@ -653,3 +653,4 @@ async function inviteFriends() {
       alert('DigitalGoodsService is not available.');
     }
 }
+window.inviteFriends = inviteFriends;
