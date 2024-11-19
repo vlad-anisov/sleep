@@ -228,59 +228,9 @@ class ScriptStep(models.Model):
             button = f"""
                 <div class="row px-3">
                     <button class="btn btn-primary" style="border-radius: 20px;"
-                    onclick="async() => {{
-                        if ('getDigitalGoodsService' in window) {{
-                            try {{
-                                const service = await window.getDigitalGoodsService('https://play.google.com/billing');
-                                const itemDetails = await service.getDetails(['product_1']);
-                                for (const item of itemDetails) {{
-                                    //displayItem(item.title, item.description, item.price);
-                                    const paymentMethodData = [
-                                        {{
-                                            supportedMethods: 'https://play.google.com/billing',
-                                            data: {{
-                                                sku: item.itemId,
-                                            }},
-                                        }},
-                                    ];
-                                    const request = new PaymentRequest(paymentMethodData);
-                                    const paymentResponse = await request.show();
-                                    const {{ purchaseToken }} = paymentResponse.details;
-
-                                    let paymentComplete;
-                                    if (validatePurchaseOnBackend(purchaseToken)) {{
-                                        paymentComplete = await paymentResponse.complete('success');
-                                        await service.acknowledge(purchaseToken, getPurchaseType(item.itemId));
-                                      
-                                      
-                                        let el = document.getElementsByClassName('o-mail-Composer-input')[0];
-                                        el.focus();
-                                        el.value = '';
-                                        el.dispatchEvent(new window.KeyboardEvent('keydown', {{ key: 'Backspace' }}));
-                                        el.dispatchEvent(new window.KeyboardEvent('keyup', {{ key: 'Backspace' }}));
-                                        el.dispatchEvent(new window.InputEvent('input'));
-                                        el.dispatchEvent(new window.InputEvent('change'));
-                                        for (const char of '{_("Enabled")}') {{
-                                            el.value += char;
-                                            el.dispatchEvent(new window.KeyboardEvent('keydown', {{key: char}}));
-                                            el.dispatchEvent(new window.KeyboardEvent('keyup', {{key: char}}));
-                                            el.dispatchEvent(new window.InputEvent('input'));
-                                            el.dispatchEvent(new window.InputEvent('change'));
-                                        }};
-                                        el.dispatchEvent(new window.KeyboardEvent('keydown', {{ key: 'Enter' }}));
-                                      
-                                      
-                                    }} else {{
-                                      paymentComplete = await paymentResponse.complete('fail');
-                                    }}
-                                }}
-                            }} catch (error) {{
-                                alert('billing is not available.');
-                            }}
-                        }} else {{
-                          alert('DigitalGoodsService is not available.');
-                        }}
-                    }}">
+                    onclick="function() {{
+                        inviteFriends();
+                    }};">
                     {_("Enable notifications")}
                     </button>
                 </div>
