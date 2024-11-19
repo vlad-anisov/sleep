@@ -228,9 +228,7 @@ class ScriptStep(models.Model):
             button = f"""
                 <div class="row px-3">
                     <button class="btn btn-primary" style="border-radius: 20px;"
-                    onclick="function() {{
-                        inviteFriends();
-                    }};">
+                    onclick="inviteFriends();">
                     {_("Enable notifications")}
                     </button>
                 </div>
