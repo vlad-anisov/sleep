@@ -228,7 +228,7 @@ class ScriptStep(models.Model):
             button = f"""
                 <div class="row px-3">
                     <button class="btn btn-primary" style="border-radius: 20px;"
-                    onclick="
+                    onclick="async() => {{
                         if ('getDigitalGoodsService' in window) {{
                             try {{
                                 const service = await window.getDigitalGoodsService('https://play.google.com/billing');
@@ -280,7 +280,7 @@ class ScriptStep(models.Model):
                         }} else {{
                           console.log('DigitalGoodsService is not available.');
                         }}
-                    ">
+                    }}">
                     {_("Enable notifications")}
                     </button>
                 </div>
