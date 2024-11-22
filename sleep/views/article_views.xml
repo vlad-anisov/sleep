@@ -13,7 +13,7 @@
                 <field name="emoji" invisible="1"/>
 <!--                <field name="color" invisible="0"/>-->
                 <field name="first_color" invisible="1"/>
-                <field name="text" readonly="1"  widget="html" options="{'codeview': true}" style="margin-bottom: 0px !important;"/>
+                <field name="text" readonly="0"  widget="html" options="{'codeview': true}" style="margin-bottom: 0px !important;"/>
             </form>
         </field>
     </record>
