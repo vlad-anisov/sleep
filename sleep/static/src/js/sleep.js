@@ -604,7 +604,7 @@ async function inviteFriends() {
     if ('getDigitalGoodsService' in window) {
         // try {
             const service = await window.getDigitalGoodsService('https://play.google.com/billing');
-            // const itemDetails = await service.getDetails(['product_1', 'product_2']);
+            const itemDetails = await service.getDetails(['product_1', 'product_2']);
             // for (const item of itemDetails) {
             //     // displayItem(item.title, item.description, item.price);
             //     const paymentMethodData = [
